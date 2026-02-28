@@ -2429,6 +2429,14 @@ function togglePw(id, btn) {
 
             // ============ USER SYSTEM ============
             
+            toggleSecurityMenu: function() {
+                const sub = document.getElementById('security-submenu');
+                const chevron = document.getElementById('security-chevron');
+                const isOpen = sub.style.display !== 'none';
+                sub.style.display = isOpen ? 'none' : 'block';
+                chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            },
+
             toggleUserMenu: function() {
                 if(!currentUser) {
                     this.openUserAuth();
@@ -2437,12 +2445,16 @@ function togglePw(id, btn) {
                 const menu = document.getElementById('user-menu');
                 const isOpening = menu.style.display === 'none' || menu.style.display === '';
                 menu.style.display = isOpening ? 'block' : 'none';
-                // ไม่ให้ nav-profile ค้าง active — เคลียร์ทันทีหลังปิด
                 const navProfile = document.getElementById('nav-profile');
                 if(isOpening) {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     if(navProfile) navProfile.classList.remove('active');
+                    // ปิด security submenu ด้วย
+                    const sub = document.getElementById('security-submenu');
+                    const chevron = document.getElementById('security-chevron');
+                    if(sub) sub.style.display = 'none';
+                    if(chevron) chevron.style.transform = 'rotate(0deg)';
                 }
             },
 

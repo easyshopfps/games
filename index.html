@@ -162,11 +162,23 @@
             <i class="fas fa-wallet" style="color: var(--main-red);"></i>
             <span>ເຕີມເງິນ</span>
         </div>
-        <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openChangePassword()">
-            <i class="fas fa-key" style="color: var(--main-red);"></i>
-            <span>ປ່ຽນລະຫັດຜ່ານ</span>
+        <div class="user-menu-item" onclick="app.toggleSecurityMenu()" id="security-menu-item">
+            <i class="fas fa-shield-alt" style="color: var(--main-red);"></i>
+            <span>ຄວາມປອດໄພ</span>
+            <i class="fas fa-chevron-down" id="security-chevron" style="margin-left:auto; font-size:11px; color:#666; transition:transform 0.2s;"></i>
         </div>
-        <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openUserProfile()">
+        <!-- Security Submenu -->
+        <div id="security-submenu" style="display:none; background:#0a0a0a; border-radius:10px; margin:2px 0 4px; overflow:hidden;">
+            <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openChangePassword()" style="padding:12px 16px 12px 36px; font-size:13px;">
+                <i class="fas fa-key" style="color:#aaa; font-size:13px;"></i>
+                <span style="color:#ccc;">ປ່ຽນລະຫັດຜ່ານ</span>
+            </div>
+            <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openChangePinPage()" style="padding:12px 16px 12px 36px; font-size:13px; border-top:1px solid #1a1a1a;">
+                <i class="fas fa-lock" style="color:#aaa; font-size:13px;"></i>
+                <span style="color:#ccc;">ປ່ຽນ PIN 6 ຕົວ</span>
+            </div>
+        </div>
+        <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.navProfile()">
             <i class="fas fa-user" style="color: var(--main-red);"></i>
             <span>ໂປຣໄຟລ໌</span>
         </div>
