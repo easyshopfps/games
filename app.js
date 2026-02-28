@@ -2527,9 +2527,45 @@ function togglePw(id, btn) {
                 } catch(e) { hideProcessing(); NotificationManager.error('ເກີດຂໍ້ຜິດພາດ'); }
             },
 
+            checkPwStrengthChange: function(pw) {
+                this._pwStrength(pw, 'change-strength-fill', 'change-strength-hint');
+            },
+            checkPwStrengthReg: function(pw) {
+                this._pwStrength(pw, 'reg-strength-fill', 'reg-strength-hint');
+            },
+            checkPwStrengthReset: function(pw) {
+                this._pwStrength(pw, 'reset-strength-fill', 'reset-strength-hint');
+            },
+            _pwStrength: function(pw, fillId, hintId) {
+                const fill = document.getElementById(fillId);
+                const hint = document.getElementById(hintId);
+                if(!fill || !hint) return;
+                const checks = {
+                    upper: /[A-Z]/.test(pw),
+                    lower: /[a-z]/.test(pw),
+                    num: /[0-9]/.test(pw),
+                    special: /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(pw),
+                    long: pw.length >= 8
+                };
+                const score = Object.values(checks).filter(Boolean).length;
+                const colors = ['#ff2222','#ff6622','#ffaa00','#88dd00','#00ff88'];
+                const widths = ['20%','40%','60%','80%','100%'];
+                fill.style.background = score > 0 ? colors[score-1] : '#333';
+                fill.style.width = score > 0 ? widths[score-1] : '0%';
+                let missing = [];
+                if(!checks.upper) missing.push('ຕົວພິມໃຫຍ່ A-Z');
+                if(!checks.lower) missing.push('ຕົວພິມນ້ອຍ a-z');
+                if(!checks.num) missing.push('ຕົວເລກ 0-9');
+                if(!checks.special) missing.push('ອັກຂະລະພິເສດ !@#$');
+                if(!checks.long) missing.push('ຢ່າງໜ້ອຍ 8 ຕົວ');
+                if(score >= 5) { hint.style.color='#00ff88'; hint.textContent='✓ ລະຫັດຜ່ານເຂັ້ມແຂງ'; }
+                else if(pw.length === 0) { hint.style.color='#aaa'; hint.textContent='ລະຫັດຜ່ານຕ້ອງມີ: ຕົວພິມໃຫຍ່ (A-Z) + ຕົວພິມນ້ອຍ (a-z) + ຕົວເລກ (0-9) + ອັກຂະລະພິເສດ (!@#$)'; }
+                else { hint.style.color='#ffaa00'; hint.textContent='ຍັງຂາດ: ' + missing.join(', '); }
+            },
+
             checkPasswordStrength: function(pw) {
-                const fill = document.getElementById('strength-fill');
-                const hint = document.getElementById('strength-hint');
+                this._pwStrength(pw, 'change-strength-fill', 'change-strength-hint');
+            },
                 if(!fill) return;
                 const checks = {
                     upper: /[A-Z]/.test(pw),
