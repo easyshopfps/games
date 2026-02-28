@@ -1753,6 +1753,15 @@
             .topup-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         }
 
+        @media (min-width: 1024px) {
+            .cat-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                max-width: 900px;
+                gap: 16px;
+            }
+        }
+
         body {
             background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
             padding-bottom: 70px;
