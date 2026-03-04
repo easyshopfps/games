@@ -241,6 +241,7 @@ function togglePw(id, btn) {
         let activeProduct = null;
         let currentUser = null;
         let selectedAmount = null;
+        let buyQty = 1; // ຈຳນວນສິນຄ້າທີ່ເລືອກ
 
         // ========================================
         // NOTIFICATION SYSTEM (แทน alert)
@@ -453,11 +454,18 @@ function togglePw(id, btn) {
                 const p = app.db.products.find(x => x.id == id);
                 if(!p) return;
                 activeProduct = p;
+                buyQty = 1; // reset quantity every time detail page opens
                 document.getElementById('det-img').src = p.img;
                 document.getElementById('det-title').innerText = p.name;
                 document.getElementById('det-price').innerText = Number(p.price).toLocaleString() + " ₭";
                 document.getElementById('det-desc').innerText = p.desc;
-                
+                // Reset qty display
+                const detQty = document.getElementById('det-qty-display');
+                if(detQty) detQty.textContent = '1';
+                const totalDisplay = document.getElementById('det-total-display');
+                if(totalDisplay) totalDisplay.style.display = 'none';
+                // Update qty buttons
+                app._updateQtyButtons();
                 // แสดง Stock ใต้ราคาทันที
                 app._updateDetailStockUI(p);
                 
@@ -468,16 +476,29 @@ function togglePw(id, btn) {
                 app.renderAdmin(); 
             },
             show: (id) => {
+                // หน้าที่ต้องซ่อน header + bottom nav (full-screen mode)
+                const FULLSCREEN_VIEWS = ['view-buy-confirm', 'view-receipt'];
                 // เฉพาะหน้าหลักที่ควรมี page transition
                 const MAIN_VIEWS = ['view-home', 'view-list', 'view-detail'];
                 const active = document.querySelector('.page-view:not(.hidden)');
                 const useTransition = MAIN_VIEWS.includes(id) && active && active.id !== id && MAIN_VIEWS.includes(active.id);
+
+                const header = document.querySelector('header');
+                const mobileNav = document.querySelector('.mobile-nav');
 
                 const doShow = () => {
                     if(active && active.id !== id) router.history.push(active.id);
                     document.querySelectorAll('.page-view').forEach(v => v.classList.add('hidden'));
                     document.getElementById(id).classList.remove('hidden');
                     window.scrollTo(0, 0);
+                    // ซ่อน/แสดง header + bottom nav
+                    if(FULLSCREEN_VIEWS.includes(id)) {
+                        if(header) header.style.display = 'none';
+                        if(mobileNav) mobileNav.style.display = 'none';
+                    } else {
+                        if(header) header.style.display = '';
+                        if(mobileNav) mobileNav.style.display = '';
+                    }
                 };
 
                 const mask = document.getElementById('page-transition-mask');
@@ -495,11 +516,15 @@ function togglePw(id, btn) {
             },
             back: () => {
                 const prev = router.history.pop() || 'view-home';
-                // กดกลับไม่ต้องมี transition — ให้รู้สึก instant
                 const active = document.querySelector('.page-view:not(.hidden)');
                 document.querySelectorAll('.page-view').forEach(v => v.classList.add('hidden'));
                 document.getElementById(prev).classList.remove('hidden');
                 window.scrollTo(0, 0);
+                // restore header + nav เสมอเมื่อกลับ
+                const header = document.querySelector('header');
+                const mobileNav = document.querySelector('.mobile-nav');
+                if(header) header.style.display = '';
+                if(mobileNav) mobileNav.style.display = '';
             }
         };
 
@@ -800,6 +825,13 @@ function togglePw(id, btn) {
                 }
             },
 
+            // ===== GENERATE BILL NUMBER (unique, never repeats) =====
+            _generateBillNumber: function() {
+                const now = Date.now();
+                const rand = Math.random().toString(36).substring(2, 10).toUpperCase();
+                return 'BILL-' + now + '-' + rand;
+            },
+
             buyProduct: async function() {
                 if(!currentUser) {
                     NotificationManager.warning('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນ');
@@ -807,10 +839,11 @@ function togglePw(id, btn) {
                 }
                 if(!activeProduct) return;
 
+                const qty = buyQty || 1;
+
                 // ===== CHECK LIVE STOCK FROM DATABASE BEFORE PURCHASE =====
                 showProcessing('ກຳລັງກວດສອບຂໍ້ມູນ...');
                 
-                // Fetch latest product data from DB (prevent stale cache issues)
                 const { data: liveProduct, error: fetchErr } = await _supabase
                     .from('products')
                     .select('*')
@@ -823,20 +856,25 @@ function togglePw(id, btn) {
                     return;
                 }
 
-                // Update activeProduct with live data
                 activeProduct = liveProduct;
 
-                // Check if out of stock (live check)
-                if(liveProduct.stock !== null && liveProduct.stock !== undefined && liveProduct.stock <= 0) {
-                    hideProcessing();
-                    NotificationManager.error('ສິນຄ້ານີ້ໝົດສະຕ໊ອກແລ້ວ! ກະລຸນາລໍຖ້າການ restocking');
-                    // Update UI to reflect out-of-stock
-                    this._updateDetailStockUI(liveProduct);
-                    return;
+                // Check stock (must have enough for qty)
+                if(liveProduct.stock !== null && liveProduct.stock !== undefined) {
+                    if(liveProduct.stock <= 0) {
+                        hideProcessing();
+                        NotificationManager.error('ສິນຄ້ານີ້ໝົດສະຕ໊ອກແລ້ວ!');
+                        this._updateDetailStockUI(liveProduct);
+                        return;
+                    }
+                    if(liveProduct.stock < qty) {
+                        hideProcessing();
+                        NotificationManager.error(`ສະຕ໊ອກບໍ່ພຽງພໍ! ເຫຼືອ ${liveProduct.stock} ອັນ`);
+                        return;
+                    }
                 }
 
-                // Fetch latest user balance from DB (prevent stale cache)
-                const { data: liveUser, error: userFetchErr } = await _supabase
+                // Fetch latest user balance
+                const { data: liveUser } = await _supabase
                     .from('site_users')
                     .select('balance')
                     .eq('id', currentUser.id)
@@ -844,26 +882,25 @@ function togglePw(id, btn) {
                 
                 const balance = liveUser ? (liveUser.balance || 0) : (currentUser.balance || 0);
                 const price = liveProduct.price || 0;
+                const totalAmount = price * qty;
                 
-                if(balance < price) {
+                if(balance < totalAmount) {
                     hideProcessing();
-                    NotificationManager.error(`ຍອດເງິນບໍ່ພຽງພໍ! ຍອດຄົງເຫຼືອ: ${balance.toLocaleString()} ₭ (ຕ້ອງການ: ${price.toLocaleString()} ₭)`);
+                    NotificationManager.error(`ຍອດເງິນບໍ່ພຽງພໍ! ຍອດຄົງເຫຼືອ: ${balance.toLocaleString()} ₭ (ຕ້ອງການ: ${totalAmount.toLocaleString()} ₭)`);
                     return;
                 }
                 
-                // หักเงิน
                 showProcessing('ກຳລັງດຳເນີນການສັ່ງຊື້<br>ກະລຸນາລໍຖ້າ ຢ່າປິດໜ້ານີ້...');
-                const newBalance = balance - price;
+                const newBalance = balance - totalAmount;
                 const { error: balErr } = await _supabase.from('site_users').update({ balance: newBalance }).eq('id', currentUser.id);
                 if(balErr) { hideProcessing(); NotificationManager.error('ເກີດຂໍ້ຜິດພາດ: ' + balErr.message); return; }
                 
-                // ลด stock ถ้ามี (ใช้ live stock value)
+                // ลด stock
                 let newStock = null;
                 if(liveProduct.stock !== null && liveProduct.stock !== undefined && liveProduct.stock > 0) {
-                    newStock = liveProduct.stock - 1;
+                    newStock = liveProduct.stock - qty;
                     const { error: stockErr } = await _supabase.from('products').update({ stock: newStock }).eq('id', liveProduct.id);
                     if(stockErr) {
-                        // Rollback balance
                         await _supabase.from('site_users').update({ balance: balance }).eq('id', currentUser.id);
                         hideProcessing();
                         NotificationManager.error('ເກີດຂໍ້ຜິດພາດໃນການອັພເດດສະຕ໊ອກ');
@@ -872,31 +909,33 @@ function togglePw(id, btn) {
                     activeProduct.stock = newStock;
                 }
                 
-                // Generate unique product ID if product has has_product_id=true
+                // Generate Bill Number (1 bill ต่อการสั่งซื้อ 1 ครั้ง)
+                const billNumber = this._generateBillNumber();
+
+                // Generate product unique ID (1 ID ต่อ 1 การซื้อ ระบุจำนวนใน record)
                 let generatedProductId = null;
                 if(liveProduct.has_product_id) {
-                    // Generate unique ID: EZ + timestamp base36 + random chars, never repeats
                     const ts = Date.now().toString(36).toUpperCase();
                     const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
                     generatedProductId = 'EZ-' + ts + '-' + rand;
                 }
-                
-                // บันทึกคำสั่งซื้อ
+
+                // บันทึก 1 row รวม qty ไว้ใน record เดียว
                 const orderData = {
                     user_id: currentUser.id,
                     product_id: liveProduct.id,
                     product_name: liveProduct.name,
                     product_img: liveProduct.img,
                     product_price: price,
-                    total_amount: price,
-                    quantity: 1,
+                    total_amount: totalAmount,
+                    quantity: qty,
                     status: 'completed',
-                    product_unique_id: generatedProductId
+                    product_unique_id: generatedProductId,
+                    bill_number: billNumber
                 };
                 const { error: orderErr } = await _supabase.from('orders').insert([orderData]);
                 if(orderErr) { 
                     console.error('Order error:', orderErr);
-                    // rollback เงิน + stock
                     await _supabase.from('site_users').update({ balance: balance }).eq('id', currentUser.id);
                     if(newStock !== null) {
                         await _supabase.from('products').update({ stock: liveProduct.stock }).eq('id', liveProduct.id);
@@ -906,84 +945,150 @@ function togglePw(id, btn) {
                     return; 
                 }
                 
-                // จำกัด 10 ประวัติต่อ user
+                // อัปเดต limit ประวัติ
                 const { data: userOrders } = await _supabase
                     .from('orders')
                     .select('id, created_at')
                     .eq('user_id', currentUser.id)
                     .order('created_at', { ascending: true });
                 
-                if(userOrders && userOrders.length > 10) {
-                    const toDelete = userOrders.slice(0, userOrders.length - 10);
+                if(userOrders && userOrders.length > 20) {
+                    const toDelete = userOrders.slice(0, userOrders.length - 20);
                     for(const o of toDelete) {
                         await _supabase.from('orders').delete().eq('id', o.id);
                     }
                 }
                 
-                // อัปเดต balance ใน currentUser
                 currentUser.balance = newBalance;
                 this.updateUserUI();
 
-                // ===== UPDATE LOCAL CACHE ทันที (ไม่รอ fetchData) =====
-                // อัปเดต stock ใน db.products cache ทันทีเลย
                 if(newStock !== null) {
                     const cachedProd = this.db.products.find(p => p.id === liveProduct.id);
                     if(cachedProd) cachedProd.stock = newStock;
                 }
                 
-                // Re-render หน้า home แบบ silent (ถ้า home ถูกโหลดอยู่ใน DOM)
-                // เพื่อให้ stock card อัปเดตทันทีโดยไม่ต้องรีเฟรช
                 this._silentRefreshHomeStock(liveProduct.id, newStock);
-
                 await this.fetchData();
                 
-                
-                // ===== UPDATE DETAIL PAGE STOCK UI REAL-TIME (ไม่ต้อง reload) =====
                 if(newStock !== null) {
                     this._updateDetailStockUI({ ...liveProduct, stock: newStock });
                 }
                 
-                // Popup สำเร็จ
                 hideProcessing();
-                NotificationManager.success(`ສັ່ງຊື້ສຳເລັດ! ຫັກເງິນ ${price.toLocaleString()} ₭ | ຍອດຄົງເຫຼືອ: ${newBalance.toLocaleString()} ₭`);
+                
+                // ใบเสร็จ
+                const firstProductId = generatedProductId;
+                this.showReceipt({
+                    billNumber,
+                    productName: liveProduct.name,
+                    productImg: liveProduct.img,
+                    price,
+                    qty,
+                    totalAmount,
+                    productUniqueId: firstProductId,
+                    newBalance
+                });
             },
 
-            // ===== BUY CONFIRM POPUP =====
+            showReceipt: function(data) {
+                document.getElementById('receipt-bill-number').textContent = data.billNumber;
+                document.getElementById('receipt-img').src = data.productImg || '';
+                document.getElementById('receipt-product-name').textContent = data.productName || '';
+                document.getElementById('receipt-price-each').textContent = `${data.price.toLocaleString()} ₭ / ອັນ`;
+                document.getElementById('receipt-qty').textContent = data.qty + ' ອັນ';
+                document.getElementById('receipt-total').textContent = data.totalAmount.toLocaleString() + ' ₭';
+                this._receiptUid = data.productUniqueId || null;
+                const uidSection = document.getElementById('receipt-uid-section');
+                if(data.productUniqueId) {
+                    document.getElementById('receipt-uid').textContent = data.productUniqueId;
+                    const qtyEl = document.getElementById('receipt-uid-qty');
+                    if(qtyEl) qtyEl.textContent = data.qty > 1 ? `ໃຊ້ໄດ້ ${data.qty} ອັນ` : '';
+                    uidSection.style.display = 'block';
+                } else {
+                    uidSection.style.display = 'none';
+                }
+                router.show('view-receipt');
+            },
+
+            copyReceiptUid: function() {
+                const uid = this._receiptUid;
+                if(!uid) return;
+                navigator.clipboard.writeText(uid).then(() => {
+                    const btn = document.getElementById('receipt-uid-copy-btn');
+                    if(btn) { btn.innerHTML = '<i class="fas fa-check"></i> ຄັດລອກແລ້ວ'; btn.style.background = '#1a4731'; btn.style.color = '#00e676'; }
+                    setTimeout(() => {
+                        if(btn) { btn.innerHTML = '<i class="fas fa-copy"></i> ຄັດລອກ'; btn.style.background = '#1e3a5f'; btn.style.color = '#60a5fa'; }
+                    }, 2000);
+                }).catch(() => {
+                    NotificationManager.info('ກົດຄ້າງທີ່ ID ເພື່ອຄັດລອກ');
+                });
+            },
+
+            goToOrderHistory: function() {
+                router.show('view-order-history');
+                this.renderOrderHistory();
+            },
+
+            // ===== BUY CONFIRM (Full-screen page) =====
             showBuyConfirm: function() {
                 if(!currentUser) { NotificationManager.warning('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນ'); return; }
                 if(!activeProduct) return;
-                // Check stock first
                 if(activeProduct.stock !== null && activeProduct.stock !== undefined && activeProduct.stock <= 0) {
                     NotificationManager.error('ສິນຄ້ານີ້ໝົດສະຕ໊ອກແລ້ວ');
                     return;
                 }
-                // Fill popup info
+                const price = Number(activeProduct.price || 0);
+                const total = price * buyQty;
                 document.getElementById('buy-confirm-img').src = activeProduct.img || '';
                 document.getElementById('buy-confirm-name').textContent = activeProduct.name || '';
-                document.getElementById('buy-confirm-price').textContent = Number(activeProduct.price || 0).toLocaleString() + ' ₭';
+                document.getElementById('buy-confirm-price').textContent = price.toLocaleString() + ' ₭';
                 document.getElementById('buy-confirm-balance').textContent = Number(currentUser.balance || 0).toLocaleString() + ' ₭';
-                // Show overlay
-                const overlay = document.getElementById('buy-confirm-overlay');
-                const sheet = document.getElementById('buy-confirm-sheet');
-                overlay.style.display = 'flex';
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => { sheet.style.transform = 'translateY(0)'; });
-                });
-                // Tap outside to close
-                overlay.onclick = (e) => { if(e.target === overlay) this.closeBuyConfirm(); };
+                document.getElementById('bc-qty-label').textContent = buyQty;
+                document.getElementById('bc-subtotal').textContent = total.toLocaleString() + ' ₭';
+                document.getElementById('buy-confirm-total').textContent = total.toLocaleString() + ' ₭';
+                router.show('view-buy-confirm');
+            },
+
+            changeQty: function(delta) {
+                if(!activeProduct) return;
+                const price = Number(activeProduct.price || 0);
+                const maxStock = (activeProduct.stock !== null && activeProduct.stock !== undefined) ? activeProduct.stock : 99;
+                const maxQty = Math.min(maxStock, 99);
+                buyQty = Math.max(1, Math.min(maxQty, buyQty + delta));
+                // Update detail page qty display
+                const detQty = document.getElementById('det-qty-display');
+                if(detQty) detQty.textContent = buyQty;
+                // Update total display
+                const totalDisplay = document.getElementById('det-total-display');
+                const totalPrice = document.getElementById('det-total-price');
+                if(totalDisplay && totalPrice) {
+                    if(buyQty > 1) {
+                        totalDisplay.style.display = 'flex';
+                        totalPrice.textContent = (price * buyQty).toLocaleString() + ' ₭';
+                    } else {
+                        totalDisplay.style.display = 'none';
+                    }
+                }
+                this._updateQtyButtons();
+            },
+
+            _updateQtyButtons: function() {
+                const minusBtn = document.getElementById('qty-minus-btn');
+                const plusBtn = document.getElementById('qty-plus-btn');
+                if(!minusBtn || !plusBtn) return;
+                const maxStock = (activeProduct && activeProduct.stock !== null && activeProduct.stock !== undefined) ? activeProduct.stock : 99;
+                minusBtn.style.opacity = buyQty <= 1 ? '0.4' : '1';
+                plusBtn.style.opacity = buyQty >= Math.min(maxStock, 99) ? '0.4' : '1';
             },
 
             closeBuyConfirm: function() {
-                const overlay = document.getElementById('buy-confirm-overlay');
-                const sheet = document.getElementById('buy-confirm-sheet');
-                sheet.style.transform = 'translateY(100%)';
-                setTimeout(() => { overlay.style.display = 'none'; }, 380);
+                router.back();
             },
 
             confirmBuy: function() {
-                this.closeBuyConfirm();
-                setTimeout(() => { this.buyProduct(); }, 100);
+                this.buyProduct();
             },
+
 
             // ===== HELPER: Update stock UI on detail page in real-time =====
             _updateDetailStockUI: function(p) {
@@ -1101,18 +1206,28 @@ function togglePw(id, btn) {
                     <div style="text-align:center; margin-bottom:10px;">
                         <img src="${order.product_img || ''}" style="width:72px; height:72px; object-fit:cover; border-radius:8px;">
                     </div>
+                    ${order.bill_number ? `
+                    <div style="background:#1a1a2e; border:1px solid rgba(167,139,250,0.3); border-radius:8px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-receipt" style="color:#a78bfa; font-size:12px;"></i>
+                        <span style="color:#aaa; font-size:11px;">ເລກບິນ:</span>
+                        <span style="font-family:monospace; color:#a78bfa; font-size:10px; font-weight:700; word-break:break-all;">${order.bill_number}</span>
+                    </div>` : ''}
                     <div style="background:#111; padding:10px 12px; border-radius:10px; font-size:13px;">
                         <div style="margin-bottom:6px;"><span style="color:#aaa;">ສິນຄ້າ:</span> <b>${order.product_name || '-'}</b></div>
+                        <div style="margin-bottom:6px;"><span style="color:#aaa;">ຈຳນວນ:</span> <b>${order.quantity || 1} ອັນ</b></div>
                         <div style="margin-bottom:6px;"><span style="color:#aaa;">ລາຄາ:</span> ${priceHtml}</div>
                         <div><span style="color:#aaa;">ເວລາສັ່ງຊື້:</span> ${dateStr}</div>
                     </div>
                     ${order.product_unique_id ? `
-                    <div class="product-id-badge">
+                    <div class="product-id-badge" style="margin-top:10px;">
                         <div class="id-icon"><i class="fas fa-id-badge"></i></div>
-                        <div class="id-text">
-                            <div class="id-label">🔑 ລະຫັດສິນຄ້າຂອງທ່ານ</div>
-                            <div class="id-value">${order.product_unique_id}</div>
+                        <div class="id-text" style="flex:1;min-width:0;">
+                            <div class="id-label">🔑 ລະຫັດສິນຄ້າ${(order.quantity && order.quantity > 1) ? ` <span style="background:rgba(229,57,53,0.2);color:#ff6b6b;font-size:10px;padding:1px 7px;border-radius:6px;margin-left:4px;">x${order.quantity} ອັນ</span>` : ''}</div>
+                            <div class="id-value" style="font-size:12px; word-break:break-all; white-space:normal;">${order.product_unique_id}</div>
                         </div>
+                        <button onclick="app.copyProductId('${order.product_unique_id}')" id="copy-pid-btn" style="padding:8px 12px;border:none;background:#1e3a5f;color:#60a5fa;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;margin-left:10px;">
+                            <i class="fas fa-copy"></i> ຄັດລອກ
+                        </button>
                     </div>` : ''}
                 `;
                 
@@ -1122,6 +1237,16 @@ function togglePw(id, btn) {
                 dlBtn.style.display = (prod && prod.file_content) ? 'flex' : 'none';
                 
                 this.openModal('order-detail-modal');
+            },
+
+            copyProductId: function(uid) {
+                navigator.clipboard.writeText(uid).then(() => {
+                    const btn = document.getElementById('copy-pid-btn');
+                    if(btn) { btn.innerHTML = '<i class="fas fa-check"></i> ຄັດລອກແລ້ວ'; btn.style.background = '#1a4731'; btn.style.color = '#00e676'; }
+                    setTimeout(() => {
+                        if(btn) { btn.innerHTML = '<i class="fas fa-copy"></i> ຄັດລອກ'; btn.style.background = '#1e3a5f'; btn.style.color = '#60a5fa'; }
+                    }, 2000);
+                }).catch(() => NotificationManager.info('ກົດຄ້າງທີ່ ID ເພື່ອຄັດລອກ'));
             },
 
             renderOrderHistory: async function() {
@@ -1146,11 +1271,12 @@ function togglePw(id, btn) {
                     const priceText = fromSpin
                         ? '<span style="color:#f5c518;font-size:11px;"><i class="fas fa-sync-alt" style="margin-right:3px;"></i>ໄດ້ຈາກວົງລໍ້</span>'
                         : `${Number(o.total_amount || o.product_price || 0).toLocaleString()} ₭`;
+                    const qtyBadge = (o.quantity && o.quantity > 1) ? `<span style="background:rgba(96,165,250,0.15);color:#60a5fa;font-size:10px;padding:1px 6px;border-radius:6px;margin-left:4px;">x${o.quantity}</span>` : '';
                     return `
                     <div class="history-item" style="display:flex; align-items:center; gap:12px; padding:12px; background:#111; border-radius:12px; margin-bottom:10px;">
                         <img src="${o.product_img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:8px; flex-shrink:0;" onerror="this.src='https://via.placeholder.com/60x60?text=No+Img'">
                         <div style="flex:1; min-width:0;">
-                            <div style="font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.product_name || '-'}</div>
+                            <div style="font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.product_name || '-'}${qtyBadge}</div>
                             <div style="color:var(--main-red); font-size:13px; margin:3px 0;">${priceText}</div>
                             <div style="color:#888; font-size:11px;">${dateStr}</div>
                         </div>
@@ -1193,7 +1319,8 @@ function togglePw(id, btn) {
                 }
                 // โหลด product IDs เมื่อเปิด tab
                 if(id === 'tab-product-ids') {
-                    this.loadProductIds();
+                    // default to product-ids sub-tab
+                    this.switchProductIdSubTab('product-ids');
                 }
                 // โหลดประกาศเมื่อเปิด tab ประกาศ
                 if(id === 'tab-announcement') {
@@ -3366,7 +3493,7 @@ function togglePw(id, btn) {
             loadProductIds: async function() {
                 const tbody = document.getElementById('t-product-ids');
                 if(!tbody) return;
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#aaa; padding:20px;"><i class="fas fa-spinner fa-spin"></i> ກຳລັງໂຫຼດ...</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#aaa; padding:20px;"><i class="fas fa-spinner fa-spin"></i> ກຳລັງໂຫຼດ...</td></tr>';
                 const searchInput = document.getElementById('product-id-search');
                 if(searchInput) searchInput.value = '';
                 
@@ -3376,22 +3503,21 @@ function togglePw(id, btn) {
                     .not('product_unique_id', 'is', null)
                     .order('created_at', { ascending: false });
                 if(!orders || orders.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#aaa; padding:20px;">ຍັງບໍ່ມີລະຫັດສິນຄ້າ</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#aaa; padding:20px;">ຍັງບໍ່ມີລະຫັດສິນຄ້າ</td></tr>';
                     const countEl = document.getElementById('product-id-count');
                     if(countEl) countEl.textContent = '';
                     return;
                 }
-                // Get user info
                 const userIds = [...new Set(orders.map(o => o.user_id))];
                 const { data: users } = await _supabase.from('site_users').select('id,username').in('id', userIds);
                 const userMap = {};
                 if(users) users.forEach(u => userMap[u.id] = u.username);
                 
-                // Store all data for search filtering
                 this._allProductIds = orders.map(o => ({
                     id: o.id,
                     uid: o.product_unique_id,
                     product: o.product_name || '-',
+                    qty: o.quantity || 1,
                     buyer: userMap[o.user_id] || String(o.user_id),
                     date: o.created_at ? new Date(o.created_at).toLocaleDateString('lo-LA') : '-'
                 }));
@@ -3410,7 +3536,10 @@ function togglePw(id, btn) {
                 }
                 tbody.innerHTML = list.map(o => `
                     <tr>
-                        <td><span style="font-family:monospace; color:#60a5fa; font-weight:700; font-size:12px;">${o.uid}</span></td>
+                        <td>
+                            <span style="font-family:monospace; color:#60a5fa; font-weight:700; font-size:12px;">${o.uid}</span>
+                            ${o.qty > 1 ? `<span style="display:inline-block;margin-left:5px;background:rgba(229,57,53,0.2);color:#ff6b6b;font-size:10px;padding:1px 6px;border-radius:6px;font-weight:700;">x${o.qty} ອັນ</span>` : ''}
+                        </td>
                         <td style="font-size:12px; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.product}">${o.product}</td>
                         <td style="font-size:12px; color:#ccc;">${o.buyer}</td>
                         <td style="font-size:11px; color:#aaa;">${o.date}</td>
@@ -3423,16 +3552,88 @@ function togglePw(id, btn) {
             filterProductIds: function(query) {
                 if(!this._allProductIds) return;
                 const q = query.toLowerCase().trim();
-                if(!q) {
-                    this._renderProductIdsTable(this._allProductIds);
-                    return;
-                }
+                if(!q) { this._renderProductIdsTable(this._allProductIds); return; }
                 const filtered = this._allProductIds.filter(o =>
                     o.uid.toLowerCase().includes(q) ||
                     o.product.toLowerCase().includes(q) ||
                     o.buyer.toLowerCase().includes(q)
                 );
                 this._renderProductIdsTable(filtered);
+            },
+
+            switchProductIdSubTab: function(tab) {
+                const isId = tab === 'product-ids';
+                document.getElementById('sub-tab-product-ids').style.display = isId ? 'block' : 'none';
+                document.getElementById('sub-tab-bills').style.display = isId ? 'none' : 'block';
+                const idBtn = document.getElementById('sub-tab-product-id-btn');
+                const billBtn = document.getElementById('sub-tab-bill-btn');
+                if(isId) {
+                    idBtn.style.border = '1.5px solid #60a5fa'; idBtn.style.background = 'rgba(96,165,250,0.15)'; idBtn.style.color = '#60a5fa';
+                    billBtn.style.border = '1.5px solid #333'; billBtn.style.background = 'transparent'; billBtn.style.color = '#aaa';
+                    this.loadProductIds();
+                } else {
+                    billBtn.style.border = '1.5px solid #60a5fa'; billBtn.style.background = 'rgba(96,165,250,0.15)'; billBtn.style.color = '#60a5fa';
+                    idBtn.style.border = '1.5px solid #333'; idBtn.style.background = 'transparent'; idBtn.style.color = '#aaa';
+                    this.loadBills();
+                }
+            },
+
+            loadBills: async function() {
+                const tbody = document.getElementById('t-bills');
+                if(!tbody) return;
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;"><i class="fas fa-spinner fa-spin"></i> ກຳລັງໂຫຼດ...</td></tr>';
+                const { data: orders } = await _supabase.from('orders').select('*').order('created_at', { ascending: false });
+                if(!orders || orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;">ຍັງບໍ່ມີຂໍ້ມູນ</td></tr>';
+                    return;
+                }
+                const userIds = [...new Set(orders.map(o => o.user_id))];
+                const { data: users } = await _supabase.from('site_users').select('id,username').in('id', userIds);
+                const userMap = {};
+                if(users) users.forEach(u => userMap[u.id] = u.username);
+                this._allBills = orders.map(o => ({
+                    bill: o.bill_number || '-',
+                    product: o.product_name || '-',
+                    qty: o.quantity || 1,
+                    total: Number(o.total_amount || 0),
+                    buyer: userMap[o.user_id] || String(o.user_id),
+                    date: o.created_at ? new Date(o.created_at).toLocaleDateString('lo-LA') : '-'
+                }));
+                this._renderBillsTable(this._allBills);
+            },
+
+            _renderBillsTable: function(list) {
+                const tbody = document.getElementById('t-bills');
+                const countEl = document.getElementById('bill-count');
+                if(!tbody) return;
+                if(!list || list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
+                    if(countEl) countEl.textContent = '';
+                    return;
+                }
+                tbody.innerHTML = list.map(o => `
+                    <tr>
+                        <td><span style="font-family:monospace;color:#a78bfa;font-weight:700;font-size:11px;">${o.bill}</span></td>
+                        <td style="font-size:12px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${o.product}">${o.product}</td>
+                        <td style="font-size:12px;color:#ccc;text-align:center;">${o.qty}</td>
+                        <td style="font-size:12px;color:#e53935;font-weight:600;">${o.total.toLocaleString()} ₭</td>
+                        <td style="font-size:12px;color:#ccc;">${o.buyer}</td>
+                        <td style="font-size:11px;color:#aaa;">${o.date}</td>
+                    </tr>
+                `).join('');
+                if(countEl) countEl.textContent = `ທັງໝົດ: ${list.length} ລາຍການ`;
+            },
+
+            filterBills: function(query) {
+                if(!this._allBills) return;
+                const q = query.toLowerCase().trim();
+                if(!q) { this._renderBillsTable(this._allBills); return; }
+                const filtered = this._allBills.filter(o =>
+                    o.bill.toLowerCase().includes(q) ||
+                    o.product.toLowerCase().includes(q) ||
+                    o.buyer.toLowerCase().includes(q)
+                );
+                this._renderBillsTable(filtered);
             },
 
             deleteProductId: async function(orderId) {
@@ -3570,7 +3771,7 @@ function togglePw(id, btn) {
                 mode = mode || 'ticket';
                 if(this.isSpinning) return;
                 if(!currentUser) { NotificationManager.warning('ກະລຸນາເຂົ້າສູ່ລະບົບ'); return; }
-                if(!this.prizes || this.prizes.length === 0) { NotificationManager.warning('ຍັງບໍ່ມີລາງວັນ'); return; }
+                if(!this.prizes || this.prizes.length === 0) return; // ไม่มีรางวัล = ไม่ทำอะไร ไม่แจ้งเตือน
 
                 showProcessing('ກຳລັງກວດສອບ...');
                 const { data: liveUser } = await _supabase.from('site_users').select('spin_tickets,balance').eq('id', currentUser.id).single();
@@ -3597,7 +3798,7 @@ function togglePw(id, btn) {
                 const prize = this.pickPrize();
                 if(!prize) { NotificationManager.error('ຜິດພາດ: ໄດ້ລາງວັນບໍ່ສຳເລັດ'); return; }
 
-                // หมุน animation — คำนวณ angle ให้วงล้อหยุดตรงช่องที่สุ่มได้จริงๆ
+                // หมุน animation — คำนวณ angle ให้วงล้อหยุดในช่องที่สุ่มได้ แต่ตำแหน่งสุ่ม (ไม่กึ่งกลาง)
                 this.isSpinning = true;
                 document.getElementById('spin-btn').disabled = true;
                 document.getElementById('spin-result-box').style.display = 'none';
@@ -3606,14 +3807,16 @@ function togglePw(id, btn) {
                 const prizeIdx = this.prizes.indexOf(prize);
                 const arc = (Math.PI * 2) / n;
 
-                // draw() วาดช่อง i ที่ start = arc*i - PI/2 (ctx ถูก rotate ด้วย currentAngle แล้ว)
-                // pointer อยู่บนสุด = angle 0 ของ canvas = -PI/2 ของวงล้อ
-                // เราต้องการให้กึ่งกลางช่อง prizeIdx อยู่ที่ angle -PI/2 (บนสุด)
-                // กึ่งกลางช่อง prizeIdx ใน local coords = arc*prizeIdx - PI/2 + arc/2
-                // ต้องการให้: currentAngle + (arc*prizeIdx - PI/2 + arc/2) = -PI/2
-                // => currentAngle = -arc*prizeIdx - arc/2
-                const targetLocalAngle = -(arc * prizeIdx + arc / 2);
-                // ปรับให้ currentAngle วิ่งไปข้างหน้าเสมอ (หมุนทวนเข็ม = angle เพิ่มขึ้น)
+                // สุ่ม offset ภายในช่องนั้น (ห่างจากขอบ 15% เพื่อไม่ชิดขอบเกินไป)
+                const edgeMargin = 0.15;
+                const randomOffset = (Math.random() * (1 - 2*edgeMargin) + edgeMargin) * arc;
+
+                // pointer อยู่บนสุด = -PI/2
+                // start ของช่อง prizeIdx = arc*prizeIdx - PI/2
+                // ต้องการให้จุดสุ่มในช่อง = start + randomOffset อยู่ที่ -PI/2 (pointer)
+                // => currentAngle + (arc*prizeIdx - PI/2 + randomOffset) = -PI/2
+                // => currentAngle = -arc*prizeIdx - randomOffset
+                const targetLocalAngle = -(arc * prizeIdx + randomOffset);
                 const spins = 6 + Math.floor(Math.random() * 4);
                 let diff = targetLocalAngle - (this.currentAngle % (Math.PI * 2));
                 if(diff > 0) diff -= Math.PI * 2;
@@ -3622,6 +3825,37 @@ function togglePw(id, btn) {
                 const duration = 4500;
                 const start = performance.now();
                 const startAngle = this.currentAngle;
+
+                // เสียงหมุน — Style B: Tick นุ่มๆ คล้ายนาฬิกา
+                let tickStopped = false;
+                let tickTimeoutId = null;
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const spinDuration = duration;
+
+                    function playTick() {
+                        if(tickStopped) return;
+                        try {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.value = 1050;
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            const now = audioCtx.currentTime;
+                            gain.gain.setValueAtTime(0, now);
+                            gain.gain.linearRampToValueAtTime(0.28, now + 0.004); // soft attack
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055); // quick decay
+                            osc.start(now);
+                            osc.stop(now + 0.055);
+                        } catch(e) {}
+
+                        const t = Math.min((performance.now() - start) / spinDuration, 1);
+                        const delay = 35 + (290 - 35) * Math.pow(t, 1.7);
+                        if(t < 1) tickTimeoutId = setTimeout(playTick, delay);
+                    }
+                    tickTimeoutId = setTimeout(playTick, 35);
+                } catch(e) { /* audio not supported */ }
 
                 const animate = (now) => {
                     const elapsed = now - start;
@@ -3634,6 +3868,8 @@ function togglePw(id, btn) {
                     } else {
                         this.currentAngle = finalAngle;
                         this.draw();
+                        tickStopped = true;
+                        if(tickTimeoutId) clearTimeout(tickTimeoutId);
                         this.onSpinEnd(prize, newTickets);
                     }
                 };
@@ -3967,10 +4203,16 @@ function togglePw(id, btn) {
                 const el = document.getElementById('spin-prizes-list');
                 if(!el || !spinWheel.prizes) return;
                 if(!spinWheel.prizes.length) { el.innerHTML = '<p style="color:#555; font-size:12px; text-align:center;">ຍັງບໍ່ມີລາງວັນ</p>'; return; }
-                el.innerHTML = spinWheel.prizes.map(p => {
+                const seen = new Set();
+                const unique = spinWheel.prizes.filter(p => {
+                    const key = (p.display_name || '').trim().toLowerCase();
+                    if(seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+                el.innerHTML = unique.map(p => {
                     const dot = `<span class="spin-history-dot" style="background:${p.color||'#888'};"></span>`;
                     const nameEl = `<span style="flex:1; font-size:13px;">${p.emoji||''} ${p.display_name}</span>`;
-                    // ซ่อน % และ stock จากผู้ใช้ทั่วไป
                     return `<div class="spin-history-item">${dot}${nameEl}</div>`;
                 }).join('');
             },
@@ -4233,6 +4475,47 @@ function togglePw(id, btn) {
 
 
                 app.init();
+
+        // ===== SNOW TOGGLE =====
+        app.toggleSnow = function() {
+            if(typeof window._snowToggle !== 'function') return;
+            const isOn = window._snowToggle();
+            const sw = document.getElementById('snow-toggle-switch');
+            const thumb = document.getElementById('snow-toggle-thumb');
+            if(sw && thumb) {
+                sw.style.background = isOn ? '#e53935' : '#555';
+                thumb.style.left = isOn ? '21px' : '3px';
+            }
+        };
+
+        // sync สวิตช์ทุกครั้งที่เปิดเมนู
+        app._syncSnowSwitch = function() {
+            const isOn = typeof window._snowEnabled === 'function' ? window._snowEnabled() : true;
+            const sw = document.getElementById('snow-toggle-switch');
+            const thumb = document.getElementById('snow-toggle-thumb');
+            if(sw && thumb) {
+                sw.style.background = isOn ? '#e53935' : '#555';
+                thumb.style.left = isOn ? '21px' : '3px';
+            }
+        };
+
+        // hook เข้า toggleMenu เดิม
+        const _origToggleMenu = app.toggleMenu ? app.toggleMenu.bind(app) : null;
+        const _origOpenMenu = document.getElementById('user-menu');
+        if(_origOpenMenu) {
+            const _origStyle = Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, 'display');
+        }
+        // ง่ายกว่า: MutationObserver ดูการเปิด user-menu
+        (function() {
+            const menu = document.getElementById('user-menu');
+            if(!menu) return;
+            const obs = new MutationObserver(() => {
+                if(menu.style.display !== 'none' && menu.style.display !== '') {
+                    app._syncSnowSwitch && app._syncSnowSwitch();
+                }
+            });
+            obs.observe(menu, { attributes: true, attributeFilter: ['style'] });
+        })();
 
         // ===== CUSTOM CONFIRM DIALOG =====
         const CustomConfirm = {

@@ -1231,24 +1231,27 @@
             right: 20px;
             background: #1a1a1a;
             border: 1px solid rgba(255, 0, 0, 0.3);
-            border-radius: 16px;
-            padding: 15px;
-            min-width: 280px;
+            border-radius: 14px;
+            padding: 8px;
+            min-width: 210px;
+            max-width: 210px;
+            max-height: 85vh;
+            overflow-y: auto;
             box-shadow: 0 8px 30px rgba(0,0,0,0.9);
             z-index: 1001;
             animation: fadeInUp 0.3s ease;
         }
         .user-menu-item {
-            padding: 15px;
-            margin: 5px 0;
-            border-radius: 12px;
+            padding: 10px 12px;
+            margin: 2px 0;
+            border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             border: 1px solid transparent;
         }
         .user-menu-item:hover {
@@ -1258,23 +1261,23 @@
         }
         .balance-card {
             background: linear-gradient(135deg, #ff3333 0%, #990000 100%);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
         }
         .balance-amount {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 700;
             color: #fff;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             animation: pulse 3s ease-in-out infinite;
         }
         .balance-label {
-            font-size: 12px;
+            font-size: 11px;
             color: rgba(255,255,255,0.9);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -1751,15 +1754,6 @@
             .search-input:focus { width: 250px; }
             .popup-container { max-width: 600px; }
             .topup-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        }
-
-        @media (min-width: 1024px) {
-            .cat-grid {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                max-width: 900px;
-                gap: 16px;
-            }
         }
 
         body {
