@@ -1001,8 +1001,6 @@ function togglePw(id, btn) {
                 const uidSection = document.getElementById('receipt-uid-section');
                 if(data.productUniqueId) {
                     document.getElementById('receipt-uid').textContent = data.productUniqueId;
-                    const qtyEl = document.getElementById('receipt-uid-qty');
-                    if(qtyEl) qtyEl.textContent = data.qty > 1 ? `ໃຊ້ໄດ້ ${data.qty} ອັນ` : '';
                     uidSection.style.display = 'block';
                 } else {
                     uidSection.style.display = 'none';
@@ -1207,10 +1205,10 @@ function togglePw(id, btn) {
                         <img src="${order.product_img || ''}" style="width:72px; height:72px; object-fit:cover; border-radius:8px;">
                     </div>
                     ${order.bill_number ? `
-                    <div style="background:#1a1a2e; border:1px solid rgba(167,139,250,0.3); border-radius:8px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-                        <i class="fas fa-receipt" style="color:#a78bfa; font-size:12px;"></i>
+                    <div style="background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-receipt" style="color:#aaa; font-size:12px;"></i>
                         <span style="color:#aaa; font-size:11px;">ເລກບິນ:</span>
-                        <span style="font-family:monospace; color:#a78bfa; font-size:10px; font-weight:700; word-break:break-all;">${order.bill_number}</span>
+                        <span style="font-family:monospace; color:#ccc; font-size:10px; font-weight:600; word-break:break-all;">${order.bill_number}</span>
                     </div>` : ''}
                     <div style="background:#111; padding:10px 12px; border-radius:10px; font-size:13px;">
                         <div style="margin-bottom:6px;"><span style="color:#aaa;">ສິນຄ້າ:</span> <b>${order.product_name || '-'}</b></div>
@@ -1222,8 +1220,8 @@ function togglePw(id, btn) {
                     <div class="product-id-badge" style="margin-top:10px;">
                         <div class="id-icon"><i class="fas fa-id-badge"></i></div>
                         <div class="id-text" style="flex:1;min-width:0;">
-                            <div class="id-label">🔑 ລະຫັດສິນຄ້າ${(order.quantity && order.quantity > 1) ? ` <span style="background:rgba(229,57,53,0.2);color:#ff6b6b;font-size:10px;padding:1px 7px;border-radius:6px;margin-left:4px;">x${order.quantity} ອັນ</span>` : ''}</div>
-                            <div class="id-value" style="font-size:12px; word-break:break-all; white-space:normal;">${order.product_unique_id}</div>
+                            <div class="id-label">🔑 ລະຫັດສິນຄ້າ${(order.quantity && order.quantity > 1) ? ` (x${order.quantity} ອັນ)` : ''}</div>
+                            <div class="id-value" style="font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${order.product_unique_id}</div>
                         </div>
                         <button onclick="app.copyProductId('${order.product_unique_id}')" id="copy-pid-btn" style="padding:8px 12px;border:none;background:#1e3a5f;color:#60a5fa;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;margin-left:10px;">
                             <i class="fas fa-copy"></i> ຄັດລອກ
@@ -3536,9 +3534,11 @@ function togglePw(id, btn) {
                 }
                 tbody.innerHTML = list.map(o => `
                     <tr>
-                        <td>
-                            <span style="font-family:monospace; color:#60a5fa; font-weight:700; font-size:12px;">${o.uid}</span>
-                            ${o.qty > 1 ? `<span style="display:inline-block;margin-left:5px;background:rgba(229,57,53,0.2);color:#ff6b6b;font-size:10px;padding:1px 6px;border-radius:6px;font-weight:700;">x${o.qty} ອັນ</span>` : ''}
+                        <td style="max-width:160px;">
+                            <div style="display:flex;align-items:center;gap:5px;overflow:hidden;">
+                                <span style="font-family:monospace; color:#60a5fa; font-weight:700; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;" title="${o.uid}">${o.uid}</span>
+                                ${o.qty > 1 ? `<span style="flex-shrink:0;background:rgba(229,57,53,0.2);color:#ff6b6b;font-size:10px;padding:1px 6px;border-radius:6px;font-weight:700;white-space:nowrap;">x${o.qty}</span>` : ''}
+                            </div>
                         </td>
                         <td style="font-size:12px; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.product}">${o.product}</td>
                         <td style="font-size:12px; color:#ccc;">${o.buyer}</td>
@@ -3613,7 +3613,7 @@ function togglePw(id, btn) {
                 }
                 tbody.innerHTML = list.map(o => `
                     <tr>
-                        <td><span style="font-family:monospace;color:#a78bfa;font-weight:700;font-size:11px;">${o.bill}</span></td>
+                        <td><span style="font-family:monospace;color:#ccc;font-weight:600;font-size:11px;">${o.bill}</span></td>
                         <td style="font-size:12px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${o.product}">${o.product}</td>
                         <td style="font-size:12px;color:#ccc;text-align:center;">${o.qty}</td>
                         <td style="font-size:12px;color:#e53935;font-weight:600;">${o.total.toLocaleString()} ₭</td>
