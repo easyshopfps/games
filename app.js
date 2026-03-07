@@ -1731,19 +1731,14 @@ function togglePw(id, btn) {
             },
 
             resetMemberPassword: async function() {
-                if(!await CustomConfirm.show('ແນ່ໃຈບໍ່ວ່າຕ້ອງການຣີເຊັດລະຫັດຜ່ານ?', {title:'ຣີເຊັດລະຫັດຜ່ານ', icon:'fa-key'})) return;
-                
-                const id = document.getElementById('member-id').value;
-                const newPassword = '123456';
-                // ສ້າງ token ໃໝ່ force logout ທຸກ device
-                const newToken = Date.now().toString(36) + Math.random().toString(36).substring(2);
-                
-                const { error } = await _supabase.from('site_users').update({ 
-                    password: newPassword,
-                    session_token: newToken
-                }).eq('id', id);
+                if(!await CustomConfirm.show('ຣີເຊັດລະຫັດຜ່ານເປັນ 123456?', {title:'ຣີເຊັດລະຫັດຜ່ານ', icon:'fa-key'})) return;
+                const memberId = document.getElementById('member-id').value;
+                const { error } = await _supabase.rpc('admin_reset_password', {
+                    p_user_id: parseInt(memberId),
+                    p_new_password: '123456'
+                });
                 if(error) NotificationManager.error(error.message);
-                else NotificationManager.success('ຣີເຊັດລະຫັດຜ່ານສຳເລັດ! ລະຫັດໃໝ່: 123456 (User ຈະຖືກ Logout ອັດຕະໂນມັດ)');
+                else NotificationManager.success('ຣີເຊັດລະຫັດຜ່ານສຳເລັດ! ລະຫັດໃໝ່: 123456');
             },
 
             saveProduct: async function() {
@@ -2331,94 +2326,30 @@ function togglePw(id, btn) {
             },
 
             redeemCode: async function() {
-                if(!currentUser) {
-                    NotificationManager.warning('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນ');
-                    return;
-                }
-                
+                if(!currentUser) { NotificationManager.warning('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນ'); return; }
                 const code = document.getElementById('redeem-code').value.trim();
-                if(!code) {
-                    NotificationManager.warning('ກະລຸນາໃສ່ໂຄດ');
-                    return;
-                }
-                
-                // ตรวจสอบโค้ด (ไม่ใช้ .eq('used', false) แล้ว)
-                showProcessing('ກຳລັງກວດສອບໂຄດ<br>ກະລຸນາລໍຖ້າ...');
-                const { data: redeemCode } = await _supabase
-                    .from('redeem_codes')
-                    .select('*')
-                    .eq('code', code)
-                    .or('is_active.is.null,is_active.eq.true')
-                    .single();
-                    
-                if(!redeemCode) {
-                    hideProcessing();
-                    NotificationManager.error('ໂຄດບໍ່ຖືກຕ້ອງ ຫຼື ໝົດອາຍຸແລ້ວ');
-                    return;
-                }
-                
-                // ตรวจสอบวันหมดอายุ (ถ้ามี)
-                if(redeemCode.expiry && new Date(redeemCode.expiry) < new Date()) {
-                    // ลบโค้ดที่หมดอายุ
-                    await _supabase.from('redeem_codes').delete().eq('id', redeemCode.id);
-                    hideProcessing();
-                    NotificationManager.error('ໂຄດໝົດອາຍຸແລ້ວ');
-                    return;
-                }
-                
-                // ตรวจสอบว่าใช้ครบหรือยัง
-                const currentUses = redeemCode.current_uses || 0;
-                const maxUses = redeemCode.max_uses || 1;
-                if(currentUses >= maxUses) {
-                    hideProcessing();
-                    NotificationManager.error('ໂຄດນີ້ຖືກໃຊ້ຄົບແລ້ວ');
-                    return;
-                }
-                
-                // ตรวจสอบว่าคนนี้เคยใช้แล้วหรือยัง
-                const { data: existingUse } = await _supabase
-                    .from('code_redemptions')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .eq('code_id', redeemCode.id)
-                    .maybeSingle();
-                
-                if(existingUse) {
-                    hideProcessing();
-                    NotificationManager.error('ທ່ານເຄີຍໃຊ້ໂຄ້ດນີ້ໄປແລ້ວ');
-                    return;
-                }
-                
-                // บันทึกประวัติการใช้โค้ด ก่อนเสมอ (ป้องกัน race condition)
-                await _supabase.from('code_redemptions').insert([{
-                    user_id: currentUser.id,
-                    code_id: redeemCode.id,
-                    amount: redeemCode.amount
-                }]);
+                if(!code) { NotificationManager.warning('ກະລຸນາໃສ່ໂຄດ'); return; }
 
-                // เพิ่มเงินให้ผู้ใช้
-                const newBalance = (currentUser.balance || 0) + redeemCode.amount;
-                await _supabase.from('site_users').update({ balance: newBalance }).eq('id', currentUser.id);
-                
-                // อัปเดตจำนวนการใช้
-                const newCurrentUses = currentUses + 1;
-                
-                // ถ้าใช้ครบ → อัปเดตเป็น is_active=false แทนการลบ (เพื่อไม่ให้ FK code_redemptions พัง)
-                if(newCurrentUses >= maxUses) {
-                    await _supabase.from('redeem_codes').update({ current_uses: newCurrentUses, is_active: false }).eq('id', redeemCode.id);
-                } else {
-                    await _supabase.from('redeem_codes').update({ current_uses: newCurrentUses }).eq('id', redeemCode.id);
-                }
-                
-                await app._updateSpinProgress(redeemCode.amount);
-                NotificationManager.success(`ໃຊ້ໂຄດສຳເລັດ! ໄດ້ຮັບເງິນ ${redeemCode.amount.toLocaleString()} ₭`);
+                showProcessing('ກຳລັງກວດສອບໂຄດ<br>ກະລຸນາລໍຖ້າ...');
+
+                // ── ເອີ້ນ RPC — ທຸກການກວດສອບ ແລະ ບວກເງິນຢູ່ DB ──
+                const { data, error } = await _supabase.rpc('use_redeem_code', {
+                    p_user_id: currentUser.id,
+                    p_code:    code
+                });
+
                 hideProcessing();
-                
-                // อัปเดต currentUser
-                currentUser.balance = newBalance;
+
+                if(error) { NotificationManager.error('ເກີດຂໍ້ຜິດພາດ ກະລຸນາລອງໃໝ່'); return; }
+
+                const result = typeof data === 'string' ? JSON.parse(data) : data;
+                if(!result?.ok) { NotificationManager.error(result?.error || 'ໂຄດບໍ່ຖືກຕ້ອງ'); return; }
+
+                // ── ອັບເດດ UI ດ້ວຍຄ່າຈາກ DB ──
+                currentUser.balance = result.new_balance;
                 this.updateUserUI();
-                
-                // รีเซ็ตฟอร์ม
+                await app._updateSpinProgress(result.amount);
+                NotificationManager.success(`ໃຊ້ໂຄດສຳເລັດ! ໄດ້ຮັບເງິນ ${result.amount.toLocaleString()} ₭`);
                 document.getElementById('redeem-code').value = '';
             },
 
@@ -2472,24 +2403,23 @@ function togglePw(id, btn) {
             },
 
             approveTopup: async function(id) {
-                const { data: topup } = await _supabase.from('topup_requests').select('*').eq('id', id).single();
-                if(topup) {
-                    // ดึงข้อมูลผู้ใช้ปัจจุบัน
-                    const { data: user } = await _supabase.from('site_users').select('*').eq('id', topup.user_id).single();
-                    
-                    // อัปเดตยอดเงินผู้ใช้
-                    const newBalance = (user.balance || 0) + topup.amount;
-                    await _supabase.from('site_users').update({ balance: newBalance }).eq('id', topup.user_id);
-                    
-                    // ลบรายการเติมเงินทิ้งเลย (ไม่เปลืองพื้นที่ database)
-                    await _supabase.from('topup_requests').delete().eq('id', id);
-                    
-                    await app._updateSpinProgress(topup.amount, topup.user_id);
-                    NotificationManager.success('ອະນຸມັດສຳເລັດ! ລຶບລາຍການແລ້ວ');
-                    await this.fetchData();
-                    this.renderAdmin();
-                    this.tab('tab-topup-admin');
-                }
+                if(!await CustomConfirm.show('ຢືນຢັນອະນຸມັດການເຕີມເງິນນີ້?', {title:'ອະນຸມັດເຕີມເງິນ', icon:'fa-check-circle'})) return;
+
+                // ── ເອີ້ນ RPC — amount ດຶງຈາກ DB ເອງ Client ບໍ່ສາມາດ hack ໄດ້ ──
+                const { data, error } = await _supabase.rpc('approve_topup', {
+                    p_topup_id: id
+                });
+
+                if(error) { NotificationManager.error('ເກີດຂໍ້ຜິດພາດ: ' + error.message); return; }
+
+                const result = typeof data === 'string' ? JSON.parse(data) : data;
+                if(!result?.ok) { NotificationManager.error(result?.error || 'ເກີດຂໍ້ຜິດພາດ'); return; }
+
+                await app._updateSpinProgress(result.amount, result.user_id);
+                NotificationManager.success('ອະນຸມັດສຳເລັດ!');
+                await this.fetchData();
+                this.renderAdmin();
+                this.tab('tab-topup-admin');
             },
 
             rejectTopup: async function(id) {
@@ -2754,43 +2684,32 @@ function togglePw(id, btn) {
 
                 try {
                     showProcessing('ກຳລັງສ້າງບັນຊີ<br>ກະລຸນາລໍຖ້າສັກຄູ່...');
+
+                    // ── ກວດ username ຊໍ້າ ──
                     const { data: existing } = await _supabase
-                        .from('site_users')
-                        .select('id')
-                        .eq('username', username)
-                        .single();
+                        .from('site_users').select('id').eq('username', username).maybeSingle();
+                    if(existing) { hideProcessing(); NotificationManager.error('ຊື່ຜູ້ໃຊ້ນີ້ຖືກໃຊ້ແລ້ວ'); return; }
 
-                    if(existing) {
-                        hideProcessing();
-                        NotificationManager.error('ຊື່ຜູ້ໃຊ້ນີ້ຖືກໃຊ້ແລ້ວ');
-                        return;
-                    }
+                    // ── ໃຊ້ RPC ສ້າງ account — DB hash password ດ້ວຍ crypt() ──
+                    const { data: result, error: rpcErr } = await _supabase.rpc('register_user', {
+                        p_username: username,
+                        p_password: password,
+                        p_pin:      pin
+                    });
 
-                    const { data, error } = await _supabase
-                        .from('site_users')
-                        .insert([{
-                            username: username,
-                            pin: pin,
-                            password: password,
-                            avatar_url: 'https://img5.pic.in.th/file/secure-sv1/17710495907562b12906e5c4d2a54.png',
-                            balance: 0,
-                            total_spent: 0,
-                            status: 'active'
-                        }])
-                        .select()
-                        .single();
+                    if(rpcErr) throw rpcErr;
+                    const res = typeof result === 'string' ? JSON.parse(result) : result;
+                    if(!res?.ok) { hideProcessing(); NotificationManager.error(res?.error || 'ເກີດຂໍ້ຜິດພາດ'); return; }
 
-                    if(error) throw error;
+                    // ── ດຶງ profile ຫຼັງ register ──
+                    const { data } = await _supabase.from('site_users').select('*').eq('id', res.id).single();
+                    if(!data) throw new Error('Profile not found');
 
                     hideProcessing();
                     NotificationManager.success('ສະໝັກສະມາຊິກສຳເລັດ!');
-                    // Generate session_token for new user
-                    const newToken = Date.now().toString(36) + Math.random().toString(36).substring(2);
-                    await _supabase.from('site_users').update({ session_token: newToken }).eq('id', data.id);
-                    data.session_token = newToken;
                     currentUser = data;
                     this.updateUserUI();
-                    this.saveUserSession();
+                    this.checkAdminAccess();
                     this._clearRegisterForm();
                     router.home();
                     
@@ -2806,44 +2725,30 @@ function togglePw(id, btn) {
                 if(!cfToken || !cfToken.value) { NotificationManager.warning('ກະລຸນາຢືນຢັນວ່າທ່ານບໍ່ແມ່ນ Bot ກ່ອນ'); return; }
                 const username = document.getElementById('login-username').value.trim();
                 const password = document.getElementById('login-password').value;
-
-                if(!username || !password) {
-                    NotificationManager.warning('ກະລຸນາກອກຊື່ຜູ້ໃຊ້ແລະລະຫັດຜ່ານ');
-                    return;
-                }
+                if(!username || !password) { NotificationManager.warning('ກະລຸນາກອກຊື່ຜູ້ໃຊ້ແລະລະຫັດຜ່ານ'); return; }
 
                 showProcessing('ກຳລັງກວດສອບຂໍ້ມູນ<br>ກະລຸນາລໍຖ້າສັກຄູ່...');
                 try {
+                    // ── ໃຊ້ RPC — DB ກວດ password hash ເອງ ──
+                    const { data: result, error: rpcErr } = await _supabase.rpc('login_user', {
+                        p_username: username,
+                        p_password: password
+                    });
+
+                    if(rpcErr) { hideProcessing(); NotificationManager.error('ເກີດຂໍ້ຜິດພາດ'); return; }
+
+                    const res = typeof result === 'string' ? JSON.parse(result) : result;
+                    if(!res?.ok) { hideProcessing(); NotificationManager.error(res?.error || 'ຊື່ຜູ້ໃຊ້ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ'); return; }
+
+                    // ── ດຶງ profile ──
                     const { data: siteUser } = await _supabase
-                        .from('site_users')
-                        .select('*')
-                        .eq('username', username)
-                        .eq('password', password)
-                        .maybeSingle();
+                        .from('site_users').select('*').eq('id', res.id).single();
 
-                    if(!siteUser) {
-                        hideProcessing();
-                        NotificationManager.error('ຊື່ຜູ້ໃຊ້ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ');
-                        return;
-                    }
-
-                    if(siteUser.status === 'banned') {
-                        hideProcessing();
-                        NotificationManager.error('ບັນຊີຖືກລະງັບ');
-                        return;
-                    }
-
-                    await _supabase.from('site_users')
-                        .update({ last_login: new Date().toISOString() })
-                        .eq('id', siteUser.id);
-
-                    const newToken = Date.now().toString(36) + Math.random().toString(36).substring(2);
-                    await _supabase.from('site_users').update({ session_token: newToken }).eq('id', siteUser.id);
-                    siteUser.session_token = newToken;
+                    if(!siteUser) { hideProcessing(); NotificationManager.error('ບໍ່ພົບຂໍ້ມູນຜູ້ໃຊ້'); return; }
 
                     currentUser = siteUser;
                     this.updateUserUI();
-                    this.checkAdminAccess(); // ← ถ้า is_admin=true จะโชว์ปุ่ม Admin อัตโนมัติ
+                    this.checkAdminAccess();
                     this.saveUserSession();
                     router.home();
                     hideProcessing();
@@ -2861,7 +2766,6 @@ function togglePw(id, btn) {
                 if(await CustomConfirm.show('ແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກຈາກລະບົບ?', {title:'ອອກຈາກລະບົບ', icon:'fa-sign-out-alt'})) {
                     currentUser = null;
                     localStorage.removeItem('user_session');
-                    // Reload ໜ້າເວັບໃໝ່
                     location.reload();
                 }
             },
@@ -2929,31 +2833,23 @@ function togglePw(id, btn) {
 
             loadUserSession: async function() {
                 const session = localStorage.getItem('user_session');
-                if(session) {
-                    try {
-                        const { id, session_token } = JSON.parse(session);
-                        const { data } = await _supabase
-                            .from('site_users')
-                            .select('*')
-                            .eq('id', id)
-                            .single();
-                        
-                        if(data && data.status === 'active') {
-                            // ກວດສອບ session_token — ຖ້າລະຫັດຜ່ານຖືກປ່ຽນ token ຈະບໍ່ຕົງກັນ
-                            if(data.session_token && session_token && data.session_token !== session_token) {
-                                localStorage.removeItem('user_session');
-                                NotificationManager.warning('ລະຫັດຜ່ານຖືກປ່ຽນ, ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່');
-                                return;
-                            }
-                            currentUser = data;
-                            this.updateUserUI();
-                        } else {
+                if(!session) return;
+                try {
+                    const { id, session_token } = JSON.parse(session);
+                    const { data } = await _supabase.from('site_users').select('*').eq('id', id).single();
+                    if(data && data.status === 'active') {
+                        if(data.session_token && session_token && data.session_token !== session_token) {
                             localStorage.removeItem('user_session');
+                            NotificationManager.warning('ລະຫັດຜ່ານຖືກປ່ຽນ, ກະລຸນາເຂົ້າສູ່ລະບົບໃໝ່');
+                            return;
                         }
-                    } catch(error) {
-                        console.error('Session load error:', error);
+                        currentUser = data;
+                        this.updateUserUI();
+                        this.checkAdminAccess();
+                    } else {
+                        localStorage.removeItem('user_session');
                     }
-                }
+                } catch(e) { console.error('Session load error:', e); }
             },
 
             openChangePassword: function() {
@@ -2969,54 +2865,44 @@ function togglePw(id, btn) {
                 const newPass = document.getElementById('new-password').value;
                 const confirm = document.getElementById('confirm-password').value;
 
-                if(!current || !newPass || !confirm) {
-                    NotificationManager.warning('ກະລຸນາກອກຂໍ້ມູນ');
-                    return;
-                }
-                if(current !== currentUser.password) {
-                    NotificationManager.error('ລະຫັດຜ່ານປັດຈຸບັນບໍ່ຖືກ');
-                    return;
-                }
-                if(newPass !== confirm) {
-                    NotificationManager.error('ລະຫັດໃໝ່ບໍ່ຕົງກັນ');
-                    return;
-                }
+                if(!current || !newPass || !confirm) { NotificationManager.warning('ກະລຸນາກອກຂໍ້ມູນ'); return; }
+                if(newPass !== confirm) { NotificationManager.error('ລະຫັດໃໝ່ບໍ່ຕົງກັນ'); return; }
 
-                // ກວດ password strength ເໝືອນຕອນສະໝັກ
                 const checks = {
-                    upper: /[A-Z]/.test(newPass),
-                    lower: /[a-z]/.test(newPass),
+                    upper: /[A-Z]/.test(newPass), lower: /[a-z]/.test(newPass),
                     num: /[0-9]/.test(newPass),
                     special: /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(newPass),
                     long: newPass.length >= 8
                 };
-                const score = Object.values(checks).filter(Boolean).length;
-                if(score < 5) {
-                    let missing = [];
-                    if(!checks.upper) missing.push('ຕົວພິມໃຫຍ່ A-Z');
-                    if(!checks.lower) missing.push('ຕົວພິມນ້ອຍ a-z');
-                    if(!checks.num) missing.push('ຕົວເລກ 0-9');
-                    if(!checks.special) missing.push('ອັກຂະລະພິເສດ !@#$');
-                    if(!checks.long) missing.push('ຢ່າງໜ້ອຍ 8 ຕົວ');
-                    NotificationManager.error('ລະຫັດຜ່ານບໍ່ເຂັ້ມແຂງ! ຍັງຂາດ: ' + missing.join(', '));
+                if(Object.values(checks).filter(Boolean).length < 5) {
+                    let m = [];
+                    if(!checks.upper) m.push('A-Z'); if(!checks.lower) m.push('a-z');
+                    if(!checks.num) m.push('0-9'); if(!checks.special) m.push('!@#$');
+                    if(!checks.long) m.push('8+ ຕົວ');
+                    NotificationManager.error('ລະຫັດຜ່ານບໍ່ເຂັ້ມແຂງ! ຍັງຂາດ: ' + m.join(', '));
                     return;
                 }
 
-                // ສ້າງ session_token ໃໝ່ ເພື່ອ force logout ທຸກ device
-                const newToken = Date.now().toString(36) + Math.random().toString(36).substring(2);
                 showProcessing('ກຳລັງປ່ຽນລະຫັດ...');
-                await _supabase.from('site_users').update({ 
-                    password: newPass,
-                    session_token: newToken
-                }).eq('id', currentUser.id);
-                
-                currentUser.password = newPass;
+
+                // ── RPC: ກວດລະຫັດເກົ່າ + hash ລະຫັດໃໝ່ຢູ່ DB ──
+                const { data: result, error } = await _supabase.rpc('change_password', {
+                    p_user_id:    currentUser.id,
+                    p_old_password: current,
+                    p_new_password: newPass
+                });
+
+                hideProcessing();
+                if(error) { NotificationManager.error('ເກີດຂໍ້ຜິດພາດ'); return; }
+
+                const res = typeof result === 'string' ? JSON.parse(result) : result;
+                if(!res?.ok) { NotificationManager.error(res?.error || 'ລະຫັດຜ່ານປັດຈຸບັນບໍ່ຖືກ'); return; }
+
+                // ── ອັບເດດ session_token ໃໝ່ force logout ທຸກ device ──
+                const newToken = res.new_session_token;
                 currentUser.session_token = newToken;
                 this.saveUserSession();
-                hideProcessing();
                 NotificationManager.success('ປ່ຽນລະຫັດຜ່ານສຳເລັດ!');
-                
-                // Reload ໜ້າເວັບໃໝ່
                 setTimeout(() => { location.reload(); }, 1500);
             },
 
