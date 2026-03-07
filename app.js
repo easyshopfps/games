@@ -1482,9 +1482,10 @@ function togglePw(id, btn) {
                     <tr onclick="app.selectMember(${u.id})" style="cursor:pointer;">
                         <td>${u.id}</td>
                         <td>${u.username}</td>
-                        <td>${Number(u.balance || 0).toLocaleString()} ₭</td>
-                        <td>${u.status === 'active' ? '<span style="color:#00cc88">ເປີດໃຊ້</span>' : '<span style="color:#ff4444">ລະງັບ</span>'}</td>
-                        <td>${new Date(u.created_at).toLocaleDateString('lo-LA')}</td>
+                        <td style="color:#00cc88;">${Number(u.balance || 0).toLocaleString()} ₭</td>
+                        <td>${u.is_admin ? '<span style="color:#ff4444">🔑</span>' : '<span style="color:#555">—</span>'}</td>
+                        <td>${u.status === 'active' ? '<span style="color:#00cc88">✅</span>' : '<span style="color:#ff4444">🚫</span>'}</td>
+                        <td style="color:var(--text-dim);font-size:11px;">${new Date(u.created_at).toLocaleDateString('lo-LA')}</td>
                     </tr>
                 `).join('');
 
@@ -1643,17 +1644,20 @@ function togglePw(id, btn) {
 
             updateMember: async function() {
                 const id = document.getElementById('member-id').value;
+                const isAdminVal = document.getElementById('member-is-admin').value === 'true';
                 const data = {
-                    balance: parseInt(document.getElementById('member-balance').value) || 0,
+                    balance:     parseInt(document.getElementById('member-balance').value) || 0,
                     total_spent: parseInt(document.getElementById('member-spent').value) || 0,
-                    status: document.getElementById('member-status').value
+                    status:      document.getElementById('member-status').value,
+                    is_admin:    isAdminVal
                 };
-                
+
                 const { error } = await _supabase.from('site_users').update(data).eq('id', id);
                 if(error) NotificationManager.error(error.message);
                 else {
                     NotificationManager.success('ອັບເດດຂໍ້ມູນສຳເລັດ');
-                    this.loadAllMembers();
+                    await this.fetchData();
+                    this.renderAdmin();
                     document.getElementById('member-edit-form').style.display = 'none';
                 }
             },
@@ -1697,6 +1701,7 @@ function togglePw(id, btn) {
                     document.getElementById('member-balance').value = data.balance || 0;
                     document.getElementById('member-spent').value = data.total_spent || 0;
                     document.getElementById('member-status').value = data.status || 'active';
+                    document.getElementById('member-is-admin').value = data.is_admin ? 'true' : 'false';
                     document.getElementById('member-edit-form').style.display = 'block';
                 }
             },
