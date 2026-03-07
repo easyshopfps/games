@@ -814,7 +814,6 @@ function togglePw(id, btn) {
 
             handleSearch: function(e) {
                 const val = e.target.value.trim().toLowerCase();
-                if(val === "khoudadmin") { e.target.value=""; this.openModal('login-modal'); return; }
                 if(e.key === 'Enter' && val) {
                     const hotIds = this.db.hot_deals.products || [];
                     const res = this.db.products.filter(p => p.name.toLowerCase().includes(val));
@@ -841,151 +840,87 @@ function togglePw(id, btn) {
 
                 const qty = buyQty || 1;
 
-                // ===== CHECK LIVE STOCK FROM DATABASE BEFORE PURCHASE =====
-                showProcessing('ກຳລັງກວດສອບຂໍ້ມູນ...');
-                
-                const { data: liveProduct, error: fetchErr } = await _supabase
-                    .from('products')
-                    .select('*')
-                    .eq('id', activeProduct.id)
-                    .single();
-                
-                if(fetchErr || !liveProduct) {
-                    hideProcessing();
-                    NotificationManager.error('ບໍ່ສາມາດດຶງຂໍ້ມູນສິນຄ້າໄດ້ ກະລຸນາລອງໃໝ່');
-                    return;
-                }
-
-                activeProduct = liveProduct;
-
-                // Check stock (must have enough for qty)
-                if(liveProduct.stock !== null && liveProduct.stock !== undefined) {
-                    if(liveProduct.stock <= 0) {
-                        hideProcessing();
-                        NotificationManager.error('ສິນຄ້ານີ້ໝົດສະຕ໊ອກແລ້ວ!');
-                        this._updateDetailStockUI(liveProduct);
-                        return;
-                    }
-                    if(liveProduct.stock < qty) {
-                        hideProcessing();
-                        NotificationManager.error(`ສະຕ໊ອກບໍ່ພຽງພໍ! ເຫຼືອ ${liveProduct.stock} ອັນ`);
-                        return;
-                    }
-                }
-
-                // Fetch latest user balance
-                const { data: liveUser } = await _supabase
-                    .from('site_users')
-                    .select('balance')
-                    .eq('id', currentUser.id)
-                    .single();
-                
-                const balance = liveUser ? (liveUser.balance || 0) : (currentUser.balance || 0);
-                const price = liveProduct.price || 0;
-                const totalAmount = price * qty;
-                
-                if(balance < totalAmount) {
-                    hideProcessing();
-                    NotificationManager.error(`ຍອດເງິນບໍ່ພຽງພໍ! ຍອດຄົງເຫຼືອ: ${balance.toLocaleString()} ₭ (ຕ້ອງການ: ${totalAmount.toLocaleString()} ₭)`);
-                    return;
-                }
-                
                 showProcessing('ກຳລັງດຳເນີນການສັ່ງຊື້<br>ກະລຸນາລໍຖ້າ ຢ່າປິດໜ້ານີ້...');
-                const newBalance = balance - totalAmount;
-                const { error: balErr } = await _supabase.from('site_users').update({ balance: newBalance }).eq('id', currentUser.id);
-                if(balErr) { hideProcessing(); NotificationManager.error('ເກີດຂໍ້ຜິດພາດ: ' + balErr.message); return; }
-                
-                // ลด stock
-                let newStock = null;
-                if(liveProduct.stock !== null && liveProduct.stock !== undefined && liveProduct.stock > 0) {
-                    newStock = liveProduct.stock - qty;
-                    const { error: stockErr } = await _supabase.from('products').update({ stock: newStock }).eq('id', liveProduct.id);
-                    if(stockErr) {
-                        await _supabase.from('site_users').update({ balance: balance }).eq('id', currentUser.id);
-                        hideProcessing();
-                        NotificationManager.error('ເກີດຂໍ້ຜິດພາດໃນການອັພເດດສະຕ໊ອກ');
-                        return;
-                    }
-                    activeProduct.stock = newStock;
-                }
-                
-                // Generate Bill Number (1 bill ต่อการสั่งซื้อ 1 ครั้ง)
-                const billNumber = this._generateBillNumber();
 
-                // Generate product unique ID (1 ID ต่อ 1 การซื้อ ระบุจำนวนใน record)
+                // ── Generate bill + product ID ຝ່ັງ client (ສົ່ງໄປໃຫ້ RPC ເກັບ) ──
+                const billNumber = this._generateBillNumber();
                 let generatedProductId = null;
-                if(liveProduct.has_product_id) {
+                if(activeProduct.has_product_id) {
                     const ts = Date.now().toString(36).toUpperCase();
                     const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
                     generatedProductId = 'EZ-' + ts + '-' + rand;
                 }
 
-                // บันทึก 1 row รวม qty ไว้ใน record เดียว
-                const orderData = {
-                    user_id: currentUser.id,
-                    product_id: liveProduct.id,
-                    product_name: liveProduct.name,
-                    product_img: liveProduct.img,
-                    product_price: price,
-                    total_amount: totalAmount,
-                    quantity: qty,
-                    status: 'completed',
-                    product_unique_id: generatedProductId,
-                    bill_number: billNumber
-                };
-                const { error: orderErr } = await _supabase.from('orders').insert([orderData]);
-                if(orderErr) { 
-                    console.error('Order error:', orderErr);
-                    await _supabase.from('site_users').update({ balance: balance }).eq('id', currentUser.id);
-                    if(newStock !== null) {
-                        await _supabase.from('products').update({ stock: liveProduct.stock }).eq('id', liveProduct.id);
-                    }
+                // ── ເອີ້ນ RPC — ທຸກການຄຳນວນ, ກວດ stock/balance, ຫັກເງິນ ຢູ່ Database ──
+                const { data: rpcResult, error: rpcErr } = await _supabase.rpc('process_purchase', {
+                    p_user_id:    currentUser.id,
+                    p_product_id: activeProduct.id,
+                    p_qty:        qty,
+                    p_bill_no:    billNumber,
+                    p_prod_uid:   generatedProductId
+                });
+
+                if(rpcErr) {
                     hideProcessing();
-                    NotificationManager.error('ເກີດຂໍ້ຜິດພາດໃນການສັ່ງຊື້: ' + orderErr.message); 
-                    return; 
+                    NotificationManager.error('ເກີດຂໍ້ຜິດພາດ: ' + rpcErr.message);
+                    return;
                 }
-                
-                // อัปเดต limit ประวัติ
-                const { data: userOrders } = await _supabase
-                    .from('orders')
-                    .select('id, created_at')
-                    .eq('user_id', currentUser.id)
-                    .order('created_at', { ascending: true });
-                
-                if(userOrders && userOrders.length > 20) {
-                    const toDelete = userOrders.slice(0, userOrders.length - 20);
-                    for(const o of toDelete) {
-                        await _supabase.from('orders').delete().eq('id', o.id);
-                    }
+
+                const result = typeof rpcResult === 'string' ? JSON.parse(rpcResult) : rpcResult;
+
+                if(!result || !result.ok) {
+                    hideProcessing();
+                    NotificationManager.error(result?.error || 'ການສັ່ງຊື້ລົ້ມເຫຼວ');
+                    // refresh stock UI ໃຫ້ຖືກຕ້ອງ
+                    const { data: freshProd } = await _supabase.from('products').select('*').eq('id', activeProduct.id).single();
+                    if(freshProd) this._updateDetailStockUI(freshProd);
+                    return;
                 }
-                
+
+                // ── ອັບເດດ UI ດ້ວຍຄ່າຈາກ DB ──
+                const newBalance = result.new_balance;
+                const newStock   = result.new_stock;
+                const price      = result.price;
+                const totalAmount = result.total;
+
                 currentUser.balance = newBalance;
                 this.updateUserUI();
 
-                if(newStock !== null) {
-                    const cachedProd = this.db.products.find(p => p.id === liveProduct.id);
+                if(newStock !== null && newStock !== undefined) {
+                    activeProduct.stock = newStock;
+                    const cachedProd = this.db.products.find(p => p.id === activeProduct.id);
                     if(cachedProd) cachedProd.stock = newStock;
+                    this._silentRefreshHomeStock(activeProduct.id, newStock);
                 }
-                
-                this._silentRefreshHomeStock(liveProduct.id, newStock);
+
+                // ── ລຶບ order ເກົ່າ limit 20 ──
+                const { data: userOrders } = await _supabase
+                    .from('orders').select('id, created_at')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: true });
+                if(userOrders && userOrders.length > 20) {
+                    const toDelete = userOrders.slice(0, userOrders.length - 20);
+                    for(const o of toDelete) await _supabase.from('orders').delete().eq('id', o.id);
+                }
+
                 await this.fetchData();
-                
-                if(newStock !== null) {
-                    this._updateDetailStockUI({ ...liveProduct, stock: newStock });
+
+                if(newStock !== null && newStock !== undefined) {
+                    this._updateDetailStockUI({ ...activeProduct, stock: newStock });
                 }
-                
+
                 hideProcessing();
                 
                 // ใบเสร็จ
                 const firstProductId = generatedProductId;
                 this.showReceipt({
                     billNumber,
-                    productName: liveProduct.name,
-                    productImg: liveProduct.img,
+                    productName: result.prod_name || activeProduct.name,
+                    productImg:  result.prod_img  || activeProduct.img,
                     price,
                     qty,
                     totalAmount,
-                    productUniqueId: firstProductId,
+                    productUniqueId: (result.has_prod_id || activeProduct.has_product_id) ? firstProductId : null,
                     newBalance
                 });
             },
@@ -2104,19 +2039,59 @@ function togglePw(id, btn) {
                 window.scrollTo(0,0);
             },
 
-            login: function() {
-                const u = document.getElementById('log-u').value;
-                const p = document.getElementById('log-p').value;
-                const admin = this.db.users.find(x => x.username === u && x.password === p);
-                if(admin || (u === "khoud" && p === "khoud123@")) {
-                    localStorage.setItem('adminLogin','true');
-                    this.closeModal('login-modal');
-                    router.admin();
-                } else { NotificationManager.error('User ຫຼື Pass ຜິດ!'); }
+            login: async function() {
+                const email = document.getElementById('log-u').value.trim();
+                const pass  = document.getElementById('log-p').value.trim();
+                if(!email || !pass) { NotificationManager.error('ກະລຸນາໃສ່ Email ແລະ Password'); return; }
+
+                // ── ໃຊ້ Supabase Auth signInWithPassword ──
+                const { data: authData, error: authErr } = await _supabase.auth.signInWithPassword({
+                    email, password: pass
+                });
+
+                if(authErr || !authData?.user) {
+                    NotificationManager.error('Email ຫຼື Password ຜິດ!');
+                    return;
+                }
+
+                // ── ກວດວ່າ email ນີ້ຢູ່ໃນລາຍຊື່ admin ──
+                const { data: isAdm } = await _supabase.rpc('is_admin_user', {
+                    p_user_id: authData.user.id
+                });
+
+                if(!isAdm) {
+                    // ອອກ session ທັນທີ ຖ້າບໍ່ແມ່ນ admin
+                    await _supabase.auth.signOut();
+                    NotificationManager.error('ທ່ານບໍ່ມີສິດ Admin');
+                    return;
+                }
+
+                // ── Login Admin ສຳເລັດ ──
+                currentUser = {
+                    id: 'admin_' + authData.user.id,
+                    username: authData.user.email,
+                    email: authData.user.email,
+                    is_admin: true,
+                    balance: 0,
+                    avatar_url: 'https://img5.pic.in.th/file/secure-sv1/17710495907562b12906e5c4d2a54.png',
+                    status: 'active'
+                };
+                localStorage.setItem('adminLogin', 'true');
+                this.closeModal('login-modal');
+                this.updateUserUI();
+                this.checkAdminAccess();
+                router.admin();
             },
 
-            logout: function() {
+            logout: async function() {
+                // ຖ້າ admin ໃຊ້ Supabase Auth ໃຫ້ sign out ດ້ວຍ
+                if(currentUser && currentUser.is_admin) {
+                    await _supabase.auth.signOut();
+                }
                 localStorage.removeItem('adminLogin');
+                currentUser = null;
+                this.updateUserUI();
+                this.checkAdminAccess();
                 router.home();
             },
 
@@ -2867,7 +2842,7 @@ function togglePw(id, btn) {
 
                 showProcessing('ກຳລັງກວດສອບຂໍ້ມູນ<br>ກະລຸນາລໍຖ້າສັກຄູ່...');
                 try {
-                    // ลองหาใน site_users ก่อน (User ใหม่)
+                    // ลองหาใน site_users
                     const { data: siteUser, error: siteError } = await _supabase
                         .from('site_users')
                         .select('*')
@@ -2875,37 +2850,9 @@ function togglePw(id, btn) {
                         .eq('password', password)
                         .maybeSingle();
 
-                    // ถ้าไม่เจอใน site_users ลองหาใน users (Admin เก่า)
                     if(!siteUser) {
-                        const { data: adminUser, error: adminError } = await _supabase
-                            .from('users')
-                            .select('*')
-                            .eq('username', username)
-                            .eq('password', password)
-                            .maybeSingle();
-                        
-                        if(!adminUser) {
-                            hideProcessing();
-                            NotificationManager.error('ຊື່ຜູ້ໃຊ້ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ');
-                            return;
-                        }
-                        
-                        // Login สำเร็จด้วย Admin เก่า
-                        currentUser = {
-                            id: 'admin_' + adminUser.id,
-                            username: adminUser.username,
-                            password: adminUser.password,
-                            is_admin: true,
-                            balance: 0,
-                            avatar_url: 'https://img5.pic.in.th/file/secure-sv1/17710495907562b12906e5c4d2a54.png',
-                            status: 'active'
-                        };
-                        
-                        this.updateUserUI();
-                        this.checkAdminAccess();
-                        router.home();
                         hideProcessing();
-                        NotificationManager.success(`ຍິນດີຕ້ອນຮັບ Admin ${username}!`);
+                        NotificationManager.error('ຊື່ຜູ້ໃຊ້ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ');
                         return;
                     }
 
