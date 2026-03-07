@@ -569,7 +569,6 @@ function togglePw(id, btn) {
                 this.renderHome();
 
                 this.loading(false);
-                localStorage.removeItem('adminLogin');
 
                 // รอรูป category แรกโหลดเสร็จก่อน แล้วค่อยปิด loading
                 const _hideLoading = () => {
@@ -2039,63 +2038,7 @@ function togglePw(id, btn) {
                 window.scrollTo(0,0);
             },
 
-            login: async function() {
-                const email = document.getElementById('log-u').value.trim();
-                const pass  = document.getElementById('log-p').value.trim();
-                if(!email || !pass) { NotificationManager.error('ກະລຸນາໃສ່ Email ແລະ Password'); return; }
-
-                // ── ໃຊ້ Supabase Auth signInWithPassword ──
-                const { data: authData, error: authErr } = await _supabase.auth.signInWithPassword({
-                    email, password: pass
-                });
-
-                if(authErr || !authData?.user) {
-                    NotificationManager.error('Email ຫຼື Password ຜິດ!');
-                    return;
-                }
-
-                // ── ກວດວ່າ email ນີ້ຢູ່ໃນລາຍຊື່ admin ──
-                const { data: isAdm } = await _supabase.rpc('is_admin_user', {
-                    p_user_id: authData.user.id
-                });
-
-                if(!isAdm) {
-                    // ອອກ session ທັນທີ ຖ້າບໍ່ແມ່ນ admin
-                    await _supabase.auth.signOut();
-                    NotificationManager.error('ທ່ານບໍ່ມີສິດ Admin');
-                    return;
-                }
-
-                // ── Login Admin ສຳເລັດ ──
-                currentUser = {
-                    id: 'admin_' + authData.user.id,
-                    username: authData.user.email,
-                    email: authData.user.email,
-                    is_admin: true,
-                    balance: 0,
-                    avatar_url: 'https://img5.pic.in.th/file/secure-sv1/17710495907562b12906e5c4d2a54.png',
-                    status: 'active'
-                };
-                localStorage.setItem('adminLogin', 'true');
-                this.closeModal('login-modal');
-                this.updateUserUI();
-                this.checkAdminAccess();
-                router.admin();
-            },
-
-            logout: async function() {
-                // ຖ້າ admin ໃຊ້ Supabase Auth ໃຫ້ sign out ດ້ວຍ
-                if(currentUser && currentUser.is_admin) {
-                    await _supabase.auth.signOut();
-                }
-                localStorage.removeItem('adminLogin');
-                currentUser = null;
-                this.updateUserUI();
-                this.checkAdminAccess();
-                router.home();
-            },
-
-            // ===== HOT DEALS FUNCTIONS =====
+            // ========= HOT DEALS FUNCTIONS =====
             loadHotItems: function() {
                 // reset selection
                 document.getElementById('hot-item').value = '';
@@ -2842,8 +2785,7 @@ function togglePw(id, btn) {
 
                 showProcessing('ກຳລັງກວດສອບຂໍ້ມູນ<br>ກະລຸນາລໍຖ້າສັກຄູ່...');
                 try {
-                    // ลองหาใน site_users
-                    const { data: siteUser, error: siteError } = await _supabase
+                    const { data: siteUser } = await _supabase
                         .from('site_users')
                         .select('*')
                         .eq('username', username)
@@ -2862,23 +2804,20 @@ function togglePw(id, btn) {
                         return;
                     }
 
-                    await _supabase
-                        .from('site_users')
+                    await _supabase.from('site_users')
                         .update({ last_login: new Date().toISOString() })
                         .eq('id', siteUser.id);
 
-                    // ສ້າງ session_token ໃໝ່ ແລະ save ໄວ້ໃນ DB
                     const newToken = Date.now().toString(36) + Math.random().toString(36).substring(2);
                     await _supabase.from('site_users').update({ session_token: newToken }).eq('id', siteUser.id);
                     siteUser.session_token = newToken;
 
                     currentUser = siteUser;
                     this.updateUserUI();
-                    this.checkAdminAccess();
+                    this.checkAdminAccess(); // ← ถ้า is_admin=true จะโชว์ปุ่ม Admin อัตโนมัติ
                     this.saveUserSession();
                     router.home();
                     hideProcessing();
-                    // Clear login form after success
                     this._clearLoginForm();
                     NotificationManager.success(`ຍິນດີຕ້ອນຮັບ ${username}!`);
 
