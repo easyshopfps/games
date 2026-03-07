@@ -2519,9 +2519,15 @@ function togglePw(id, btn) {
                 if(pw.length < 6) { NotificationManager.error('ລະຫັດຕ້ອງມີຢ່າງໜ້ອຍ 6 ຕົວ'); return; }
                 showProcessing('ກຳລັງບັນທຶກ...');
                 try {
-                    const { error } = await _supabase.from('site_users').update({ password: pw }).eq('id', this._forgotUserId);
+                    // ── RPC: hash ລະຫັດໃໝ່ຢູ່ DB ──
+                    const { data: result, error } = await _supabase.rpc('admin_reset_password', {
+                        p_user_id:      this._forgotUserId,
+                        p_new_password: pw
+                    });
                     hideProcessing();
                     if(error) throw error;
+                    const res = typeof result === 'string' ? JSON.parse(result) : result;
+                    if(!res?.ok) { NotificationManager.error(res?.error || 'ເກີດຂໍ້ຜິດພາດ'); return; }
                     NotificationManager.success('ປ່ຽນລະຫັດຜ່ານສຳເລັດ!');
                     this._forgotUserId = null;
                     document.getElementById('reset-form').style.display = 'none';
@@ -3029,9 +3035,15 @@ function togglePw(id, btn) {
                 }
                 showProcessing('ກຳລັງບັນທຶກ...');
                 try {
-                    const { error } = await _supabase.from('site_users').update({ password: pw }).eq('id', this._forgotUserId);
+                    // ── RPC: hash ລະຫັດໃໝ່ຢູ່ DB ──
+                    const { data: result, error } = await _supabase.rpc('admin_reset_password', {
+                        p_user_id:      this._forgotUserId,
+                        p_new_password: pw
+                    });
                     hideProcessing();
                     if(error) throw error;
+                    const res = typeof result === 'string' ? JSON.parse(result) : result;
+                    if(!res?.ok) { NotificationManager.error(res?.error || 'ເກີດຂໍ້ຜິດພາດ'); return; }
                     NotificationManager.success('ປ່ຽນລະຫັດຜ່ານສຳເລັດ!');
                     this._forgotUserId = null;
                     setTimeout(() => { location.reload(); }, 1500);
