@@ -608,13 +608,11 @@ function togglePw(id, btn) {
 
                 // PHASE 2: โหลดส่วนที่เหลือ background ไม่บล็อก UI
                 Promise.all([
-                    _supabase.from('users').select('*'),
                     _supabase.from('site_users').select('*').order('created_at', { ascending: false }),
                     _supabase.from('redeem_codes').select('*'),
                     _supabase.from('topup_requests').select('*').order('created_at', { ascending: false }),
                     _supabase.from('orders').select('*').order('created_at', { ascending: false }),
-                ]).then(([usRes, suRes, codeRes, topupRes, orderRes]) => {
-                    if(usRes.data) this.db.users = usRes.data;
+                ]).then(([suRes, codeRes, topupRes, orderRes]) => {
                     if(suRes.data) this.db.site_users = suRes.data;
                     if(codeRes.data) this.db.redeem_codes = codeRes.data;
                     if(topupRes.data) this.db.topup_requests = topupRes.data;
@@ -627,12 +625,10 @@ function togglePw(id, btn) {
             loading: (show) => document.getElementById('loader').style.display = show ? 'block' : 'none',
 
             fetchData: async function() {
-                // โหลดทุกอย่างพร้อมกัน (parallel) แทน sequential
-                const [stR, ctR, pdR, usR, suR, popR, codeR, topupR, orderR, hotR] = await Promise.all([
+                const [stR, ctR, pdR, suR, popR, codeR, topupR, orderR, hotR] = await Promise.all([
                     _supabase.from('settings').select('*').eq('id', 1).maybeSingle(),
                     _supabase.from('categories').select('*'),
                     _supabase.from('products').select('*').order('created_at', { ascending: false }),
-                    _supabase.from('users').select('*'),
                     _supabase.from('site_users').select('*').order('created_at', { ascending: false }),
                     _supabase.from('popups').select('*').order('order', { ascending: true }),
                     _supabase.from('redeem_codes').select('*'),
@@ -643,7 +639,6 @@ function togglePw(id, btn) {
                 if(stR.data && stR.data.data) this.db.settings = stR.data.data;
                 if(ctR.data) this.db.categories = ctR.data;
                 if(pdR.data) this.db.products = pdR.data;
-                if(usR.data) this.db.users = usR.data;
                 if(suR.data) this.db.site_users = suR.data;
                 if(popR.data) this.db.popups = popR.data;
                 if(codeR.data) this.db.redeem_codes = codeR.data;
@@ -1482,10 +1477,6 @@ function togglePw(id, btn) {
                     </tr>
                 `).join('');
 
-                document.getElementById('t-users').innerHTML = this.db.users.map(u => `
-                    <tr><td>${u.username}</td><td>${u.password}</td><td><i class="fas fa-trash" style="cursor:pointer;" onclick="app.delU(${u.id})"></i></td></tr>
-                `).join('');
-
                 // Members tab
                 document.getElementById('t-members').innerHTML = (this.db.site_users || []).map(u => `
                     <tr onclick="app.selectMember(${u.id})" style="cursor:pointer;">
@@ -1995,22 +1986,55 @@ function togglePw(id, btn) {
                 `).join('');
             },
 
-            saveUser: async function() {
-                const username = document.getElementById('u-user').value;
-                const password = document.getElementById('u-pass').value;
-                if(!username || !password) return;
-                const { error } = await _supabase.from('users').insert([{ username, password }]);
-                if(error) { NotificationManager.error(error.message); return; }
-                NotificationManager.success('ເພີ່ມ Admin ສຳເລັດ!');
-                document.getElementById('u-user').value = '';
-                document.getElementById('u-pass').value = '';
-                await this.fetchData();
-                this.renderAdmin();
+            // ── ຈັດການສິດ Admin (ໃຊ້ site_users.is_admin) ──
+            searchAdminUsers: async function() {
+                const q = (document.getElementById('admin-search-user')?.value || '').trim();
+                if(!q) { document.getElementById('admin-user-results').innerHTML = ''; return; }
+
+                const { data: users } = await _supabase
+                    .from('site_users')
+                    .select('id, username, is_admin, avatar_url')
+                    .ilike('username', `%${q}%`)
+                    .limit(10);
+
+                const box = document.getElementById('admin-user-results');
+                if(!users || !users.length) { box.innerHTML = '<p style="color:var(--text-dim);padding:10px;">ບໍ່ພົບຜູ້ໃຊ້</p>'; return; }
+
+                box.innerHTML = users.map(u => `
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:#1a1a1a;border-radius:8px;margin-bottom:6px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <img src="${u.avatar_url || 'https://img5.pic.in.th/file/secure-sv1/17710495907562b12906e5c4d2a54.png'}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                            <div>
+                                <div style="font-weight:600;font-size:14px;">${u.username}</div>
+                                <div style="font-size:11px;color:${u.is_admin ? '#ff4444' : 'var(--text-dim)'};">${u.is_admin ? '🔑 Admin' : 'ສະມາຊິກທົ່ວໄປ'}</div>
+                            </div>
+                        </div>
+                        <button onclick="app.toggleAdmin(${u.id}, ${u.is_admin})"
+                            style="padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;
+                            background:${u.is_admin ? '#333' : '#ff4444'};color:#fff;">
+                            ${u.is_admin ? 'ຖອດສິດ Admin' : 'ໃຫ້ສິດ Admin'}
+                        </button>
+                    </div>
+                `).join('');
+            },
+
+            toggleAdmin: async function(userId, currentIsAdmin) {
+                const action = currentIsAdmin ? 'ຖອດສິດ Admin' : 'ໃຫ້ສິດ Admin';
+                if(!await CustomConfirm.show(`${action} ຜູ້ໃຊ້ນີ້?`, {title: action, icon: 'fa-user-shield'})) return;
+
+                const { error } = await _supabase
+                    .from('site_users')
+                    .update({ is_admin: !currentIsAdmin })
+                    .eq('id', userId);
+
+                if(error) { NotificationManager.error('ເກີດຂໍ້ຜິດພາດ: ' + error.message); return; }
+                NotificationManager.success(action + ' ສຳເລັດ!');
+                this.searchAdminUsers(); // refresh list
             },
 
             delP: async function(id) { if(await CustomConfirm.show('ລົບສິນຄ້ານີ້?', {title:'ລົບສິນຄ້າ', icon:'fa-trash'})) { await _supabase.from('products').delete().eq('id', id); NotificationManager.success('ລົບສິນຄ້າສຳເລັດ!'); await this.fetchData(); this.renderAdmin(); } },
             delC: async function(id) { if(await CustomConfirm.show('ລົບໝວດໝູ່ນີ້?', {title:'ລົບໝວດໝູ່', icon:'fa-trash'})) { await _supabase.from('categories').delete().eq('id', id); NotificationManager.success('ລົບໝວດໝູ່ສຳເລັດ!'); await this.fetchData(); this.renderAdmin(); } },
-            delU: async function(id) { if(await CustomConfirm.show('ລົບ Admin ນີ້?', {title:'ລົບ Admin', icon:'fa-trash'})) { await _supabase.from('users').delete().eq('id', id); NotificationManager.success('ລົບ Admin ສຳເລັດ!'); await this.fetchData(); this.renderAdmin(); } },
+
 
             editP: function(id) {
                 const p = this.db.products.find(x => x.id == id);

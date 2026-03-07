@@ -701,16 +701,10 @@
         </div>
 
         <div id="tab-u" class="admin-tab hidden">
-             <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
-                <input type="text" id="u-user" class="form-control" placeholder="Username">
-                <input type="text" id="u-pass" class="form-control" placeholder="Password">
-                <button class="btn btn-red" style="width:100%" onclick="app.saveUser()">ເພີ່ມ Admin</button>
-            </div>
-            <div class="admin-table-container">
-                <table class="admin-table">
-                    <thead><tr><th>User</th><th>Pass</th><th>ລົບ</th></tr></thead>
-                    <tbody id="t-users"></tbody>
-                </table>
+            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+                <h3 style="color:var(--main-red); font-size:15px; margin-bottom:12px;">🔑 ຈັດການສິດ Admin</h3>
+                <input type="text" id="admin-search-user" class="form-control" placeholder="ຄົ້ນຫາ Username..." oninput="app.searchAdminUsers()">
+                <div id="admin-user-results" style="margin-top:10px; max-height:400px; overflow-y:auto;"></div>
             </div>
         </div>
 
