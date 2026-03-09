@@ -942,9 +942,9 @@ function togglePw(id, btn) {
                 if(!uid) return;
                 navigator.clipboard.writeText(uid).then(() => {
                     const btn = document.getElementById('receipt-uid-copy-btn');
-                    if(btn) { btn.innerHTML = '<i class="fas fa-check"></i> ຄັດລອກແລ້ວ'; btn.style.background = '#1a4731'; btn.style.color = '#00e676'; }
+                    if(btn) { btn.innerHTML = '<i class="fas fa-check"></i> ຄັດລອກແລ້ວ'; btn.style.background = '#065f46'; btn.style.color = '#ffffff'; }
                     setTimeout(() => {
-                        if(btn) { btn.innerHTML = '<i class="fas fa-copy"></i> ຄັດລອກ'; btn.style.background = '#1e3a5f'; btn.style.color = '#60a5fa'; }
+                        if(btn) { btn.innerHTML = '<i class="fas fa-copy"></i> ຄັດລອກ'; btn.style.background = '#2563eb'; btn.style.color = '#ffffff'; }
                     }, 2000);
                 }).catch(() => {
                     NotificationManager.info('ກົດຄ້າງທີ່ ID ເພື່ອຄັດລອກ');
@@ -1127,23 +1127,23 @@ function togglePw(id, btn) {
                 const fromSpin = order.note === 'ໄດ້ຈາກວົງລໍ້';
                 const priceHtml = fromSpin
                     ? `<b style="color:var(--main-red);">0 ₭</b> <span style="color:#f5c518;font-size:11px;"><i class="fas fa-sync-alt" style="margin-right:2px;"></i>ໄດ້ຈາກວົງລໍ້</span>`
-                    : `<b style="color:var(--main-red);">${Number(order.total_amount || order.product_price || 0).toLocaleString()} ₭</b>`;
+                    : `<b style="color:#f5c518;">${Number(order.total_amount || order.product_price || 0).toLocaleString()} ₭</b>`;
 
                 document.getElementById('order-detail-content').innerHTML = `
                     <div style="text-align:center; margin-bottom:10px;">
                         <img src="${order.product_img || ''}" style="width:72px; height:72px; object-fit:cover; border-radius:8px;">
                     </div>
                     ${order.bill_number ? `
-                    <div style="background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-                        <i class="fas fa-receipt" style="color:#aaa; font-size:12px;"></i>
-                        <span style="color:#aaa; font-size:11px;">ເລກບິນ:</span>
-                        <span style="font-family:monospace; color:#ccc; font-size:10px; font-weight:600; word-break:break-all;">${order.bill_number}</span>
+                    <div style="background:#1a1a1a; border:1px solid #333; border-radius:10px; padding:10px 14px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-receipt" style="color:#888; font-size:13px;"></i>
+                        <span style="color:#aaaaaa; font-size:11px;">ເລກບິນ:</span>
+                        <span style="font-family:monospace; color:#ffffff; font-size:11px; font-weight:600; word-break:break-all;">${order.bill_number}</span>
                     </div>` : ''}
-                    <div style="background:#111; padding:10px 12px; border-radius:10px; font-size:13px;">
-                        <div style="margin-bottom:6px;"><span style="color:#aaa;">ສິນຄ້າ:</span> <b>${order.product_name || '-'}</b></div>
-                        <div style="margin-bottom:6px;"><span style="color:#aaa;">ຈຳນວນ:</span> <b>${order.quantity || 1} ອັນ</b></div>
-                        <div style="margin-bottom:6px;"><span style="color:#aaa;">ລາຄາ:</span> ${priceHtml}</div>
-                        <div><span style="color:#aaa;">ເວລາສັ່ງຊື້:</span> ${dateStr}</div>
+                    <div style="background:#1a1a1a; padding:14px 16px; border-radius:12px; font-size:13px; border:1px solid #2a2a2a;">
+                        <div style="margin-bottom:8px;"><span style="color:#aaaaaa;">ສິນຄ້າ:</span> <b style="color:#ffffff;">${order.product_name || '-'}</b></div>
+                        <div style="margin-bottom:8px;"><span style="color:#aaaaaa;">ຈຳນວນ:</span> <b style="color:#ffffff;">${order.quantity || 1} ອັນ</b></div>
+                        <div style="margin-bottom:8px;"><span style="color:#aaaaaa;">ລາຄາ:</span> ${priceHtml}</div>
+                        <div><span style="color:#aaaaaa;">ເວລາສັ່ງຊື້:</span> <span style="color:#ffffff;">${dateStr}</span></div>
                     </div>
                     ${order.product_unique_id ? `
                     <div class="product-id-badge" style="margin-top:10px;">
@@ -1152,7 +1152,7 @@ function togglePw(id, btn) {
                             <div class="id-label">🔑 ລະຫັດສິນຄ້າ${(order.quantity && order.quantity > 1) ? ` (x${order.quantity} ອັນ)` : ''}</div>
                             <div class="id-value" style="font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${order.product_unique_id}</div>
                         </div>
-                        <button onclick="app.copyProductId('${order.product_unique_id}')" id="copy-pid-btn" style="padding:8px 12px;border:none;background:#1e3a5f;color:#60a5fa;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;margin-left:10px;">
+                        <button onclick="app.copyProductId('${order.product_unique_id}')" id="copy-pid-btn" style="padding:8px 14px;border:none;background:#2563eb;color:#ffffff;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;margin-left:10px;">
                             <i class="fas fa-copy"></i> ຄັດລອກ
                         </button>
                     </div>` : ''}
@@ -1169,9 +1169,9 @@ function togglePw(id, btn) {
             copyProductId: function(uid) {
                 navigator.clipboard.writeText(uid).then(() => {
                     const btn = document.getElementById('copy-pid-btn');
-                    if(btn) { btn.innerHTML = '<i class="fas fa-check"></i> ຄັດລອກແລ້ວ'; btn.style.background = '#1a4731'; btn.style.color = '#00e676'; }
+                    if(btn) { btn.innerHTML = '<i class="fas fa-check"></i> ຄັດລອກແລ້ວ'; btn.style.background = '#065f46'; btn.style.color = '#ffffff'; }
                     setTimeout(() => {
-                        if(btn) { btn.innerHTML = '<i class="fas fa-copy"></i> ຄັດລອກ'; btn.style.background = '#1e3a5f'; btn.style.color = '#60a5fa'; }
+                        if(btn) { btn.innerHTML = '<i class="fas fa-copy"></i> ຄັດລອກ'; btn.style.background = '#2563eb'; btn.style.color = '#ffffff'; }
                     }, 2000);
                 }).catch(() => NotificationManager.info('ກົດຄ້າງທີ່ ID ເພື່ອຄັດລອກ'));
             },
@@ -1180,7 +1180,7 @@ function togglePw(id, btn) {
                 if(!currentUser) return;
                 const el = document.getElementById('order-history-list');
                 if(!el) return;
-                el.innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;"><i class="fas fa-spinner fa-spin"></i> ກຳລັງໂຫຼດ...</div>';
+                el.innerHTML = '<div style="text-align:center;color:#888888;padding:20px;"><i class="fas fa-spinner fa-spin"></i> ກຳລັງໂຫຼດ...</div>';
                 const { data: myOrders } = await _supabase
                     .from('orders').select('*')
                     .eq('user_id', currentUser.id)
@@ -1200,14 +1200,14 @@ function togglePw(id, btn) {
                         : `${Number(o.total_amount || o.product_price || 0).toLocaleString()} ₭`;
                     const qtyBadge = (o.quantity && o.quantity > 1) ? `<span style="background:rgba(96,165,250,0.15);color:#60a5fa;font-size:10px;padding:1px 6px;border-radius:6px;margin-left:4px;">x${o.quantity}</span>` : '';
                     return `
-                    <div class="history-item" style="display:flex; align-items:center; gap:12px; padding:12px; background:#111; border-radius:12px; margin-bottom:10px;">
-                        <img src="${o.product_img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:8px; flex-shrink:0;" onerror="this.src='https://via.placeholder.com/60x60?text=No+Img'">
+                    <div class="history-item" style="display:flex; align-items:center; gap:12px; padding:14px; background:#1a1a1a; border-radius:14px; margin-bottom:10px; border:1px solid #2a2a2a;">
+                        <img src="${o.product_img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:10px; flex-shrink:0; border:1px solid #333;" onerror="this.src='https://via.placeholder.com/60x60?text=No+Img'">
                         <div style="flex:1; min-width:0;">
-                            <div style="font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.product_name || '-'}${qtyBadge}</div>
-                            <div style="color:var(--main-red); font-size:13px; margin:3px 0;">${priceText}</div>
-                            <div style="color:#888; font-size:11px;">${dateStr}</div>
+                            <div style="font-weight:600; font-size:14px; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.product_name || '-'}${qtyBadge}</div>
+                            <div style="color:#f5c518; font-size:13px; margin:3px 0;">${priceText}</div>
+                            <div style="color:#aaaaaa; font-size:11px;">${dateStr}</div>
                         </div>
-                        <button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="app.showOrderDetail('${o.id}')">
+                        <button class="btn btn-sm" style="white-space:nowrap; background:#ffffff; color:#111111; border:none; border-radius:10px; padding:8px 14px; font-weight:600; cursor:pointer;" onclick="app.showOrderDetail('${o.id}')">
                             ເບິ່ງຂໍ້ມູນ
                         </button>
                     </div>`;
@@ -1436,7 +1436,7 @@ function togglePw(id, btn) {
                 const maxProd = Math.max(...top5.map(p=>p[1]),1);
                 const colors = ['#ff6b6b','#fbbf24','#34d399','#60a5fa','#a78bfa'];
                 document.getElementById('ov-chart-products').innerHTML = top5.length === 0
-                    ? '<div style="color:#555; text-align:center; padding:20px; font-size:13px;">ຍັງບໍ່ມີຂໍ້ມູນ</div>'
+                    ? '<div style="color:#888888; text-align:center; padding:20px; font-size:13px;">ຍັງບໍ່ມີຂໍ້ມູນ</div>'
                     : top5.map(([name,count],i) => `
                         <div class="ov-bar-row">
                             <div class="ov-bar-label" style="font-size:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${name}">${name.length>8?name.slice(0,8)+'…':name}</div>
@@ -1625,7 +1625,7 @@ function togglePw(id, btn) {
                     
                     if(data && data.length > 0) {
                         resultsDiv.innerHTML = data.map(u => `
-                            <div onclick="app.selectMember('${u.id}')" style="padding:12px; background:#1a1a1a; margin:5px 0; border-radius:8px; cursor:pointer; border:1px solid #333; transition:all 0.2s;" onmouseover="this.style.background='#252525'; this.style.borderColor='var(--main-red)';" onmouseout="this.style.background='#1a1a1a'; this.style.borderColor='#333';">
+                            <div onclick="app.selectMember('${u.id}')" style="padding:12px; background:#1e1e1e; margin:5px 0; border-radius:8px; cursor:pointer; border:1px solid #333; transition:all 0.2s; color:#ffffff;" onmouseover="this.style.background='#2a2a2a'; this.style.borderColor='#555';" onmouseout="this.style.background='#1e1e1e'; this.style.borderColor='#333';">
                                 <div style="font-weight:600; color:#fff; margin-bottom:4px; font-size:14px;">${u.username}</div>
                                 <div style="font-size:11px; color:#888; display:flex; justify-content:space-between;">
                                     <span>ID: ${u.id}</span>
@@ -1634,7 +1634,7 @@ function togglePw(id, btn) {
                             </div>
                         `).join('');
                     } else {
-                        resultsDiv.innerHTML = '<div style="padding:20px; color:#999; text-align:center; font-size:13px;"><i class="fas fa-search"></i> ບໍ່ພົບຂໍ້ມູນສະມາຊິກ</div>';
+                        resultsDiv.innerHTML = '<div style="padding:20px; color:#888888; text-align:center; font-size:13px;"><i class="fas fa-search"></i> ບໍ່ພົບຂໍ້ມູນສະມາຊິກ</div>';
                     }
                 } catch(err) {
                     console.error('Search exception:', err);
@@ -1801,21 +1801,21 @@ function togglePw(id, btn) {
                 if(q) items = items.filter(p => p.name.toLowerCase().includes(q));
                 
                 if(items.length === 0) {
-                    list.innerHTML = '<div style="text-align:center; color:#555; font-size:12px; padding:15px;">ບໍ່ພົບສິນຄ້າ</div>';
+                    list.innerHTML = '<div style="text-align:center; color:#888888; font-size:12px; padding:15px;">ບໍ່ພົບສິນຄ້າ</div>';
                     return;
                 }
                 
                 list.innerHTML = items.map(p => `
                     <div onclick="app.selectPopupProduct(${p.id}, '${p.name.replace(/'/g,"\'")}', '${p.img}', ${p.price})"
-                         style="display:flex; align-items:center; gap:10px; background:#1a1a1a; border-radius:10px; padding:8px 10px; cursor:pointer; border:1.5px solid transparent; transition:all 0.15s;"
-                         onmouseover="this.style.borderColor='rgba(255,0,0,0.4)'; this.style.background='#221010';"
-                         onmouseout="this.style.borderColor='transparent'; this.style.background='#1a1a1a';">
+                         style="display:flex; align-items:center; gap:10px; background:#1e1e1e; border-radius:10px; padding:8px 10px; cursor:pointer; border:1.5px solid #2a2a2a; transition:all 0.15s;"
+                         onmouseover="this.style.borderColor='#555'; this.style.background='#2a2a2a';"
+                         onmouseout="this.style.borderColor='#2a2a2a'; this.style.background='#1e1e1e';">
                         <img src="${p.img}" style="width:44px; height:44px; object-fit:cover; border-radius:8px; flex-shrink:0;" onerror="this.src='https://via.placeholder.com/44?text=?'">
                         <div style="flex:1; min-width:0;">
-                            <div style="font-size:13px; color:#fff; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</div>
+                            <div style="font-size:13px; color:#ffffff; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</div>
                             <div style="font-size:11px; color:var(--main-red);">${Number(p.price).toLocaleString()} ₭</div>
                         </div>
-                        <i class="fas fa-plus-circle" style="color:#555; font-size:16px; flex-shrink:0;"></i>
+                        <i class="fas fa-plus-circle" style="color:#aaaaaa; font-size:16px; flex-shrink:0;"></i>
                     </div>
                 `).join('');
             },
@@ -1978,9 +1978,9 @@ function togglePw(id, btn) {
                 const banners = this.db.settings.banners || (this.db.settings.banner ? [this.db.settings.banner] : []);
                 if(!banners.length) { el.innerHTML = '<p style="color:#555;font-size:12px;text-align:center;padding:8px;">ຍັງບໍ່ມີ banner</p>'; return; }
                 el.innerHTML = banners.map((b,i) => `
-                    <div style="display:flex;align-items:center;gap:8px;background:#1a1a1a;border-radius:8px;padding:8px 10px;border:1px solid #2a2a2a;">
+                    <div style="display:flex;align-items:center;gap:8px;background:#1e1e1e;border-radius:8px;padding:8px 10px;border:1px solid #333;">
                         <img src="${b}" style="width:56px;height:36px;object-fit:cover;border-radius:5px;flex-shrink:0;" onerror="this.src='https://via.placeholder.com/56x36?text=?'">
-                        <div style="flex:1;font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${b}</div>
+                        <div style="flex:1;font-size:11px;color:#aaaaaa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${b}</div>
                         <i class="fas fa-trash" style="color:#ff4444;cursor:pointer;font-size:14px;flex-shrink:0;" onclick="app.removeBanner(${i})"></i>
                     </div>
                 `).join('');
@@ -2001,11 +2001,11 @@ function togglePw(id, btn) {
                 if(!users || !users.length) { box.innerHTML = '<p style="color:var(--text-dim);padding:10px;">ບໍ່ພົບຜູ້ໃຊ້</p>'; return; }
 
                 box.innerHTML = users.map(u => `
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:#1a1a1a;border-radius:8px;margin-bottom:6px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:#1e1e1e;border-radius:8px;margin-bottom:6px;border:1px solid #2a2a2a;">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <img src="${u.avatar_url || 'https://img5.pic.in.th/file/secure-sv1/17710495907562b12906e5c4d2a54.png'}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
                             <div>
-                                <div style="font-weight:600;font-size:14px;">${u.username}</div>
+                                <div style="font-weight:600;font-size:14px;color:#ffffff;">${u.username}</div>
                                 <div style="font-size:11px;color:${u.is_admin ? '#ff4444' : 'var(--text-dim)'};">${u.is_admin ? '🔑 Admin' : 'ສະມາຊິກທົ່ວໄປ'}</div>
                             </div>
                         </div>
@@ -2086,21 +2086,21 @@ function togglePw(id, btn) {
                 if(q) items = items.filter(i => i.name.toLowerCase().includes(q));
                 
                 if(items.length === 0) {
-                    list.innerHTML = '<div style="text-align:center; color:#555; font-size:12px; padding:15px;">ບໍ່ພົບລາຍການ</div>';
+                    list.innerHTML = '<div style="text-align:center; color:#888888; font-size:12px; padding:15px;">ບໍ່ພົບລາຍການ</div>';
                     return;
                 }
                 
                 list.innerHTML = items.map(i => `
                     <div onclick="app.selectHotItem(${i.id}, '${i.name.replace(/'/g,"\'")}', '${i.img}')"
-                         style="display:flex; align-items:center; gap:10px; background:#1a1a1a; border-radius:10px; padding:8px 10px; cursor:pointer; border:1.5px solid transparent; transition:all 0.15s;"
-                         onmouseover="this.style.borderColor='rgba(255,0,0,0.4)'; this.style.background='#221010';"
-                         onmouseout="this.style.borderColor='transparent'; this.style.background='#1a1a1a';">
+                         style="display:flex; align-items:center; gap:10px; background:#1e1e1e; border-radius:10px; padding:8px 10px; cursor:pointer; border:1.5px solid #2a2a2a; transition:all 0.15s;"
+                         onmouseover="this.style.borderColor='#555'; this.style.background='#2a2a2a';"
+                         onmouseout="this.style.borderColor='#2a2a2a'; this.style.background='#1e1e1e';">
                         <img src="${i.img}" style="width:44px; height:44px; object-fit:cover; border-radius:8px; flex-shrink:0;" onerror="this.src='https://via.placeholder.com/44?text=?'">
                         <div style="flex:1; min-width:0;">
-                            <div style="font-size:13px; color:#fff; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${i.name}</div>
+                            <div style="font-size:13px; color:#ffffff; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${i.name}</div>
                             ${i.sub ? `<div style="font-size:11px; color:var(--main-red);">${i.sub}</div>` : ''}
                         </div>
-                        <i class="fas fa-plus-circle" style="color:#555; font-size:16px; flex-shrink:0;"></i>
+                        <i class="fas fa-plus-circle" style="color:#aaaaaa; font-size:16px; flex-shrink:0;"></i>
                     </div>
                 `).join('');
             },
@@ -2156,10 +2156,10 @@ function togglePw(id, btn) {
                         const cat = this.db.categories.find(c => c.id === id);
                         if(!cat) return '';
                         return `
-                            <div style="background:#1a1a1a; padding:10px; border-radius:8px; display:flex; align-items:center; gap:10px;">
+                            <div style="background:#1e1e1e; padding:10px; border-radius:8px; display:flex; align-items:center; gap:10px; border:1px solid #2a2a2a;">
                                 <img src="${cat.img}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">
                                 <div style="flex:1;">
-                                    <div style="font-size:13px; color:#fff;">${cat.name}</div>
+                                    <div style="font-size:13px; color:#ffffff;">${cat.name}</div>
                                 </div>
                                 <button class="btn btn-red btn-sm" onclick="app.removeHotDeal('category', ${id})" style="padding:4px 8px;">ລົບ</button>
                             </div>
@@ -2176,10 +2176,10 @@ function togglePw(id, btn) {
                         const prod = this.db.products.find(p => p.id === id);
                         if(!prod) return '';
                         return `
-                            <div style="background:#1a1a1a; padding:10px; border-radius:8px; display:flex; align-items:center; gap:10px;">
+                            <div style="background:#1e1e1e; padding:10px; border-radius:8px; display:flex; align-items:center; gap:10px; border:1px solid #2a2a2a;">
                                 <img src="${prod.img}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">
                                 <div style="flex:1;">
-                                    <div style="font-size:13px; color:#fff;">${prod.name}</div>
+                                    <div style="font-size:13px; color:#ffffff;">${prod.name}</div>
                                     <div style="font-size:11px; color:var(--main-red);">${Number(prod.price).toLocaleString()} ₭</div>
                                 </div>
                                 <button class="btn btn-red btn-sm" onclick="app.removeHotDeal('product', ${id})" style="padding:4px 8px;">ລົບ</button>
@@ -3197,7 +3197,7 @@ function togglePw(id, btn) {
                 }
                 el.innerHTML = data.map(ann => {
                     const c = this._annColors[ann.color] || this._annColors.red;
-                    return `<div style="background:#0a0a0a; border:1px solid ${c.accent}40; border-left:4px solid ${c.accent}; border-radius:10px; padding:12px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
+                    return `<div style="background:#1a1a1a; border:1px solid ${c.accent}40; border-left:4px solid ${c.accent}; border-radius:10px; padding:12px; margin-bottom:10px; display:flex; align-items:center; gap:12px; color:#ffffff;">
                         <div style="width:38px; height:38px; background:${c.icon}; border-radius:8px; display:flex; align-items:center; justify-content:center; color:${c.text}; font-size:18px; flex-shrink:0;">
                             <i class="fas ${ann.icon||'fa-bullhorn'}"></i>
                         </div>
@@ -3341,7 +3341,7 @@ function togglePw(id, btn) {
                 const countEl = document.getElementById('product-id-count');
                 if(!tbody) return;
                 if(list.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#aaa; padding:20px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#888888; padding:20px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
                     if(countEl) countEl.textContent = '';
                     return;
                 }
@@ -3397,7 +3397,7 @@ function togglePw(id, btn) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;"><i class="fas fa-spinner fa-spin"></i> ກຳລັງໂຫຼດ...</td></tr>';
                 const { data: orders } = await _supabase.from('orders').select('*').order('created_at', { ascending: false });
                 if(!orders || orders.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;">ຍັງບໍ່ມີຂໍ້ມູນ</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888888;padding:20px;">ຍັງບໍ່ມີຂໍ້ມູນ</td></tr>';
                     return;
                 }
                 const userIds = [...new Set(orders.map(o => o.user_id))];
@@ -3420,7 +3420,7 @@ function togglePw(id, btn) {
                 const countEl = document.getElementById('bill-count');
                 if(!tbody) return;
                 if(!list || list.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888888;padding:20px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
                     if(countEl) countEl.textContent = '';
                     return;
                 }
@@ -4069,7 +4069,7 @@ function togglePw(id, btn) {
                 if(q) items = items.filter(p => p.name.toLowerCase().includes(q));
                 list.innerHTML = items.slice(0,30).map(p => `
                     <div onclick="app.selectSpinProduct(${p.id},'${p.name.replace(/'/g,"\'")}','${p.img}')"
-                         style="display:flex; align-items:center; gap:8px; background:#222; border-radius:8px; padding:8px; cursor:pointer; border:1px solid transparent; transition:0.15s;"
+                         style="display:flex; align-items:center; gap:8px; background:#1e1e1e; border-radius:8px; padding:8px; cursor:pointer; border:1px solid #2a2a2a; transition:0.15s; color:#ffffff;"
                          onmouseover="this.style.borderColor='rgba(255,0,0,0.4)'"
                          onmouseout="this.style.borderColor='transparent'">
                         <img src="${p.img}" style="width:36px;height:36px;border-radius:6px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/36'">
