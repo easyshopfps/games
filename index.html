@@ -14,9 +14,10 @@
 <body>
 
     <!-- ===== LOADING SCREEN — ต้องเป็น element แรกสุด ป้องกัน flash ===== -->
-    <div id="loading-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#f2f2f2;display:flex;justify-content:center;align-items:center;z-index:99999;opacity:1;visibility:visible;">
+    <div id="loading-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#ffffff;display:flex;justify-content:center;align-items:center;z-index:99999;opacity:1;visibility:visible;">
         <div class="loading-character">
-            <img src="https://img2.pic.in.th/elves-01.gif" alt="Loading...">
+            <div class="loading-spinner-ring"></div>
+            <div class="loading-brand">EAZY<span>SHOP</span></div>
         </div>
     </div>
 
@@ -54,7 +55,7 @@
         </div>
     </div>
     <!-- ===== BUY CONFIRM PAGE (Full Screen) ===== -->
-    <div id="view-buy-confirm" class="page-view hidden" style="min-height:100vh;background:#f5f5f5;padding:0;">
+    <div id="view-buy-confirm" class="page-view hidden" style="min-height:100vh;background:#ffffff;padding:0;">
         <div style="max-width:520px;margin:0 auto;padding:20px 20px 40px;min-height:100vh;display:flex;flex-direction:column;">
             <!-- Header -->
             <div style="display:flex;align-items:center;gap:14px;padding:16px 0 20px;">
@@ -79,7 +80,7 @@
 
             <!-- Balance info -->
             <div style="background:#ffffff;border-radius:14px;padding:14px 16px;margin-bottom:14px;border:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-size:13px;color:#777777888666;"><i class="fas fa-wallet" style="color:#f59e0b;margin-right:8px;"></i>ຍອດເງິນຂອງທ່ານ</span>
+                <span style="font-size:13px;color:#777777888666;"><i class="fas fa-wallet" style="color:#333333;margin-right:8px;"></i>ຍອດເງິນຂອງທ່ານ</span>
                 <span id="buy-confirm-balance" style="color:#111111;font-weight:700;font-size:15px;"></span>
             </div>
 
@@ -94,7 +95,7 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:13px;color:#777777888666;margin-bottom:14px;">
                     <span>ຄ່າດຳເນີນການ</span>
-                    <span style="color:#00a85a;">0 ₭</span>
+                    <span style="color:#111111;">0 ₭</span>
                 </div>
                 <div style="height:1px;background:#e8e8e8;margin-bottom:14px;"></div>
                 <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
@@ -116,15 +117,15 @@
     </div>
 
     <!-- ===== ORDER RECEIPT PAGE (Full Screen) ===== -->
-    <div id="view-receipt" class="page-view hidden" style="min-height:100vh;background:#f5f5f5;padding:0;">
+    <div id="view-receipt" class="page-view hidden" style="min-height:100vh;background:#ffffff;padding:0;">
         <div style="max-width:520px;margin:0 auto;padding:30px 20px 40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;">
 
             <!-- Success Animation -->
             <div style="text-align:center;padding:30px 0 24px;">
-                <div style="width:90px;height:90px;background:linear-gradient(135deg,#00c853,#00e676);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(0,200,83,0.5);margin-bottom:18px;animation:receiptPop 0.5s cubic-bezier(0.16,1,0.3,1);">
-                    <i class="fas fa-check" style="font-size:40px;color:#111111;"></i>
+                <div style="width:90px;height:90px;background:linear-gradient(135deg,#111111,#333333);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(0,0,0,0.2);margin-bottom:18px;animation:receiptPop 0.5s cubic-bezier(0.16,1,0.3,1);">
+                    <i class="fas fa-check" style="font-size:40px;color:#ffffff;"></i>
                 </div>
-                <div style="font-size:26px;font-weight:800;color:#00a85a;margin-bottom:6px;">ສັ່ງຊື້ສຳເລັດ!</div>
+                <div style="font-size:26px;font-weight:800;color:#111111;margin-bottom:6px;">ສັ່ງຊື້ສຳເລັດ!</div>
                 <div id="receipt-bill-number" style="font-size:11px;color:#777777;font-family:monospace;background:#f8f8f8;padding:4px 12px;border-radius:20px;display:inline-block;"></div>
             </div>
 
@@ -148,7 +149,7 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:13px;color:#777777888666;margin-bottom:8px;">
                     <span>ຄ່າດຳເນີນການ</span>
-                    <span style="color:#00a85a;">ຟຣີ</span>
+                    <span style="color:#111111;">ຟຣີ</span>
                 </div>
                 <div style="height:1px;background:#e8e8e8;margin:10px 0;"></div>
                 <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
@@ -272,7 +273,7 @@
             <i class="fas fa-chevron-down" id="security-chevron" style="margin-left:auto; font-size:11px; color:#777777888; transition:transform 0.2s;"></i>
         </div>
         <!-- Security Submenu -->
-        <div id="security-submenu" style="display:none; background:#f2f2f2; border-radius:10px; margin:2px 0 4px; overflow:hidden;">
+        <div id="security-submenu" style="display:none; background:#fafafa; border-radius:10px; margin:2px 0 4px; overflow:hidden;">
             <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openChangePassword()" style="padding:12px 16px 12px 36px; font-size:13px;">
                 <i class="fas fa-key" style="color:#777777888666; font-size:13px;"></i>
                 <span style="color:#ccc;">ປ່ຽນລະຫັດຜ່ານ</span>
@@ -369,7 +370,7 @@
                         <div class="fb-widget-name" id="fb-widget-name">Eazy SHOP</div>
                         <div class="fb-widget-sub">ໜ້າ Page ທາງການ</div>
                     </div>
-                    <svg style="width:26px;height:26px;margin-left:auto;flex-shrink:0;" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                    <svg style="width:26px;height:26px;margin-left:auto;flex-shrink:0;" viewBox="0 0 24 24" fill="#111111"><path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
                 </div>
                 <div class="fb-widget-divider"></div>
                 <div class="fb-widget-actions">
@@ -698,7 +699,7 @@
                 <label style="color:var(--main-red); font-size:12px; margin-top:8px; display:block;">🎬 ລິ້ງສອນການໃຊ້ງານ (YouTube/Facebook/ອື່ນໆ):</label>
                 <input type="text" id="p-tutorial" class="form-control" placeholder="https://youtube.com/... ຫຼື https://fb.com/...">
                 
-                <label style="display:flex; align-items:center; gap:10px; margin-bottom:15px; cursor:pointer; background:#f2f2f2; padding:12px; border-radius:8px; border:1px solid rgba(59,130,246,0.3);">
+                <label style="display:flex; align-items:center; gap:10px; margin-bottom:15px; cursor:pointer; background:#fafafa; padding:12px; border-radius:8px; border:1px solid rgba(59,130,246,0.3);">
                     <input type="checkbox" id="p-has-id" style="width:18px; height:18px; cursor:pointer; accent-color:#3b82f6;">
                     <span style="font-size:14px; color:#60a5fa;"><i class="fas fa-id-badge"></i> ສ້າງ ID ສິນຄ້າ (Product ID) ເມື່ອລູກຄ້າຊື້</span>
                 </label>
@@ -735,13 +736,13 @@
                 
                 <input type="text" id="member-search" class="form-control" placeholder="ຄົ້ນຫາດ້ວຍຊື່ ຫຼື ID..." onkeyup="app.searchMembers()">
                 
-                <div id="member-search-results" style="max-height: 400px; overflow-y: auto; margin-top: 10px; background: #f2f2f2; border-radius: 8px; padding: 5px;"></div>
+                <div id="member-search-results" style="max-height: 400px; overflow-y: auto; margin-top: 10px; background:#fafafa; border-radius: 8px; padding: 5px;"></div>
                 
                 <div id="member-edit-form" style="display:none; margin-top:20px; background:#f0f0f0; padding:15px; border-radius:8px;">
                     <h4 style="color:var(--main-red); margin-bottom:15px;">✏️ ແກ້ໄຂຂໍ້ມູນສະມາຊິກ</h4>
                     <input type="hidden" id="member-id">
                     
-                    <div style="background:#f2f2f2; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
+                    <div style="background:#fafafa; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                             <span style="color:var(--text-dim); font-size:12px;">🆔 ID:</span>
                             <span id="member-id-short" style="color:var(--main-red); font-size:13px; font-family:monospace;"></span>
@@ -762,7 +763,7 @@
                         </button>
                     </div>
                     
-                    <input type="number" id="member-balance" class="form-control" placeholder="ຍອດເງິນປັດຈຸບັນ" readonly style="background:#f2f2f2; margin-bottom:10px;">
+                    <input type="number" id="member-balance" class="form-control" placeholder="ຍອດເງິນປັດຈຸບັນ" readonly style="background:#fafafa; margin-bottom:10px;">
                     <input type="number" id="member-spent" class="form-control" placeholder="ຍອດໃຊ້ຈ່າຍທັງໝົດ" style="margin-bottom:10px;">
                     
                     <label style="font-size:13px; color:var(--text-dim); margin-bottom:8px; display:block;">🔐 ສະຖານະບັນຊີ:</label>
@@ -896,7 +897,7 @@
                     <input type="url" id="pop-custom-img" class="form-control" placeholder="https://example.com/banner.jpg" style="margin-bottom:10px;" oninput="app.previewCustomPopupImg()">
                     <label style="font-size:12px; color:#777777888666; margin-bottom:5px; display:block;">🔗 ລິ້ງທີ່ເປີດເມື່ອກົດ Popup (ບໍ່ບັງຄັບ):</label>
                     <input type="url" id="pop-custom-link" class="form-control" placeholder="https://facebook.com/yourpage" style="margin-bottom:15px;">
-                    <div id="pop-custom-preview" style="display:none; background:#f2f2f2; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border); text-align:center;">
+                    <div id="pop-custom-preview" style="display:none; background:#fafafa; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border); text-align:center;">
                         <img id="pop-custom-preview-img" src="" style="max-width:100%; max-height:150px; border-radius:8px; object-fit:contain;" onerror="this.style.display='none'">
                     </div>
                 </div>
@@ -1163,9 +1164,9 @@
                 <input type="text" id="s-footer-logo" class="form-control" placeholder="https://...logo.png">
                 <label style="font-size:12px; color:#777777888666; margin-top:8px; display:block;">ຄຳອະທິບາຍຮ້ານ:</label>
                 <textarea id="s-footer-desc" class="form-control" rows="3" placeholder="ຮ້ານເກມມີ່ງທີ່ດີທີ່ສຸດ..."></textarea>
-                <label style="font-size:12px; color:#1877f2; display:block; margin-top:10px; margin-bottom:4px;"><i class="fab fa-facebook" style="margin-right:4px;"></i>Facebook Page URL:</label>
+                <label style="font-size:12px; color:#111111; display:block; margin-top:10px; margin-bottom:4px;"><i class="fab fa-facebook" style="margin-right:4px;"></i>Facebook Page URL:</label>
                 <input type="text" id="s-fb-page" class="form-control" placeholder="https://www.facebook.com/YourPage">
-                <label style="font-size:12px; color:#1877f2; display:block; margin-top:8px; margin-bottom:4px;">ຊື່ເພດ Facebook:</label>
+                <label style="font-size:12px; color:#111111; display:block; margin-top:8px; margin-bottom:4px;">ຊື່ເພດ Facebook:</label>
                 <input type="text" id="s-fb-page-name" class="form-control" placeholder="Eazy SHOP">
                 <p style="font-size:11px; color:#777777; margin-top:6px;">* Social ດຶງຈາກ "ຊ່ອງທາງຕິດຕໍ່" ຂ້າງເທິງອັດຕະໂນມັດ</p>
             </div>
@@ -1184,7 +1185,7 @@
                 <span>ຕິດຕໍ່ພວກເຮົາ</span>
             </h3>
             <a href="#" id="l-wa" target="_blank" class="social-btn">
-                <i class="fab fa-whatsapp" style="background: #25d366;"></i> 
+                <i class="fab fa-whatsapp" style="background: #333333;"></i> 
                 <div class="social-btn-text">
                     <span class="social-btn-title">WhatsApp</span>
                     <span class="social-btn-subtitle">ສົນທະນາດ່ວນ</span>
@@ -1198,7 +1199,7 @@
                 </div>
             </a>
             <a href="#" id="l-fb" target="_blank" class="social-btn">
-                <i class="fab fa-facebook" style="background: #1877f2;"></i> 
+                <i class="fab fa-facebook" style="background: #111111;"></i> 
                 <div class="social-btn-text">
                     <span class="social-btn-title">Facebook</span>
                     <span class="social-btn-subtitle">ຕິດຕໍ່ເຮົາ</span>
