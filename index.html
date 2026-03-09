@@ -108,7 +108,7 @@
                 <button onclick="app.closeBuyConfirm()" style="flex:1;padding:16px;border:1.5px solid #333;background:transparent;color:#aaa;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='#555';this.style.color='#fff'" onmouseout="this.style.borderColor='#333';this.style.color='#aaa'">
                     <i class="fas fa-times"></i> ຍົກເລີກ
                 </button>
-                <button onclick="app.confirmBuy()" style="flex:2;padding:16px;border:none;background:linear-gradient(135deg,var(--main-red),var(--dark-red));color:#fff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,0,0,0.4);transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
+                <button onclick="app.confirmBuy()" style="flex:2;padding:16px;border:none;background:linear-gradient(135deg,#444444,#222222);color:#fff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
                     <i class="fas fa-bolt"></i> ຢືນຢັນການສັ່ງຊື້
                 </button>
             </div>
@@ -153,7 +153,7 @@
                 <div style="height:1px;background:#2a2a2a;margin:10px 0;"></div>
                 <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
                     <span style="color:#aaa;">ລາຄາລວມ</span>
-                    <span id="receipt-total" style="color:#e53935;font-size:20px;font-weight:800;"></span>
+                    <span id="receipt-total" style="color:#ffffff;font-size:20px;font-weight:800;"></span>
                 </div>
             </div>
 
@@ -173,7 +173,7 @@
                 <button onclick="app.goToOrderHistory()" style="width:100%;padding:16px;border:1.5px solid #333;background:transparent;color:#fff;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;">
                     <i class="fas fa-history" style="margin-right:8px;color:#60a5fa;"></i>ເບິ່ງປະຫວັດສັ່ງຊື້
                 </button>
-                <button onclick="router.home()" style="width:100%;padding:16px;border:none;background:linear-gradient(135deg,var(--main-red),var(--dark-red));color:#fff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,0,0,0.35);">
+                <button onclick="router.home()" style="width:100%;padding:16px;border:none;background:linear-gradient(135deg,#444444,#222222);color:#fff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);">
                     <i class="fas fa-home" style="margin-right:8px;"></i>ກັບໄປໜ້າຫຼັກ
                 </button>
             </div>
@@ -218,7 +218,36 @@
         </div>
     </header>
 
-    <!-- Announcement Banner (legacy, hidden) -->
+    <!-- ===== DESKTOP NAV TABS (PC Only) ===== -->
+    <nav class="desktop-nav" id="desktop-nav">
+        <div class="container" style="display:flex;align-items:center;gap:0;padding:0;">
+            <div class="desktop-nav-item active" id="dnav-home" onclick="router.home(); _dnavSetActive('dnav-home')">
+                <i class="fas fa-home"></i> ໜ້າຫຼັກ
+            </div>
+            <div class="desktop-nav-item" id="dnav-shop" onclick="app.openShop && app.openShop(); _dnavSetActive('dnav-shop')">
+                <i class="fas fa-shopping-bag"></i> ເລືອກຊື້ສິນຄ້າ
+            </div>
+            <div class="desktop-nav-item" id="dnav-topup" onclick="router.show('view-topup'); _dnavSetActive('dnav-topup')">
+                <i class="fas fa-wallet"></i> ເຕີມເງິນ
+            </div>
+            <div class="desktop-nav-item" id="dnav-history" onclick="router.show('view-order-history'); app.renderOrderHistory(); _dnavSetActive('dnav-history')">
+                <i class="fas fa-receipt"></i> ປະຫວັດ
+            </div>
+            <div class="desktop-nav-item" id="dnav-contact" onclick="app.openContact(); _dnavSetActive('dnav-contact')">
+                <i class="fas fa-headset"></i> ຕິດຕໍ່
+            </div>
+            <div class="desktop-nav-item" id="dnav-spin" onclick="router.show('view-spin'); _dnavSetActive('dnav-spin')">
+                <i class="fas fa-dharmachakra"></i> ໝຸນວົງລໍ້
+            </div>
+        </div>
+    </nav>
+    <script>
+    function _dnavSetActive(id) {
+        document.querySelectorAll('.desktop-nav-item').forEach(el => el.classList.remove('active'));
+        var el = document.getElementById(id);
+        if (el) el.classList.add('active');
+    }
+    </script>
     <div class="announcement-banner" id="announcement-banner" style="display:none!important;">
         <div class="announcement-content" id="announcement-content"></div>
     </div>
@@ -396,7 +425,7 @@
                 <!-- Total price display -->
                 <div id="det-total-display" style="display:none;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(229,57,53,0.08);border-radius:10px;margin-bottom:14px;border:1px solid rgba(229,57,53,0.2);">
                     <span style="font-size:13px;color:#aaa;">ລາຄາລວມ</span>
-                    <span id="det-total-price" style="color:#e53935;font-size:18px;font-weight:800;"></span>
+                    <span id="det-total-price" style="color:#ffffff;font-size:18px;font-weight:800;"></span>
                 </div>
 
                 <button class="btn btn-buy-card" id="det-buy-btn" style="width: 100%; padding: 16px; font-size:15px; border-radius:10px;" onclick="app.showBuyConfirm()">
