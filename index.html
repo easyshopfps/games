@@ -14,7 +14,7 @@
 <body>
 
     <!-- ===== LOADING SCREEN — ต้องเป็น element แรกสุด ป้องกัน flash ===== -->
-    <div id="loading-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:flex;justify-content:center;align-items:center;z-index:99999;opacity:1;visibility:visible;">
+    <div id="loading-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#f2f2f2;display:flex;justify-content:center;align-items:center;z-index:99999;opacity:1;visibility:visible;">
         <div class="loading-character">
             <img src="https://img2.pic.in.th/elves-01.gif" alt="Loading...">
         </div>
@@ -54,61 +54,61 @@
         </div>
     </div>
     <!-- ===== BUY CONFIRM PAGE (Full Screen) ===== -->
-    <div id="view-buy-confirm" class="page-view hidden" style="min-height:100vh;background:#0d0d0d;padding:0;">
+    <div id="view-buy-confirm" class="page-view hidden" style="min-height:100vh;background:#f5f5f5;padding:0;">
         <div style="max-width:520px;margin:0 auto;padding:20px 20px 40px;min-height:100vh;display:flex;flex-direction:column;">
             <!-- Header -->
             <div style="display:flex;align-items:center;gap:14px;padding:16px 0 20px;">
-                <button onclick="app.closeBuyConfirm()" style="width:40px;height:40px;border:none;background:#1e1e1e;color:#fff;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <button onclick="app.closeBuyConfirm()" style="width:40px;height:40px;border:none;background:#f0f0f0;color:#111111;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <div>
-                    <div style="font-size:18px;font-weight:800;color:#fff;">ຢືນຢັນການສັ່ງຊື້</div>
-                    <div style="font-size:12px;color:#666;">ກວດສອບລາຍລະອຽດກ່ອນທຳການສັ່ງ</div>
+                    <div style="font-size:18px;font-weight:800;color:#111111;">ຢືນຢັນການສັ່ງຊື້</div>
+                    <div style="font-size:12px;color:#777777888;">ກວດສອບລາຍລະອຽດກ່ອນທຳການສັ່ງ</div>
                 </div>
             </div>
 
             <!-- Product card -->
-            <div style="background:#161616;border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid #2a2a2a;display:flex;align-items:center;gap:14px;">
-                <img id="buy-confirm-img" src="" style="width:72px;height:72px;border-radius:12px;object-fit:cover;border:1px solid #333;flex-shrink:0;">
+            <div style="background:#ffffff;border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid #e0e0e0;display:flex;align-items:center;gap:14px;">
+                <img id="buy-confirm-img" src="" style="width:72px;height:72px;border-radius:12px;object-fit:cover;border:1px solid #e0e0e0;flex-shrink:0;">
                 <div style="flex:1;min-width:0;">
-                    <div style="font-size:11px;color:#666;margin-bottom:4px;">ລາຍລະອຽດສິນຄ້າ</div>
-                    <div id="buy-confirm-name" style="font-weight:700;font-size:15px;color:#fff;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+                    <div style="font-size:11px;color:#777777888;margin-bottom:4px;">ລາຍລະອຽດສິນຄ້າ</div>
+                    <div id="buy-confirm-name" style="font-weight:700;font-size:15px;color:#111111;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
                     <div id="buy-confirm-price" style="font-size:20px;font-weight:800;color:var(--main-red);"></div>
                 </div>
             </div>
 
             <!-- Balance info -->
-            <div style="background:#161616;border-radius:14px;padding:14px 16px;margin-bottom:14px;border:1px solid #2a2a2a;display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-size:13px;color:#aaa;"><i class="fas fa-wallet" style="color:#ffaa00;margin-right:8px;"></i>ຍອດເງິນຂອງທ່ານ</span>
-                <span id="buy-confirm-balance" style="color:#fff;font-weight:700;font-size:15px;"></span>
+            <div style="background:#ffffff;border-radius:14px;padding:14px 16px;margin-bottom:14px;border:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:13px;color:#777777888666;"><i class="fas fa-wallet" style="color:#f59e0b;margin-right:8px;"></i>ຍອດເງິນຂອງທ່ານ</span>
+                <span id="buy-confirm-balance" style="color:#111111;font-weight:700;font-size:15px;"></span>
             </div>
 
             <!-- Order summary box -->
-            <div style="background:#161616;border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid #2a2a2a;">
-                <div style="font-size:11px;color:#666;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;">ສະຫລຸບຄຳສັ່ງຊື້</div>
+            <div style="background:#ffffff;border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid #e0e0e0;">
+                <div style="font-size:11px;color:#777777888;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;">ສະຫລຸບຄຳສັ່ງຊື້</div>
 
                 <!-- price per unit row -->
-                <div style="display:flex;justify-content:space-between;font-size:13px;color:#aaa;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#777777888666;margin-bottom:10px;">
                     <span>ລາຄາສິນຄ້າ (<span id="bc-qty-label">1</span> ອັນ)</span>
-                    <span id="bc-subtotal" style="color:#fff;"></span>
+                    <span id="bc-subtotal" style="color:#111111;"></span>
                 </div>
-                <div style="display:flex;justify-content:space-between;font-size:13px;color:#aaa;margin-bottom:14px;">
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#777777888666;margin-bottom:14px;">
                     <span>ຄ່າດຳເນີນການ</span>
                     <span style="color:#00c853;">0 ₭</span>
                 </div>
-                <div style="height:1px;background:#2a2a2a;margin-bottom:14px;"></div>
+                <div style="height:1px;background:#e8e8e8;margin-bottom:14px;"></div>
                 <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
-                    <span style="color:#fff;">ລາຄາລວມ</span>
+                    <span style="color:#111111;">ລາຄາລວມ</span>
                     <span id="buy-confirm-total" style="color:var(--main-red);font-size:20px;"></span>
                 </div>
             </div>
 
             <!-- Action buttons -->
             <div style="display:flex;gap:12px;padding-top:8px;">
-                <button onclick="app.closeBuyConfirm()" style="flex:1;padding:16px;border:1.5px solid #333;background:transparent;color:#aaa;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='#555';this.style.color='#fff'" onmouseout="this.style.borderColor='#333';this.style.color='#aaa'">
+                <button onclick="app.closeBuyConfirm()" style="flex:1;padding:16px;border:1.5px solid #e0e0e0;background:transparent;color:#777777888666;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='#555';this.style.color='#fff'" onmouseout="this.style.borderColor='#333';this.style.color='#aaa'">
                     <i class="fas fa-times"></i> ຍົກເລີກ
                 </button>
-                <button onclick="app.confirmBuy()" style="flex:2;padding:16px;border:none;background:linear-gradient(135deg,#444444,#222222);color:#fff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
+                <button onclick="app.confirmBuy()" style="flex:2;padding:16px;border:none;background:#111111;color:#ffffff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
                     <i class="fas fa-bolt"></i> ຢືນຢັນການສັ່ງຊື້
                 </button>
             </div>
@@ -116,44 +116,44 @@
     </div>
 
     <!-- ===== ORDER RECEIPT PAGE (Full Screen) ===== -->
-    <div id="view-receipt" class="page-view hidden" style="min-height:100vh;background:#0d0d0d;padding:0;">
+    <div id="view-receipt" class="page-view hidden" style="min-height:100vh;background:#f5f5f5;padding:0;">
         <div style="max-width:520px;margin:0 auto;padding:30px 20px 40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;">
 
             <!-- Success Animation -->
             <div style="text-align:center;padding:30px 0 24px;">
                 <div style="width:90px;height:90px;background:linear-gradient(135deg,#00c853,#00e676);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(0,200,83,0.5);margin-bottom:18px;animation:receiptPop 0.5s cubic-bezier(0.16,1,0.3,1);">
-                    <i class="fas fa-check" style="font-size:40px;color:#fff;"></i>
+                    <i class="fas fa-check" style="font-size:40px;color:#111111;"></i>
                 </div>
                 <div style="font-size:26px;font-weight:800;color:#00e676;margin-bottom:6px;">ສັ່ງຊື້ສຳເລັດ!</div>
-                <div id="receipt-bill-number" style="font-size:11px;color:#555;font-family:monospace;background:#111;padding:4px 12px;border-radius:20px;display:inline-block;"></div>
+                <div id="receipt-bill-number" style="font-size:11px;color:#777777;font-family:monospace;background:#f8f8f8;padding:4px 12px;border-radius:20px;display:inline-block;"></div>
             </div>
 
             <!-- Receipt card -->
-            <div style="width:100%;background:#161616;border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid #2a2a2a;">
-                <div style="font-size:11px;color:#666;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;text-align:center;">ໃບບິນສັ່ງຊື້</div>
+            <div style="width:100%;background:#ffffff;border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid #e0e0e0;">
+                <div style="font-size:11px;color:#777777888;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;text-align:center;">ໃບບິນສັ່ງຊື້</div>
 
                 <!-- Product row -->
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed #2a2a2a;">
-                    <img id="receipt-img" src="" style="width:60px;height:60px;object-fit:cover;border-radius:10px;border:1px solid #333;flex-shrink:0;">
+                    <img id="receipt-img" src="" style="width:60px;height:60px;object-fit:cover;border-radius:10px;border:1px solid #e0e0e0;flex-shrink:0;">
                     <div style="flex:1;min-width:0;">
-                        <div id="receipt-product-name" style="font-weight:700;font-size:14px;color:#fff;margin-bottom:3px;"></div>
-                        <div id="receipt-price-each" style="font-size:12px;color:#aaa;"></div>
+                        <div id="receipt-product-name" style="font-weight:700;font-size:14px;color:#111111;margin-bottom:3px;"></div>
+                        <div id="receipt-price-each" style="font-size:12px;color:#777777888666;"></div>
                     </div>
                 </div>
 
                 <!-- Summary rows -->
-                <div style="display:flex;justify-content:space-between;font-size:13px;color:#aaa;margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#777777888666;margin-bottom:8px;">
                     <span>ຈຳນວນ</span>
-                    <span id="receipt-qty" style="color:#fff;font-weight:600;"></span>
+                    <span id="receipt-qty" style="color:#111111;font-weight:600;"></span>
                 </div>
-                <div style="display:flex;justify-content:space-between;font-size:13px;color:#aaa;margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#777777888666;margin-bottom:8px;">
                     <span>ຄ່າດຳເນີນການ</span>
                     <span style="color:#00c853;">ຟຣີ</span>
                 </div>
-                <div style="height:1px;background:#2a2a2a;margin:10px 0;"></div>
+                <div style="height:1px;background:#e8e8e8;margin:10px 0;"></div>
                 <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
-                    <span style="color:#aaa;">ລາຄາລວມ</span>
-                    <span id="receipt-total" style="color:#ffffff;font-size:20px;font-weight:800;"></span>
+                    <span style="color:#777777888666;">ລາຄາລວມ</span>
+                    <span id="receipt-total" style="color:#111111fff;font-size:20px;font-weight:800;"></span>
                 </div>
             </div>
 
@@ -161,7 +161,7 @@
             <div id="receipt-uid-section" style="display:none;width:100%;background:rgba(96,165,250,0.06);border:1.5px solid rgba(96,165,250,0.25);border-radius:16px;padding:16px;margin-bottom:16px;">
                 <div style="font-size:11px;color:#60a5fa;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><i class="fas fa-id-badge"></i> ລະຫັດສິນຄ້າຂອງທ່ານ</div>
                 <div style="display:flex;align-items:center;gap:10px;">
-                    <div id="receipt-uid" style="font-family:monospace;font-size:14px;font-weight:700;color:#fff;word-break:break-all;flex:1;"></div>
+                    <div id="receipt-uid" style="font-family:monospace;font-size:14px;font-weight:700;color:#111111;word-break:break-all;flex:1;"></div>
                     <button onclick="app.copyReceiptUid()" id="receipt-uid-copy-btn" style="padding:8px 14px;border:none;background:#1e3a5f;color:#60a5fa;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;">
                         <i class="fas fa-copy"></i> ຄັດລອກ
                     </button>
@@ -170,10 +170,10 @@
 
             <!-- Action buttons -->
             <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-                <button onclick="app.goToOrderHistory()" style="width:100%;padding:16px;border:1.5px solid #333;background:transparent;color:#fff;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;">
+                <button onclick="app.goToOrderHistory()" style="width:100%;padding:16px;border:1.5px solid #e0e0e0;background:transparent;color:#111111;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;">
                     <i class="fas fa-history" style="margin-right:8px;color:#60a5fa;"></i>ເບິ່ງປະຫວັດສັ່ງຊື້
                 </button>
-                <button onclick="router.home()" style="width:100%;padding:16px;border:none;background:linear-gradient(135deg,#444444,#222222);color:#fff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);">
+                <button onclick="router.home()" style="width:100%;padding:16px;border:none;background:#111111;color:#ffffff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);">
                     <i class="fas fa-home" style="margin-right:8px;"></i>ກັບໄປໜ້າຫຼັກ
                 </button>
             </div>
@@ -269,16 +269,16 @@
         <div class="user-menu-item" onclick="app.toggleSecurityMenu()" id="security-menu-item">
             <i class="fas fa-shield-alt" style="color: var(--main-red);"></i>
             <span>ຄວາມປອດໄພ</span>
-            <i class="fas fa-chevron-down" id="security-chevron" style="margin-left:auto; font-size:11px; color:#666; transition:transform 0.2s;"></i>
+            <i class="fas fa-chevron-down" id="security-chevron" style="margin-left:auto; font-size:11px; color:#777777888; transition:transform 0.2s;"></i>
         </div>
         <!-- Security Submenu -->
-        <div id="security-submenu" style="display:none; background:#0a0a0a; border-radius:10px; margin:2px 0 4px; overflow:hidden;">
+        <div id="security-submenu" style="display:none; background:#f2f2f2; border-radius:10px; margin:2px 0 4px; overflow:hidden;">
             <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openChangePassword()" style="padding:12px 16px 12px 36px; font-size:13px;">
-                <i class="fas fa-key" style="color:#aaa; font-size:13px;"></i>
+                <i class="fas fa-key" style="color:#777777888666; font-size:13px;"></i>
                 <span style="color:#ccc;">ປ່ຽນລະຫັດຜ່ານ</span>
             </div>
             <div class="user-menu-item" onclick="document.getElementById('user-menu').style.display='none'; app.openChangePinPage()" style="padding:12px 16px 12px 36px; font-size:13px; border-top:1px solid #1a1a1a;">
-                <i class="fas fa-lock" style="color:#aaa; font-size:13px;"></i>
+                <i class="fas fa-lock" style="color:#777777888666; font-size:13px;"></i>
                 <span style="color:#ccc;">ປ່ຽນ PIN 6 ຕົວ</span>
             </div>
         </div>
@@ -409,14 +409,14 @@
                 </div>
 
                 <!-- Quantity Selector on detail page -->
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#1a1a1a;border-radius:12px;margin-bottom:14px;border:1px solid #2a2a2a;">
-                    <span style="font-size:13px;color:#aaa;"><i class="fas fa-boxes" style="color:#60a5fa;margin-right:6px;"></i>ຈຳນວນ</span>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#f0f0f0;border-radius:12px;margin-bottom:14px;border:1px solid #e0e0e0;">
+                    <span style="font-size:13px;color:#777777888666;"><i class="fas fa-boxes" style="color:#60a5fa;margin-right:6px;"></i>ຈຳນວນ</span>
                     <div style="display:flex;align-items:center;">
-                        <button onclick="app.changeQty(-1)" id="qty-minus-btn" style="width:38px;height:38px;border:none;background:#e53935;color:#fff;border-radius:10px 0 0 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s;">
+                        <button onclick="app.changeQty(-1)" id="qty-minus-btn" style="width:38px;height:38px;border:none;background:#e53935;color:#111111;border-radius:10px 0 0 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s;">
                             <i class="fas fa-minus" style="font-size:12px;"></i>
                         </button>
-                        <div id="det-qty-display" style="width:52px;height:38px;background:#111;color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;border-top:1px solid #333;border-bottom:1px solid #333;">1</div>
-                        <button onclick="app.changeQty(1)" id="qty-plus-btn" style="width:38px;height:38px;border:none;background:#e53935;color:#fff;border-radius:0 10px 10px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s;">
+                        <div id="det-qty-display" style="width:52px;height:38px;background:#f8f8f8;color:#111111;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;border-top:1px solid #333;border-bottom:1px solid #333;">1</div>
+                        <button onclick="app.changeQty(1)" id="qty-plus-btn" style="width:38px;height:38px;border:none;background:#e53935;color:#111111;border-radius:0 10px 10px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s;">
                             <i class="fas fa-plus" style="font-size:12px;"></i>
                         </button>
                     </div>
@@ -424,8 +424,8 @@
 
                 <!-- Total price display -->
                 <div id="det-total-display" style="display:none;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(229,57,53,0.08);border-radius:10px;margin-bottom:14px;border:1px solid rgba(229,57,53,0.2);">
-                    <span style="font-size:13px;color:#aaa;">ລາຄາລວມ</span>
-                    <span id="det-total-price" style="color:#ffffff;font-size:18px;font-weight:800;"></span>
+                    <span style="font-size:13px;color:#777777888666;">ລາຄາລວມ</span>
+                    <span id="det-total-price" style="color:#111111fff;font-size:18px;font-weight:800;"></span>
                 </div>
 
                 <button class="btn btn-buy-card" id="det-buy-btn" style="width: 100%; padding: 16px; font-size:15px; border-radius:10px;" onclick="app.showBuyConfirm()">
@@ -498,7 +498,7 @@
                 <div class="upload-area" onclick="document.getElementById('slip-upload').click()">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>ອັບໂຫຼດສະລິບໂອນເງິນ</p>
-                    <p style="font-size:11px; color:#666;">ຄລິກເພື່ອເລືອກຮູບ</p>
+                    <p style="font-size:11px; color:#777777888;">ຄລິກເພື່ອເລືອກຮູບ</p>
                 </div>
                 <input type="file" id="slip-upload" accept="image/*" style="display:none;" onchange="app.previewSlip(this)">
                 <img id="slip-preview" class="upload-preview">
@@ -535,25 +535,25 @@
         <div class="bank-card">
             <div style="position:relative; margin-bottom:12px;">
                 <input type="password" id="current-password" class="form-control" placeholder="ລະຫັດຜ່ານປັດຈຸບັນ" style="padding-right:46px;">
-                <button type="button" onclick="togglePw('current-password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#aaa; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
+                <button type="button" onclick="togglePw('current-password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#777777888666; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
             </div>
             <div style="position:relative; margin-bottom:12px;">
                 <input type="password" id="new-password" class="form-control" placeholder="ລະຫັດຜ່ານໃໝ່" style="padding-right:46px;" oninput="app.checkPwStrengthChange(this.value)">
-                <button type="button" onclick="togglePw('new-password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#aaa; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
+                <button type="button" onclick="togglePw('new-password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#777777888666; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
             </div>
             <div style="position:relative; margin-bottom:12px;">
                 <input type="password" id="confirm-password" class="form-control" placeholder="ຢືນຢັນລະຫັດຜ່ານໃໝ່" style="padding-right:46px;">
-                <button type="button" onclick="togglePw('confirm-password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#aaa; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
+                <button type="button" onclick="togglePw('confirm-password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#777777888666; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
             </div>
             <!-- Strength bar ຢູ່ດ້ານລຸ່ມສຸດ -->
             <div style="margin-bottom:12px;">
                 <div style="background:#222; border-radius:4px; height:5px; overflow:hidden;">
                     <div id="change-strength-fill" style="height:100%; width:0%; background:#333; transition:all 0.3s;"></div>
                 </div>
-                <div id="change-strength-hint" style="font-size:11px; color:#aaa; margin-top:5px;">ລະຫັດຜ່ານຕ້ອງມີ: ຕົວພິມໃຫຍ່ (A-Z) + ຕົວພິມນ້ອຍ (a-z) + ຕົວເລກ (0-9) + ອັກຂະລະພິເສດ (!@#$)</div>
+                <div id="change-strength-hint" style="font-size:11px; color:#777777888666; margin-top:5px;">ລະຫັດຜ່ານຕ້ອງມີ: ຕົວພິມໃຫຍ່ (A-Z) + ຕົວພິມນ້ອຍ (a-z) + ຕົວເລກ (0-9) + ອັກຂະລະພິເສດ (!@#$)</div>
             </div>
             <div style="text-align:right; margin-bottom:15px;">
-                <button onclick="app.openForgotFromProfile()" style="background:none; border:none; color:#aaa; font-size:12px; cursor:pointer; text-decoration:underline;">ລືມລະຫັດ?</button>
+                <button onclick="app.openForgotFromProfile()" style="background:none; border:none; color:#777777888666; font-size:12px; cursor:pointer; text-decoration:underline;">ລືມລະຫັດ?</button>
             </div>
             
             <button class="btn btn-red" style="width:100%; padding:15px;" onclick="app.changePassword()">
@@ -568,22 +568,22 @@
         
         <div class="section-title"><h3>ປ່ຽນ PIN 6 ຕົວ</h3></div>
 
-        <div style="background:#111; border-radius:12px; padding:12px 15px; margin-bottom:15px; border:1px solid #222;">
-            <p style="font-size:12px; color:#aaa; margin:0;"><i class="fas fa-info-circle" style="color:var(--main-red); margin-right:6px;"></i>PIN 6 ຕົວໃຊ້ສຳລັບຢືນຢັນຕົວຕົນຕອນລືມລະຫັດຜ່ານ</p>
+        <div style="background:#f8f8f8; border-radius:12px; padding:12px 15px; margin-bottom:15px; border:1px solid #222;">
+            <p style="font-size:12px; color:#777777888666; margin:0;"><i class="fas fa-info-circle" style="color:var(--main-red); margin-right:6px;"></i>PIN 6 ຕົວໃຊ້ສຳລັບຢືນຢັນຕົວຕົນຕອນລືມລະຫັດຜ່ານ</p>
         </div>
         
         <div class="bank-card">
             <div style="position:relative; margin-bottom:12px;">
                 <input type="password" id="current-pin" class="form-control" placeholder="PIN ປັດຈຸບັນ (6 ຕົວ)" maxlength="6" inputmode="numeric" pattern="[0-9]*" style="padding-right:46px; letter-spacing:4px;">
-                <button type="button" onclick="togglePw('current-pin', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#aaa; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
+                <button type="button" onclick="togglePw('current-pin', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#777777888666; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
             </div>
             <div style="position:relative; margin-bottom:12px;">
                 <input type="password" id="new-pin" class="form-control" placeholder="PIN ໃໝ່ (6 ຕົວ)" maxlength="6" inputmode="numeric" pattern="[0-9]*" style="padding-right:46px; letter-spacing:4px;">
-                <button type="button" onclick="togglePw('new-pin', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#aaa; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
+                <button type="button" onclick="togglePw('new-pin', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#777777888666; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
             </div>
             <div style="position:relative; margin-bottom:15px;">
                 <input type="password" id="confirm-pin" class="form-control" placeholder="ຢືນຢັນ PIN ໃໝ່" maxlength="6" inputmode="numeric" pattern="[0-9]*" style="padding-right:46px; letter-spacing:4px;">
-                <button type="button" onclick="togglePw('confirm-pin', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#aaa; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
+                <button type="button" onclick="togglePw('confirm-pin', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#777777888666; cursor:pointer; font-size:16px; padding:4px;"><i class="fas fa-eye"></i></button>
             </div>
             
             <button class="btn btn-red" style="width:100%; padding:15px;" onclick="app.changePin()">
@@ -608,7 +608,7 @@
         <div class="modal-box" style="max-width:340px; padding:20px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin:0;">ຂໍ້ມູນການສັ່ງຊື້</h3>
-                <i class="fas fa-times" onclick="app.closeModal('order-detail-modal')" style="cursor:pointer; color:#aaa; font-size:18px;"></i>
+                <i class="fas fa-times" onclick="app.closeModal('order-detail-modal')" style="cursor:pointer; color:#777777888666; font-size:18px;"></i>
             </div>
             <div id="order-detail-content"></div>
             <div style="display:flex; gap:8px; margin-top:12px;">
@@ -682,7 +682,7 @@
         </div>
 
         <div id="tab-p" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:20px;">
                 <input type="hidden" id="edit-p-id">
                 <input type="text" id="p-name" class="form-control" placeholder="ຊື່ສິນຄ້າ">
                 <input type="number" id="p-price" class="form-control" placeholder="ລາຄາ (ຕົວເລກເທົ່ານັ້ນ)">
@@ -698,7 +698,7 @@
                 <label style="color:var(--main-red); font-size:12px; margin-top:8px; display:block;">🎬 ລິ້ງສອນການໃຊ້ງານ (YouTube/Facebook/ອື່ນໆ):</label>
                 <input type="text" id="p-tutorial" class="form-control" placeholder="https://youtube.com/... ຫຼື https://fb.com/...">
                 
-                <label style="display:flex; align-items:center; gap:10px; margin-bottom:15px; cursor:pointer; background:#0a0a0a; padding:12px; border-radius:8px; border:1px solid rgba(59,130,246,0.3);">
+                <label style="display:flex; align-items:center; gap:10px; margin-bottom:15px; cursor:pointer; background:#f2f2f2; padding:12px; border-radius:8px; border:1px solid rgba(59,130,246,0.3);">
                     <input type="checkbox" id="p-has-id" style="width:18px; height:18px; cursor:pointer; accent-color:#3b82f6;">
                     <span style="font-size:14px; color:#60a5fa;"><i class="fas fa-id-badge"></i> ສ້າງ ID ສິນຄ້າ (Product ID) ເມື່ອລູກຄ້າຊື້</span>
                 </label>
@@ -714,7 +714,7 @@
         </div>
 
         <div id="tab-c" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:20px;">
                 <input type="hidden" id="edit-c-id">
                 <input type="text" id="c-name" class="form-control" placeholder="ຊື່ໝວດໝູ່">
                 <input type="text" id="c-img" class="form-control" placeholder="URL ຮູບໝວດໝູ່">
@@ -730,25 +730,25 @@
 
         <!-- ===== Admin: ຈັດການສະມາຊິກ (ແບບຄົ້ນຫາ) ===== -->
         <div id="tab-members" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:20px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin-bottom:15px;">ຄົ້ນຫາສະມາຊິກ</h3>
                 
                 <input type="text" id="member-search" class="form-control" placeholder="ຄົ້ນຫາດ້ວຍຊື່ ຫຼື ID..." onkeyup="app.searchMembers()">
                 
-                <div id="member-search-results" style="max-height: 400px; overflow-y: auto; margin-top: 10px; background: #0a0a0a; border-radius: 8px; padding: 5px;"></div>
+                <div id="member-search-results" style="max-height: 400px; overflow-y: auto; margin-top: 10px; background: #f2f2f2; border-radius: 8px; padding: 5px;"></div>
                 
-                <div id="member-edit-form" style="display:none; margin-top:20px; background:#1a1a1a; padding:15px; border-radius:8px;">
+                <div id="member-edit-form" style="display:none; margin-top:20px; background:#f0f0f0; padding:15px; border-radius:8px;">
                     <h4 style="color:var(--main-red); margin-bottom:15px;">✏️ ແກ້ໄຂຂໍ້ມູນສະມາຊິກ</h4>
                     <input type="hidden" id="member-id">
                     
-                    <div style="background:#0a0a0a; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
+                    <div style="background:#f2f2f2; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                             <span style="color:var(--text-dim); font-size:12px;">🆔 ID:</span>
                             <span id="member-id-short" style="color:var(--main-red); font-size:13px; font-family:monospace;"></span>
                         </div>
                         <div style="display:flex; justify-content:space-between;">
                             <span style="color:var(--text-dim); font-size:12px;">👤 ຊື່ຜູ້ໃຊ້:</span>
-                            <input type="text" id="member-username" style="background:transparent; border:none; color:#fff; font-weight:600; text-align:right; font-size:14px; outline:none;" readonly>
+                            <input type="text" id="member-username" style="background:transparent; border:none; color:#111111; font-weight:600; text-align:right; font-size:14px; outline:none;" readonly>
                         </div>
                     </div>
                     
@@ -757,12 +757,12 @@
                         <button class="btn btn-success" onclick="app.adjustBalance('add')" style="padding:10px; font-size:13px;">
                             <i class="fas fa-plus-circle"></i> ເພີ່ມເງິນ
                         </button>
-                        <button class="btn" onclick="app.adjustBalance('subtract')" style="padding:10px; font-size:13px; background:#dc3545; color:#fff;">
+                        <button class="btn" onclick="app.adjustBalance('subtract')" style="padding:10px; font-size:13px; background:#dc3545; color:#111111;">
                             <i class="fas fa-minus-circle"></i> ຫັກເງິນ
                         </button>
                     </div>
                     
-                    <input type="number" id="member-balance" class="form-control" placeholder="ຍອດເງິນປັດຈຸບັນ" readonly style="background:#0a0a0a; margin-bottom:10px;">
+                    <input type="number" id="member-balance" class="form-control" placeholder="ຍອດເງິນປັດຈຸບັນ" readonly style="background:#f2f2f2; margin-bottom:10px;">
                     <input type="number" id="member-spent" class="form-control" placeholder="ຍອດໃຊ້ຈ່າຍທັງໝົດ" style="margin-bottom:10px;">
                     
                     <label style="font-size:13px; color:var(--text-dim); margin-bottom:8px; display:block;">🔐 ສະຖານະບັນຊີ:</label>
@@ -800,7 +800,7 @@
 
         <!-- ===== Admin: ປະກາດ (Announcement) ===== -->
         <div id="tab-announcement" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:15px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:15px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin-bottom:15px;">
                     <i class="fas fa-bullhorn"></i> ເພີ່ມ/ແກ້ໄຂປະກາດ
                 </h3>
@@ -850,14 +850,14 @@
                 </div>
             </div>
             
-            <div style="background:#111; padding:15px; border-radius:12px;">
-                <h4 style="color:#fff; font-size:14px; margin-bottom:12px;">ລາຍການປະກາດທັງໝົດ:</h4>
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px;">
+                <h4 style="color:#111111; font-size:14px; margin-bottom:12px;">ລາຍການປະກາດທັງໝົດ:</h4>
                 <div id="t-announcements"></div>
             </div>
         </div>
 
         <div id="tab-pop" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:20px;">
                 <input type="hidden" id="edit-pop-id">
                 <input type="hidden" id="pop-type" value="product">
 
@@ -875,16 +875,16 @@
                 <!-- Section: เลือกสินค้าในเว็บ -->
                 <div id="pop-section-product">
                     <input type="hidden" id="pop-product" value="">
-                    <label style="font-size:12px; color:#aaa; margin-bottom:5px; display:block;">ຄົ້ນຫາສິນຄ້າ:</label>
+                    <label style="font-size:12px; color:#777777888666; margin-bottom:5px; display:block;">ຄົ້ນຫາສິນຄ້າ:</label>
                     <input type="text" id="pop-search" class="form-control" placeholder="🔍 ພິມຊື່ສິນຄ້າ..." oninput="app.filterPopupProducts()" style="margin-bottom:10px;">
                     <!-- สินค้าที่เลือกอยู่ -->
-                    <div id="pop-selected-card" style="display:none; background:#1a1a1a; border:2px solid var(--main-red); border-radius:10px; padding:10px; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
+                    <div id="pop-selected-card" style="display:none; background:#f0f0f0; border:2px solid var(--main-red); border-radius:10px; padding:10px; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
                         <img id="pop-preview-img" src="" style="width:50px; height:50px; object-fit:cover; border-radius:8px; flex-shrink:0;">
                         <div style="flex:1; min-width:0;">
-                            <div id="pop-preview-name" style="font-size:13px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                            <div id="pop-preview-name" style="font-size:13px; font-weight:600; color:#111111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
                             <div id="pop-preview-price" style="font-size:12px; color:var(--main-red);"></div>
                         </div>
-                        <span style="font-size:10px; background:var(--main-red); color:#fff; padding:2px 7px; border-radius:20px; flex-shrink:0;">ເລືອກແລ້ວ</span>
+                        <span style="font-size:10px; background:var(--main-red); color:#111111; padding:2px 7px; border-radius:20px; flex-shrink:0;">ເລືອກແລ້ວ</span>
                     </div>
                     <!-- รายการสินค้า scroll -->
                     <div id="pop-product-list" style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; padding-right:2px;"></div>
@@ -892,11 +892,11 @@
 
                 <!-- Section: รูป/ลิงค์จากนอก -->
                 <div id="pop-section-custom" style="display:none;">
-                    <label style="font-size:12px; color:#aaa; margin-bottom:5px; display:block;">🖼️ URL ຮູບພາບ (ຈາກ URL ພາຍນອກ):</label>
+                    <label style="font-size:12px; color:#777777888666; margin-bottom:5px; display:block;">🖼️ URL ຮູບພາບ (ຈາກ URL ພາຍນອກ):</label>
                     <input type="url" id="pop-custom-img" class="form-control" placeholder="https://example.com/banner.jpg" style="margin-bottom:10px;" oninput="app.previewCustomPopupImg()">
-                    <label style="font-size:12px; color:#aaa; margin-bottom:5px; display:block;">🔗 ລິ້ງທີ່ເປີດເມື່ອກົດ Popup (ບໍ່ບັງຄັບ):</label>
+                    <label style="font-size:12px; color:#777777888666; margin-bottom:5px; display:block;">🔗 ລິ້ງທີ່ເປີດເມື່ອກົດ Popup (ບໍ່ບັງຄັບ):</label>
                     <input type="url" id="pop-custom-link" class="form-control" placeholder="https://facebook.com/yourpage" style="margin-bottom:15px;">
-                    <div id="pop-custom-preview" style="display:none; background:#0a0a0a; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border); text-align:center;">
+                    <div id="pop-custom-preview" style="display:none; background:#f2f2f2; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border); text-align:center;">
                         <img id="pop-custom-preview-img" src="" style="max-width:100%; max-height:150px; border-radius:8px; object-fit:contain;" onerror="this.style.display='none'">
                     </div>
                 </div>
@@ -913,7 +913,7 @@
         </div>
 
         <div id="tab-hot" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:20px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin-bottom:15px;">ຈັດການສິນຄ້າຂາຍດີ (Hot Deals)</h3>
                 
                 <label style="font-size:12px; color:var(--main-red); margin-bottom:5px; display:block;">ເລືອກປະເພດ:</label>
@@ -926,12 +926,12 @@
                 <label style="font-size:12px; color:var(--main-red); margin-bottom:5px; display:block;">ຄົ້ນຫາລາຍການ:</label>
                 <input type="text" id="hot-search" class="form-control" placeholder="🔍 ພິມຊື່ສິນຄ້າ/ໝວດໝູ່..." oninput="app.filterHotItems()" style="margin-bottom:10px;">
                 <!-- รายการที่เลือก -->
-                <div id="hot-selected-card" style="display:none; background:#1a1a1a; border:2px solid var(--main-red); border-radius:10px; padding:10px; margin-bottom:10px; align-items:center; gap:10px;">
+                <div id="hot-selected-card" style="display:none; background:#f0f0f0; border:2px solid var(--main-red); border-radius:10px; padding:10px; margin-bottom:10px; align-items:center; gap:10px;">
                     <img id="hot-selected-img" src="" style="width:50px; height:50px; object-fit:cover; border-radius:8px; flex-shrink:0;">
                     <div style="flex:1; min-width:0;">
-                        <div id="hot-selected-name" style="font-size:13px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                        <div id="hot-selected-name" style="font-size:13px; font-weight:600; color:#111111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
                     </div>
-                    <span style="font-size:10px; background:var(--main-red); color:#fff; padding:2px 7px; border-radius:20px; flex-shrink:0;">ເລືອກແລ້ວ</span>
+                    <span style="font-size:10px; background:var(--main-red); color:#111111; padding:2px 7px; border-radius:20px; flex-shrink:0;">ເລືອກແລ້ວ</span>
                 </div>
                 <!-- รายการ scroll -->
                 <div id="hot-item-list" style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; margin-bottom:12px; padding-right:2px;"></div>
@@ -939,20 +939,20 @@
                 <button class="btn btn-red" style="width:100%; margin-bottom:10px;" onclick="app.addHotDeal()">ເພີ່ມເປັນ Hot Deal</button>
             </div>
             
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:15px;">
-                <h4 style="color:#fff; font-size:14px; margin-bottom:10px;">ໝວດໝູ່ຂາຍດີ:</h4>
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:15px;">
+                <h4 style="color:#111111; font-size:14px; margin-bottom:10px;">ໝວດໝູ່ຂາຍດີ:</h4>
                 <div id="hot-cats-list" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
             </div>
             
-            <div style="background:#111; padding:15px; border-radius:12px;">
-                <h4 style="color:#fff; font-size:14px; margin-bottom:10px;">ສິນຄ້າຂາຍດີ:</h4>
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px;">
+                <h4 style="color:#111111; font-size:14px; margin-bottom:10px;">ສິນຄ້າຂາຍດີ:</h4>
                 <div id="hot-prods-list" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
             </div>
         </div>
 
         <!-- ===== Admin: ຈັດການໂຄດເຕີມເງິນ ===== -->
         <div id="tab-code-admin" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:20px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin-bottom:15px;">ເພີ່ມໂຄດເຕີມເງິນ</h3>
                 
                 <input type="text" id="code-value" class="form-control" placeholder="ໂຄດ (ຕົວຢ່າງ: EAZY2024)" style="text-transform:none;">
@@ -983,7 +983,7 @@
 
         <!-- ===== Admin: ລະຫັດສິນຄ້າ/ເລກບິນ ===== -->
         <div id="tab-product-ids" class="admin-tab hidden">
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:15px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:15px;">
                 <h3 style="color:#60a5fa; font-size:16px; margin-bottom:14px;"><i class="fas fa-id-badge"></i> ລະຫັດສິນຄ້າ / ເລກບິນ</h3>
 
                 <!-- Sub-menu tabs -->
@@ -991,7 +991,7 @@
                     <button id="sub-tab-product-id-btn" onclick="app.switchProductIdSubTab('product-ids')" style="flex:1;padding:10px;border:1.5px solid #60a5fa;background:rgba(96,165,250,0.15);color:#60a5fa;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;">
                         <i class="fas fa-id-badge" style="margin-right:6px;"></i>ລະຫັດສິນຄ້າ
                     </button>
-                    <button id="sub-tab-bill-btn" onclick="app.switchProductIdSubTab('bills')" style="flex:1;padding:10px;border:1.5px solid #333;background:transparent;color:#aaa;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;">
+                    <button id="sub-tab-bill-btn" onclick="app.switchProductIdSubTab('bills')" style="flex:1;padding:10px;border:1.5px solid #e0e0e0;background:transparent;color:#777777888666;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;">
                         <i class="fas fa-receipt" style="margin-right:6px;"></i>ເລກບິນ
                     </button>
                 </div>
@@ -1000,7 +1000,7 @@
                 <div id="sub-tab-product-ids">
                     <p style="color:var(--text-dim); font-size:12px; margin-bottom:12px;">ລາຍການລະຫັດ ID ທີ່ລູກຄ້າໄດ້ຮັບ. ກົດລົບຫຼັງກວດສອບໃຫ້ລູກຄ້າແລ້ວ.</p>
                     <div style="position:relative; margin-bottom:12px;">
-                        <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#aaa; font-size:14px;"></i>
+                        <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#777777888666; font-size:14px;"></i>
                         <input type="text" id="product-id-search" class="form-control" placeholder="ຄົ້ນຫາ ID, ສິນຄ້າ, ຜູ້ຊື້..." style="padding-left:36px; margin:0;" oninput="app.filterProductIds(this.value)">
                     </div>
                     <div class="admin-table-container">
@@ -1009,14 +1009,14 @@
                             <tbody id="t-product-ids"></tbody>
                         </table>
                     </div>
-                    <div id="product-id-count" style="text-align:right; font-size:11px; color:#aaa; margin-top:8px;"></div>
+                    <div id="product-id-count" style="text-align:right; font-size:11px; color:#777777888666; margin-top:8px;"></div>
                 </div>
 
                 <!-- Sub-tab: ເລກບິນ -->
                 <div id="sub-tab-bills" style="display:none;">
                     <p style="color:var(--text-dim); font-size:12px; margin-bottom:12px;">ປະຫວັດເລກບິນທຸກລາຍການ. ເລກບິນບໍ່ຊ້ຳກັນ ແລະ ແຕກຕ່າງຈາກລະຫັດສິນຄ້າ.</p>
                     <div style="position:relative; margin-bottom:12px;">
-                        <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#aaa; font-size:14px;"></i>
+                        <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#777777888666; font-size:14px;"></i>
                         <input type="text" id="bill-search" class="form-control" placeholder="ຄົ້ນຫາເລກບິນ, ສິນຄ້າ, ຜູ້ຊື້..." style="padding-left:36px; margin:0;" oninput="app.filterBills(this.value)">
                     </div>
                     <div class="admin-table-container">
@@ -1025,7 +1025,7 @@
                             <tbody id="t-bills"></tbody>
                         </table>
                     </div>
-                    <div id="bill-count" style="text-align:right; font-size:11px; color:#aaa; margin-top:8px;"></div>
+                    <div id="bill-count" style="text-align:right; font-size:11px; color:#777777888666; margin-top:8px;"></div>
                 </div>
             </div>
         </div>
@@ -1034,15 +1034,15 @@
         <!-- ===== Admin: ຈັດການວົງລໍ້ (Spin Wheel) ===== -->
         <div id="tab-spin-admin" class="admin-tab hidden">
             <!-- ตั้งค่าทั่วไป -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin-bottom:15px;">
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin:0 0 12px;">⚙️ ຕັ້ງຄ່າທົ່ວໄປ</h3>
-                <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">ຄຳອະທິບາຍ (ສະແດງໃຕ້ຫົວຂໍ້):</label>
+                <label style="font-size:12px; color:#777777888666; display:block; margin-bottom:4px;">ຄຳອະທິບາຍ (ສະແດງໃຕ້ຫົວຂໍ້):</label>
                 <input type="text" id="spin-cfg-desc" class="form-control" placeholder="ເຕີມ 200,000 ₭ ເຮັດໃຫ້ໄດ້ 1 ສິດ">
-                <label style="font-size:12px; color:#aaa; display:block; margin-top:10px; margin-bottom:4px;">ວິທີໄດ້ສິດ (ພິມໄດ້ເລີຍ, Enter ຂຶ້ນບັນທັດໃໝ່):</label>
+                <label style="font-size:12px; color:#777777888666; display:block; margin-top:10px; margin-bottom:4px;">ວິທີໄດ້ສິດ (ພິມໄດ້ເລີຍ, Enter ຂຶ້ນບັນທັດໃໝ່):</label>
                 <textarea id="spin-cfg-howto" class="form-control" rows="4" placeholder="1. ເຕີມເງິນເພື່ອໄດ້ສິດ&#10;2. ໝຸນວົງລໍ້ເພື່ອໂຊກ"></textarea>
-                <label style="font-size:12px; color:#aaa; display:block; margin-top:10px; margin-bottom:4px;">ເງິນທີ່ຕ້ອງເຕີມຕໍ່ 1 ສິດ (₭):</label>
+                <label style="font-size:12px; color:#777777888666; display:block; margin-top:10px; margin-bottom:4px;">ເງິນທີ່ຕ້ອງເຕີມຕໍ່ 1 ສິດ (₭):</label>
                 <input type="number" id="spin-cfg-threshold" class="form-control" placeholder="200000" value="200000">
-                <label style="font-size:12px; color:#aaa; display:block; margin-top:10px; margin-bottom:4px;">ລາຄາໝຸນ 1 ຄັ້ງ (₭) — 0 = ໃຊ້ສິດຟຣີ:</label>
+                <label style="font-size:12px; color:#777777888666; display:block; margin-top:10px; margin-bottom:4px;">ລາຄາໝຸນ 1 ຄັ້ງ (₭) — 0 = ໃຊ້ສິດຟຣີ:</label>
                 <input type="number" id="spin-cfg-cost" class="form-control" placeholder="0" value="0">
                 <button class="btn btn-red" style="width:100%; margin-top:10px;" onclick="app.saveSpinConfig()">
                     <i class="fas fa-save"></i> ບັນທຶກການຕັ້ງຄ່າ
@@ -1050,12 +1050,12 @@
             </div>
 
             <!-- เพิ่มรางวัล -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin-bottom:15px;">
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px;">
                 <h3 style="color:var(--main-red); font-size:16px; margin:0 0 12px;">➕ ເພີ່ມ/ແກ້ໄຂລາງວັນ</h3>
                 <input type="hidden" id="spin-edit-id">
 
                 <!-- ประเภทรางวัล -->
-                <label style="font-size:12px; color:#aaa; display:block; margin-bottom:6px;">ປະເພດລາງວັນ:</label>
+                <label style="font-size:12px; color:#777777888666; display:block; margin-bottom:6px;">ປະເພດລາງວັນ:</label>
                 <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
                     <button id="stype-cash" class="btn btn-red btn-sm" style="flex:1;" onclick="app.switchPrizeType('cash')"><i class="fas fa-coins" style="margin-right:4px;"></i>ເງິນ</button>
                     <button id="stype-product" class="btn btn-outline btn-sm" style="flex:1;" onclick="app.switchPrizeType('product')">📦 ສິນຄ້າ (ໃນເວັບ)</button>
@@ -1066,44 +1066,44 @@
 
                 <!-- ส่วน cash -->
                 <div id="spinf-cash">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">ຈຳນວນເງິນ (₭):</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-bottom:4px;">ຈຳນວນເງິນ (₭):</label>
                     <input type="number" id="spin-prize-amount" class="form-control" placeholder="1000">
                 </div>
 
                 <!-- ส่วน product จากเว็บ -->
                 <div id="spinf-product" style="display:none;">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">ຄົ້ນຫາສິນຄ້າ:</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-bottom:4px;">ຄົ້ນຫາສິນຄ້າ:</label>
                     <input type="text" id="spin-product-search" class="form-control" placeholder="🔍 ພິມຊື່ສິນຄ້າ..." oninput="app.filterSpinProducts()">
                     <input type="hidden" id="spin-product-id">
-                    <div id="spin-product-selected" style="display:none; background:#1a1a1a; border:2px solid var(--main-red); border-radius:8px; padding:8px; margin-top:8px; display:flex; align-items:center; gap:8px;">
+                    <div id="spin-product-selected" style="display:none; background:#f0f0f0; border:2px solid var(--main-red); border-radius:8px; padding:8px; margin-top:8px; display:flex; align-items:center; gap:8px;">
                         <img id="spin-product-sel-img" src="" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">
-                        <span id="spin-product-sel-name" style="font-size:13px; color:#fff;"></span>
+                        <span id="spin-product-sel-name" style="font-size:13px; color:#111111;"></span>
                     </div>
                     <div id="spin-product-list" style="max-height:200px; overflow-y:auto; margin-top:8px; display:flex; flex-direction:column; gap:5px;"></div>
                 </div>
 
                 <!-- ส่วน custom นอก -->
                 <div id="spinf-custom" style="display:none;">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">ຊື່ລາງວັນ:</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-bottom:4px;">ຊື່ລາງວັນ:</label>
                     <input type="text" id="spin-custom-name" class="form-control" placeholder="ເສື້ອ VIP">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-top:8px; margin-bottom:4px;">URL ຮູບ (ບໍ່ບັງຄັບ):</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-top:8px; margin-bottom:4px;">URL ຮູບ (ບໍ່ບັງຄັບ):</label>
                     <input type="url" id="spin-custom-img" class="form-control" placeholder="https://...">
                 </div>
 
                 <!-- ส่วน miss -->
                 <div id="spinf-miss" style="display:none;">
-                    <p style="font-size:13px; color:#aaa; margin:0;">ຊ່ອງ "ໂຊກດີຄັ້ງໜ້າ" — ຜູ້ໃຊ້ຈະບໍ່ໄດ້ຮັບຫຍັງ</p>
+                    <p style="font-size:13px; color:#777777888666; margin:0;">ຊ່ອງ "ໂຊກດີຄັ້ງໜ້າ" — ຜູ້ໃຊ້ຈະບໍ່ໄດ້ຮັບຫຍັງ</p>
                 </div>
 
                 <!-- ฟิลด์ร่วม -->
                 <div style="margin-top:12px;">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">ໂອກາດ (%):</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-bottom:4px;">ໂອກາດ (%):</label>
                     <input type="number" id="spin-prize-pct" class="form-control" placeholder="10" min="0" max="100" step="0.1">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-top:8px; margin-bottom:4px;">ຈຳນວນ stock (0 = ບໍ່ຈຳກັດ):</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-top:8px; margin-bottom:4px;">ຈຳນວນ stock (0 = ບໍ່ຈຳກັດ):</label>
                     <input type="number" id="spin-prize-stock" class="form-control" placeholder="0" min="0" value="0">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-top:8px; margin-bottom:4px;">ສີຊ່ອງໃນວົງລໍ້:</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-top:8px; margin-bottom:4px;">ສີຊ່ອງໃນວົງລໍ້:</label>
                     <input type="color" id="spin-prize-color" value="#ff4444" style="width:100%; height:36px; border-radius:8px; border:none; cursor:pointer;">
-                    <label style="font-size:12px; color:#aaa; display:block; margin-top:8px; margin-bottom:4px;">Emoji/ໄອຄອນ (ສະແດງໃນຊ່ອງ):</label>
+                    <label style="font-size:12px; color:#777777888666; display:block; margin-top:8px; margin-bottom:4px;">Emoji/ໄອຄອນ (ສະແດງໃນຊ່ອງ):</label>
                     <input type="text" id="spin-prize-emoji" class="form-control" placeholder="💎 / 🎁 / 💰">
                 </div>
                 <button class="btn btn-red" style="width:100%; margin-top:12px;" onclick="app.savePrize()">
@@ -1112,14 +1112,14 @@
             </div>
 
             <!-- รายการรางวัล -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin-bottom:15px;">
-                <h3 style="color:#fff; font-size:15px; margin:0 0 10px;">📋 ລາຍການລາງວັນທັງໝົດ</h3>
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px;">
+                <h3 style="color:#111111; font-size:15px; margin:0 0 10px;">📋 ລາຍການລາງວັນທັງໝົດ</h3>
                 <div id="spin-prizes-admin-list"></div>
             </div>
 
             <!-- ประวัติการหมุน -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin-bottom:15px;">
-                <h3 style="color:#fff; font-size:15px; margin:0 0 10px;">📜 ປະຫວັດການໝຸນ (ທຸກຄົນ)</h3>
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px;">
+                <h3 style="color:#111111; font-size:15px; margin:0 0 10px;">📜 ປະຫວັດການໝຸນ (ທຸກຄົນ)</h3>
                 <div id="spin-admin-history" style="max-height:350px; overflow-y:auto;"></div>
             </div>
         </div>
@@ -1127,7 +1127,7 @@
         <div id="tab-s" class="admin-tab hidden">
 
             <!-- ══ ຮູບໜ້າຫຼັກ (Slideshow) ══ -->
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:12px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:12px;">
                 <div style="font-size:13px; font-weight:700; color:var(--main-red); margin-bottom:10px;">
                     <i class="fas fa-images" style="margin-right:6px;"></i>Banner ໜ້າຫຼັກ (Slideshow)
                 </div>
@@ -1138,36 +1138,36 @@
                         <i class="fas fa-plus"></i> ເພີ່ມ
                     </button>
                 </div>
-                <p style="font-size:11px; color:#555; margin-top:6px;">* ຖ້າມີຫຼາຍ banner ຈະສະໄລ້ອັດຕະໂນມັດ</p>
+                <p style="font-size:11px; color:#777777; margin-top:6px;">* ຖ້າມີຫຼາຍ banner ຈະສະໄລ້ອັດຕະໂນມັດ</p>
             </div>
 
             <!-- ══ ຕິດຕໍ່ / Social ══ -->
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:12px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:12px;">
                 <div style="font-size:13px; font-weight:700; color:var(--main-red); margin-bottom:10px;">
                     <i class="fas fa-share-alt" style="margin-right:6px;"></i>ຊ່ອງທາງຕິດຕໍ່
                 </div>
-                <label style="font-size:12px; color:#aaa;">WhatsApp (ເລກ Ex: 85620...):</label>
+                <label style="font-size:12px; color:#777777888666;">WhatsApp (ເລກ Ex: 85620...):</label>
                 <input type="text" id="s-wa" class="form-control">
-                <label style="font-size:12px; color:#aaa; margin-top:8px; display:block;">TikTok Link:</label>
+                <label style="font-size:12px; color:#777777888666; margin-top:8px; display:block;">TikTok Link:</label>
                 <input type="text" id="s-tt" class="form-control">
-                <label style="font-size:12px; color:#aaa; margin-top:8px; display:block;">Facebook Link:</label>
+                <label style="font-size:12px; color:#777777888666; margin-top:8px; display:block;">Facebook Link:</label>
                 <input type="text" id="s-fb" class="form-control">
             </div>
 
             <!-- ══ Footer ══ -->
-            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:12px;">
+            <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:12px;">
                 <div style="font-size:13px; font-weight:700; color:#f5c518; margin-bottom:10px;">
                     <i class="fas fa-store" style="margin-right:6px;"></i>ສ່ວນທ້າຍເວັບ (Footer)
                 </div>
-                <label style="font-size:12px; color:#aaa;">ໂລໂກ້ຮ້ານ URL:</label>
+                <label style="font-size:12px; color:#777777888666;">ໂລໂກ້ຮ້ານ URL:</label>
                 <input type="text" id="s-footer-logo" class="form-control" placeholder="https://...logo.png">
-                <label style="font-size:12px; color:#aaa; margin-top:8px; display:block;">ຄຳອະທິບາຍຮ້ານ:</label>
+                <label style="font-size:12px; color:#777777888666; margin-top:8px; display:block;">ຄຳອະທິບາຍຮ້ານ:</label>
                 <textarea id="s-footer-desc" class="form-control" rows="3" placeholder="ຮ້ານເກມມີ່ງທີ່ດີທີ່ສຸດ..."></textarea>
                 <label style="font-size:12px; color:#1877f2; display:block; margin-top:10px; margin-bottom:4px;"><i class="fab fa-facebook" style="margin-right:4px;"></i>Facebook Page URL:</label>
                 <input type="text" id="s-fb-page" class="form-control" placeholder="https://www.facebook.com/YourPage">
                 <label style="font-size:12px; color:#1877f2; display:block; margin-top:8px; margin-bottom:4px;">ຊື່ເພດ Facebook:</label>
                 <input type="text" id="s-fb-page-name" class="form-control" placeholder="Eazy SHOP">
-                <p style="font-size:11px; color:#555; margin-top:6px;">* Social ດຶງຈາກ "ຊ່ອງທາງຕິດຕໍ່" ຂ້າງເທິງອັດຕະໂນມັດ</p>
+                <p style="font-size:11px; color:#777777; margin-top:6px;">* Social ດຶງຈາກ "ຊ່ອງທາງຕິດຕໍ່" ຂ້າງເທິງອັດຕະໂນມັດ</p>
             </div>
 
             <button class="btn btn-red" style="width:100%;" onclick="app.saveSettings()">
@@ -1178,7 +1178,7 @@
 
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content" style="position: relative;">
-            <button onclick="app.closeModal('contact-modal')" style="position: absolute; top: 15px; right: 15px; width: 45px; height: 45px; border-radius: 50%; background: rgba(100,100,100,0.3); border: none; color: #fff; font-size: 24px; cursor: pointer;">✕</button>
+            <button onclick="app.closeModal('contact-modal')" style="position: absolute; top: 15px; right: 15px; width: 45px; height: 45px; border-radius: 50%; background: rgba(100,100,100,0.3); border: none; color: #111111; font-size: 24px; cursor: pointer;">✕</button>
             <h3 style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 30px;">
                 <i class="fas fa-comment-dots" style="font-size: 28px;"></i>
                 <span>ຕິດຕໍ່ພວກເຮົາ</span>
@@ -1215,7 +1215,7 @@
                 <img src="https://img5.pic.in.th/file/secure-sv1/1771049590756.png" alt="Eazy SHOP">
                 <div>
                     <h2 style="margin:0; font-size:22px;">ເຂົ້າສູ່ລະບົບ</h2>
-                    <p style="margin:2px 0 0; font-size:12px; color:#aaa;">Login to Eazy SHOP</p>
+                    <p style="margin:2px 0 0; font-size:12px; color:#777777888666;">Login to Eazy SHOP</p>
                 </div>
             </div>
 
@@ -1227,7 +1227,7 @@
                     <button type="button" class="pw-eye" onclick="togglePw('login-password',this)" tabindex="-1"><i class="fas fa-eye"></i></button>
                 </div>
                 <div style="text-align:right; margin-bottom:14px; margin-top:-8px;">
-                    <a onclick="app.openForgotPage()" style="color:#aaa; font-size:12px; cursor:pointer;">ລືມລະຫັດຜ່ານ?</a>
+                    <a onclick="app.openForgotPage()" style="color:#777777888666; font-size:12px; cursor:pointer;">ລືມລະຫັດຜ່ານ?</a>
                 </div>
                 <div class="cf-turnstile-wrap">
                     <div class="cf-turnstile" data-sitekey="0x4AAAAAACjo1dZQZ-oTFMJG" data-theme="dark" id="cf-login"></div>
@@ -1238,7 +1238,7 @@
 
             <!-- Forgot Password Form -->
             <div id="forgot-form" style="display:none;">
-                <p style="color:#aaa; font-size:13px; margin-bottom:16px; text-align:center;">ໃສ່ຊື່ຜູ້ໃຊ້ ແລະ PIN 6 ຫຼັກທີ່ຕັ້ງໄວ້ຕອນສະໝັກ</p>
+                <p style="color:#777777888666; font-size:13px; margin-bottom:16px; text-align:center;">ໃສ່ຊື່ຜູ້ໃຊ້ ແລະ PIN 6 ຫຼັກທີ່ຕັ້ງໄວ້ຕອນສະໝັກ</p>
                 <input type="text" id="forgot-username" class="auth-input" placeholder="ຊື່ຜູ້ໃຊ້">
                 <input type="text" id="forgot-pin" class="auth-input" placeholder="PIN 6 ຫຼັກ" maxlength="6" inputmode="numeric">
                 <button class="btn btn-red" style="width:100%; padding:14px; font-size:16px;" onclick="app.verifyForgotPin()">ສົ່ງຂໍ້ມູນ</button>
@@ -1267,10 +1267,10 @@
                 <img src="https://img5.pic.in.th/file/secure-sv1/1771049590756.png" alt="Eazy SHOP">
                 <div>
                     <h2 style="margin:0; font-size:22px;">ລືມລະຫັດຜ່ານ</h2>
-                    <p style="margin:2px 0 0; font-size:12px; color:#aaa;">Reset Password</p>
+                    <p style="margin:2px 0 0; font-size:12px; color:#777777888666;">Reset Password</p>
                 </div>
             </div>
-            <p style="color:#aaa; font-size:13px; margin-bottom:16px; text-align:center;">ໃສ່ PIN 6 ຫຼັກທີ່ຕັ້ງໄວ້ຕອນສະໝັກ</p>
+            <p style="color:#777777888666; font-size:13px; margin-bottom:16px; text-align:center;">ໃສ່ PIN 6 ຫຼັກທີ່ຕັ້ງໄວ້ຕອນສະໝັກ</p>
             <div id="forgot2-username-wrap">
                 <input type="text" id="forgot2-username" class="auth-input" placeholder="ຊື່ຜູ້ໃຊ້">
             </div>
@@ -1287,7 +1287,7 @@
                 <img src="https://img5.pic.in.th/file/secure-sv1/1771049590756.png" alt="Eazy SHOP">
                 <div>
                     <h2 style="margin:0; font-size:22px;">ຕັ້ງລະຫັດໃໝ່</h2>
-                    <p style="margin:2px 0 0; font-size:12px; color:#aaa;">New Password</p>
+                    <p style="margin:2px 0 0; font-size:12px; color:#777777888666;">New Password</p>
                 </div>
             </div>
             <div class="pw-wrap">
@@ -1303,7 +1303,7 @@
                 <div style="background:#222; border-radius:4px; height:5px; overflow:hidden;">
                     <div id="reset-strength-fill" style="height:100%; width:0%; background:#333; transition:all 0.3s;"></div>
                 </div>
-                <div id="reset-strength-hint" style="font-size:11px; color:#aaa; margin-top:5px;">ລະຫັດຜ່ານຕ້ອງມີ: ຕົວພິມໃຫຍ່ (A-Z) + ຕົວພິມນ້ອຍ (a-z) + ຕົວເລກ (0-9) + ອັກຂະລະພິເສດ (!@#$)</div>
+                <div id="reset-strength-hint" style="font-size:11px; color:#777777888666; margin-top:5px;">ລະຫັດຜ່ານຕ້ອງມີ: ຕົວພິມໃຫຍ່ (A-Z) + ຕົວພິມນ້ອຍ (a-z) + ຕົວເລກ (0-9) + ອັກຂະລະພິເສດ (!@#$)</div>
             </div>
             <button class="btn btn-red" style="width:100%; padding:14px; font-size:16px;" onclick="app.doResetPassword2()">ບັນທຶກລະຫັດໃໝ່</button>
         </div>
@@ -1316,7 +1316,7 @@
                 <img src="https://img5.pic.in.th/file/secure-sv1/1771049590756.png" alt="Eazy SHOP">
                 <div>
                     <h2 style="margin:0; font-size:22px;">ສະໝັກສະມາຊິກ</h2>
-                    <p style="margin:2px 0 0; font-size:12px; color:#aaa;">Register to Eazy SHOP</p>
+                    <p style="margin:2px 0 0; font-size:12px; color:#777777888666;">Register to Eazy SHOP</p>
                 </div>
             </div>
 
@@ -1348,12 +1348,12 @@
     <!-- User Profile Modal (kept for backward compat from menu) -->
     <div id="user-profile-modal" class="modal-overlay">
         <div class="modal-content" style="max-width:500px;">
-            <button onclick="app.closeModal('user-profile-modal')" style="position:absolute; top:15px; right:15px; background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer;">✕</button>
+            <button onclick="app.closeModal('user-profile-modal')" style="position:absolute; top:15px; right:15px; background:transparent; border:none; color:#111111; font-size:24px; cursor:pointer;">✕</button>
             
             <div style="text-align:center; margin-bottom:30px;">
                 <div style="position:relative; display:inline-block; margin-bottom:15px;">
                     <img id="profile-avatar" src="" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--main-red); display:block;">
-                    <button onclick="app.showChangeAvatarPopup()" style="position:absolute; bottom:0; right:0; width:30px; height:30px; border-radius:50%; background:var(--main-red); border:2px solid #000; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;">
+                    <button onclick="app.showChangeAvatarPopup()" style="position:absolute; bottom:0; right:0; width:30px; height:30px; border-radius:50%; background:var(--main-red); border:2px solid #000; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; color:#111111;">
                         <i class="fas fa-camera"></i>
                     </button>
                 </div>
@@ -1372,7 +1372,7 @@
                 </div>
             </div>
 
-            <div style="margin-top:20px; background:#111; padding:15px; border-radius:8px;">
+            <div style="margin-top:20px; background:#f8f8f8; padding:15px; border-radius:8px;">
                 <p style="font-size:12px; color:#999; margin:5px 0;">📅 ສະໝັກເມື່ອ: <span id="profile-created"></span></p>
                 <p style="font-size:12px; color:#999; margin:5px 0;">🕐 ເຂົ້າສູ່ລະບົບລ່າສຸດ: <span id="profile-lastlogin"></span></p>
             </div>
@@ -1386,7 +1386,7 @@
         <div style="text-align:center; margin-bottom:20px;">
             <div style="position:relative; display:inline-block; margin-bottom:12px;">
                 <img id="page-profile-avatar" src="" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--main-red); display:block; object-fit:cover;">
-                <button onclick="app.showChangeAvatarPopup()" style="position:absolute; bottom:0; right:0; width:28px; height:28px; border-radius:50%; background:var(--main-red); border:2px solid #000; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff;">
+                <button onclick="app.showChangeAvatarPopup()" style="position:absolute; bottom:0; right:0; width:28px; height:28px; border-radius:50%; background:var(--main-red); border:2px solid #000; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px; color:#111111;">
                     <i class="fas fa-camera"></i>
                 </button>
             </div>
@@ -1405,9 +1405,9 @@
             </div>
         </div>
 
-        <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid #222;">
-            <p style="font-size:13px; color:#999; margin:6px 0;">📅 ສະໝັກເມື່ອ: <span id="page-profile-created" style="color:#fff;"></span></p>
-            <p style="font-size:13px; color:#999; margin:6px 0;">🕐 ເຂົ້າສູ່ລະບົບລ່າສຸດ: <span id="page-profile-lastlogin" style="color:#fff;"></span></p>
+        <div style="background:#f8f8f8; padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid #222;">
+            <p style="font-size:13px; color:#999; margin:6px 0;">📅 ສະໝັກເມື່ອ: <span id="page-profile-created" style="color:#111111;"></span></p>
+            <p style="font-size:13px; color:#999; margin:6px 0;">🕐 ເຂົ້າສູ່ລະບົບລ່າສຸດ: <span id="page-profile-lastlogin" style="color:#111111;"></span></p>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
@@ -1437,14 +1437,14 @@
     <!-- ===== Change Avatar Modal ===== -->
     <div id="change-avatar-modal" class="modal-overlay" style="display:none; z-index:10001;">
         <div class="modal-content" style="max-width:400px;">
-            <button onclick="app.closeChangeAvatarPopup()" style="position:absolute; top:15px; right:15px; background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer;">✕</button>
+            <button onclick="app.closeChangeAvatarPopup()" style="position:absolute; top:15px; right:15px; background:transparent; border:none; color:#111111; font-size:24px; cursor:pointer;">✕</button>
             <h3 style="margin:0 0 20px 0; color:var(--main-red);"><i class="fas fa-camera"></i> ປ່ຽນຮູບໂປຣໄຟລ໌</h3>
             <div style="text-align:center; margin-bottom:15px;">
                 <img id="avatar-preview" src="" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--main-red); object-fit:cover;">
             </div>
-            <label style="font-size:12px; color:#aaa; margin-bottom:5px; display:block;">URL ຮູບພາບ:</label>
+            <label style="font-size:12px; color:#777777888666; margin-bottom:5px; display:block;">URL ຮູບພາບ:</label>
             <input type="url" id="avatar-url-input" class="form-control" placeholder="https://example.com/image.jpg" oninput="app.previewAvatarUrl()">
-            <p style="font-size:11px; color:#666; margin-top:8px;">ໃສ່ URL ຮູບຈາກອິນເຕີເນັດ (png, jpg, gif)</p>
+            <p style="font-size:11px; color:#777777888; margin-top:8px;">ໃສ່ URL ຮູບຈາກອິນເຕີເນັດ (png, jpg, gif)</p>
             <button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="app.saveAvatar()">
                 <i class="fas fa-save"></i> ບັນທຶກ
             </button>
@@ -1458,13 +1458,13 @@
             <!-- Header -->
             <div style="text-align:center; margin-bottom:15px;">
                 <h2 style="font-size:22px; font-weight:800; color:var(--main-red); margin:0 0 4px;"><i class="fas fa-sync-alt" style="margin-right:8px;"></i>ວົງລໍ້ໂຊກດີ</h2>
-                <p id="spin-rule-desc" style="font-size:12px; color:#aaa; margin:0;"></p>
+                <p id="spin-rule-desc" style="font-size:12px; color:#777777888666; margin:0;"></p>
             </div>
 
             <!-- Progress bar: เติมเงินครบ 200,000 = 1 สิทธิ์ -->
-            <div style="background:#111; border-radius:12px; padding:12px 15px; margin-bottom:15px;">
+            <div style="background:#f8f8f8; border-radius:12px; padding:12px 15px; margin-bottom:15px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <span style="font-size:12px; color:#aaa;">ຄວາມຄືບໜ້າ (ເຕີມ 200,000 ₭ = 1 ສິດ)</span>
+                    <span style="font-size:12px; color:#777777888666;">ຄວາມຄືບໜ້າ (ເຕີມ 200,000 ₭ = 1 ສິດ)</span>
                     <span id="spin-progress-text" style="font-size:12px; color:var(--main-red); font-weight:700;">0 / 200,000 ₭</span>
                 </div>
                 <div class="spin-progress-bar-wrap">
@@ -1492,21 +1492,21 @@
             <div id="spin-result-box" style="display:none;"><span id="spin-result-icon"></span><span id="spin-result-name"></span><span id="spin-result-desc"></span></div>
 
             <!-- วิธีได้สิทธิ์ ขึ้นมาก่อน -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin:15px 0; border-left:3px solid var(--main-red);">
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin:15px 0; border-left:3px solid var(--main-red);">
                 <h4 style="color:var(--main-red); margin:0 0 10px; font-size:14px;"><i class="fas fa-info-circle" style="margin-right:6px;"></i>ວິທີໄດ້ສິດໝຸນ ແລະ ເງື່ອນໄຂຕ່າງໆ</h4>
                 <div id="spin-how-to" style="font-size:13px; color:#ccc; line-height:1.8;"></div>
             </div>
 
             <!-- รางวัล -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin:15px 0;">
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin:15px 0;">
                 <h4 style="color:var(--main-red); margin:0 0 12px; font-size:15px;"><i class="fas fa-trophy" style="margin-right:6px;"></i>ລາງວັນໃນວົງລໍ້</h4>
                 <div id="spin-prizes-list"></div>
             </div>
 
             <!-- ประวัติ ล่างสุด -->
-            <div style="background:#111; border-radius:12px; padding:15px; margin:15px 0;">
-                <h4 style="color:#fff; margin:0 0 12px; font-size:15px;"><i class="fas fa-history" style="margin-right:6px;"></i>ປະຫວັດການໝຸນ</h4>
-                <div id="spin-history-list"><p style="color:#555; font-size:12px; text-align:center; padding:10px;">ຍັງບໍ່ມີປະຫວັດ</p></div>
+            <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin:15px 0;">
+                <h4 style="color:#111111; margin:0 0 12px; font-size:15px;"><i class="fas fa-history" style="margin-right:6px;"></i>ປະຫວັດການໝຸນ</h4>
+                <div id="spin-history-list"><p style="color:#777777; font-size:12px; text-align:center; padding:10px;">ຍັງບໍ່ມີປະຫວັດ</p></div>
             </div>
         </div>
     </main>
@@ -1515,8 +1515,8 @@
     <div id="spin-confirm-overlay" class="spin-confirm-overlay" onclick="if(event.target===this)spinWheel.closeConfirm()">
         <div class="spin-confirm-box">
             <div style="text-align:center; margin-bottom:18px;">
-                <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;"><i class="fas fa-sync-alt" style="color:var(--main-red); margin-right:8px;"></i>ໝຸນວົງລໍ້</div>
-                <div style="font-size:12px; color:#888;">ເລືອກວິທີໃຊ້</div>
+                <div style="font-size:16px; font-weight:800; color:#111111; margin-bottom:4px;"><i class="fas fa-sync-alt" style="color:var(--main-red); margin-right:8px;"></i>ໝຸນວົງລໍ້</div>
+                <div style="font-size:12px; color:#777777;">ເລືອກວິທີໃຊ້</div>
             </div>
             <div class="spin-confirm-row">
                 <div class="spin-confirm-opt active" id="sco-ticket" onclick="spinWheel.selectMode('ticket')">
@@ -1531,10 +1531,10 @@
                 </div>
             </div>
             <div id="sco-warn" style="font-size:12px; color:#ff6666; text-align:center; margin-bottom:10px; display:none;"></div>
-            <button id="sco-go-btn" onclick="spinWheel.doSpin()" style="width:100%; padding:14px; border-radius:14px; background:linear-gradient(135deg,#ff0000,#8b0000); color:#fff; font-size:16px; font-weight:800; border:none; cursor:pointer; box-shadow:0 4px 15px rgba(255,0,0,0.4);">
+            <button id="sco-go-btn" onclick="spinWheel.doSpin()" style="width:100%; padding:14px; border-radius:14px; background:linear-gradient(135deg,#ff0000,#8b0000); color:#111111; font-size:16px; font-weight:800; border:none; cursor:pointer; box-shadow:0 4px 15px rgba(255,0,0,0.4);">
                 <i class="fas fa-play"></i> ໝຸນເລີຍ!
             </button>
-            <button onclick="spinWheel.closeConfirm()" style="width:100%; padding:10px; margin-top:8px; background:transparent; color:#666; border:none; cursor:pointer; font-size:13px;">ຍົກເລີກ</button>
+            <button onclick="spinWheel.closeConfirm()" style="width:100%; padding:10px; margin-top:8px; background:transparent; color:#777777888; border:none; cursor:pointer; font-size:13px;">ຍົກເລີກ</button>
         </div>
     </div>
 
