@@ -44,10 +44,10 @@
             <div class="custom-confirm-title" id="confirm-title">ຢືນຢັນ</div>
             <div class="custom-confirm-msg" id="confirm-msg">ທ່ານແນ່ໃຈບໍ?</div>
             <div class="custom-confirm-btns">
-                <button class="custom-confirm-cancel" onclick="CustomConfirm.cancel()">
+                <button class="custom-confirm-cancel" style="background:#f0f0f0;color:#333333;border:1px solid #ddd;" onclick="CustomConfirm.cancel()">
                     <i class="fas fa-times"></i> ຍົກເລີກ
                 </button>
-                <button class="custom-confirm-ok" id="confirm-ok-btn" onclick="CustomConfirm.confirm()">
+                <button class="custom-confirm-ok" style="background:#111111;color:#ffffff;" id="confirm-ok-btn" onclick="CustomConfirm.confirm()">
                     <i class="fas fa-check"></i> ຢືນຢັນ
                 </button>
             </div>
@@ -98,7 +98,7 @@
                 </div>
                 <div style="height:1px;background:#e8e8e8;margin-bottom:14px;"></div>
                 <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
-                    <span style="color:#111111;">ລາຄາລວມ</span>
+                    <span style="color:#111111;font-weight:600;">ລາຄາລວມ</span>
                     <span id="buy-confirm-total" style="color:var(--main-red);font-size:20px;"></span>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                 <button onclick="app.closeBuyConfirm()" style="flex:1;padding:16px;border:1.5px solid #e0e0e0;background:transparent;color:#777777888666;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='#555';this.style.color='#fff'" onmouseout="this.style.borderColor='#333';this.style.color='#aaa'">
                     <i class="fas fa-times"></i> ຍົກເລີກ
                 </button>
-                <button onclick="app.confirmBuy()" style="flex:2;padding:16px;border:none;background:#111111;color:#ffffff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
+                <button onclick="app.confirmBuy()" style="flex:2;padding:16px;border:none;background:#111111;color:#ffffff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
                     <i class="fas fa-bolt"></i> ຢືນຢັນການສັ່ງຊື້
                 </button>
             </div>
@@ -162,7 +162,7 @@
                 <div style="font-size:11px;color:#60a5fa;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><i class="fas fa-id-badge"></i> ລະຫັດສິນຄ້າຂອງທ່ານ</div>
                 <div style="display:flex;align-items:center;gap:10px;">
                     <div id="receipt-uid" style="font-family:monospace;font-size:14px;font-weight:700;color:#111111;word-break:break-all;flex:1;"></div>
-                    <button onclick="app.copyReceiptUid()" id="receipt-uid-copy-btn" style="padding:8px 14px;border:none;background:#1e3a5f;color:#60a5fa;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;">
+                    <button onclick="app.copyReceiptUid()" id="receipt-uid-copy-btn" style="padding:8px 14px;border:none;background:#dbeafe;color:#1d4ed8;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Sans Lao',sans-serif;">
                         <i class="fas fa-copy"></i> ຄັດລອກ
                     </button>
                 </div>
@@ -170,10 +170,10 @@
 
             <!-- Action buttons -->
             <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-                <button onclick="app.goToOrderHistory()" style="width:100%;padding:16px;border:1.5px solid #e0e0e0;background:transparent;color:#111111;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;">
+                <button onclick="app.goToOrderHistory()" style="width:100%;padding:16px;border:1.5px solid #cccccc;background:#f5f5f5;color:#333333;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;">
                     <i class="fas fa-history" style="margin-right:8px;color:#60a5fa;"></i>ເບິ່ງປະຫວັດສັ່ງຊື້
                 </button>
-                <button onclick="router.home()" style="width:100%;padding:16px;border:none;background:#111111;color:#ffffff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 4px 20px rgba(255,255,255,0.1);">
+                <button onclick="router.home()" style="width:100%;padding:16px;border:none;background:#111111;color:#ffffff;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
                     <i class="fas fa-home" style="margin-right:8px;"></i>ກັບໄປໜ້າຫຼັກ
                 </button>
             </div>
