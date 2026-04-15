@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Easy Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700;900&family=Kanit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="loader">
+  <div class="loader-logo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+  <div class="loader-name">Easy Store</div>
+  <svg class="loader-spin" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/><path d="M18 3a15 15 0 0115 15"/></svg>
+</div>
+
+<div id="ntfWrap"></div>
+<div class="dov" id="dov" onclick="cD()"></div>
+<div class="drw" id="drw">
+  <button class="dc" onclick="cD()">&#10005;</button>
+  <div class="dh">
+    <div class="db">Easy Store</div>
+    <div class="dtag">Top Up Game Center</div>
+    <div class="duc" id="duc">
+      <div class="dua" id="dua"></div>
+      <div><div style="color:var(--t);font-size:13px;font-weight:700" id="dun"></div><div style="color:var(--t3);font-size:10px" id="due"></div></div>
+    </div>
+  </div>
+  <div class="dmid">
+    <div class="di" onclick="go('home');cD()"><div class="dic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>ໜ້າຫຼັກ</div>
+    <div class="di" onclick="go('games');cD()"><div class="dic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="1" fill="currentColor" stroke="none"/></svg></div>ເກມທັງໝົດ</div>
+    <div class="di" onclick="needAuth(()=>{go('history');cD();})"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>ປະຫວັດ</div>
+    <div class="di" onclick="needAuth(()=>{go('profile');cD();})"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>ໂປຣໄຟລ໌</div>
+    <div class="di" onclick="go('help');cD()"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/></svg></div>ຕິດຕໍ່ຫາ</div>
+  </div>
+  <div class="dfoot">
+    <div id="dadmWrap" style="display:none;margin-bottom:8px"><button class="dadm" onclick="cD();openAdm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin Panel</button></div>
+    <div id="dloginWrap"><button class="dloginbtn" onclick="cD();go('auth')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ເຂົ້າສູ່ລະບົບ</button></div>
+  </div>
+</div>
+
+<div class="spov" id="spov"><div class="spbox"><div class="spring"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--G)" stroke-width="2.5"><polyline class="spcheck" points="20 6 9 17 4 12"/></svg></div><div class="spt" id="spt"></div><div class="sps" id="sps"></div><div class="spbar"><div class="spprog"></div></div></div></div>
+
+<div class="pupov" id="pupov" onclick="closePup()">
+  <div style="position:relative;width:85%;max-width:340px;" onclick="event.stopPropagation()">
+    <div id="pupbox"></div>
+    <button class="pupbox-close" onclick="closePup()">&#10005;</button>
+  </div>
+</div>
+
+<!-- CONFIRM PAGE (full page) -->
+<div class="page" id="pCof">
+  <nav class="nav">
+    <button class="backbtn" onclick="cCof()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="nav-title">ສົ່ງຄຳສັ່ງຊື້</div>
+  </nav>
+  <div style="padding:14px">
+    <div style="font-size:13px;color:var(--t3);margin-bottom:14px;text-align:center">ກວດສອບຂໍ້ມູນຄັ້ງສຸດທ້າຍກ່ອນຊຳລະ</div>
+    <div class="rcard" style="margin:0 0 14px 0">
+      <div class="crow"><span class="clbl">ເກມ</span><span class="cval" id="cf-g"></span></div>
+      <div class="crow"><span class="clbl">Package</span><span class="cval" id="cf-p"></span></div>
+      <div class="crow"><span class="clbl">Game ID</span><span class="cval mono" id="cf-u"></span></div>
+      <div class="crow" id="cf-zone-row" style="display:none"><span class="clbl">Zone</span><span class="cval mono" id="cf-z"></span></div>
+      <div class="crow"><span class="clbl">ລາຄາ</span><span class="cval big" id="cf-pr"></span></div>
+      <div class="crow disc" id="cf-disc-row"><span class="clbl">ສ່ວນລົດ</span><span class="cval" style="color:#16a34a" id="cf-disc">-ø ກີບ</span></div>
+      <div class="crow" style="border-bottom:none"><span class="clbl"><b>ຍອດຊຳລະ</b></span><span class="cval big" id="cf-total"></span></div>
+    </div>
+    <button class="btn-cfm" style="border-radius:16px;font-size:17px;padding:18px" onclick="doOrder()">✓ ຢືນຢັນ ຊຳລະ</button>
+    <button class="btn-cxl" style="margin-top:10px;border-radius:16px;font-size:15px;padding:14px" onclick="cCof()">ຍົກເລີກ</button>
+  </div>
+</div>
+
+<!-- EDIT SHEET -->
+<div class="eov" id="eov"><div class="esheet"><div class="sh-handle" style="margin:12px auto 0"></div><div class="etitle" id="etitle"></div><div class="eaf" id="efields"></div><div class="eact"><button class="excl" onclick="cEdit()">ຍົກເລີກ</button><button class="bsv" id="esv">ບັນທຶກ</button></div></div></div>
+
+<!-- HOME -->
+<div class="page on" id="pH">
+  <nav class="nav">
+    <button class="ham" id="hamB" onclick="oD()"><span></span><span></span><span></span></button>
+    <div style="flex:1"></div>
+    <div class="nav-r" id="nR1"></div>
+  </nav>
+  <div class="slw" id="slw"><div class="sltr" id="sltr"></div><div class="sldots" id="sldots"></div><button class="slarr l" onclick="slBy(-1)">&#8249;</button><button class="slarr r" onclick="slBy(1)">&#8250;</button></div>
+  <div class="seh"><div class="seic"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 0-5 4-5 9a5 5 0 0010 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-1.5-1-1.5-2 0-1 .5-2.5.5-5z"/><path d="M12 14c0 1.1-.9 2-2 2a2 2 0 01-2-2c0-1.5 2-3.5 2-3.5S12 12.5 12 14z" fill="rgba(255,200,50,.9)"/></svg></div><div><div class="set1">ເກມຍອດນິຍົມ</div><div class="set2">TOP UP FAVORITES</div></div><div class="semore" onclick="go('games')">ເບິ່ງທັງໝົດ &#8250;</div></div>
+  <div class="pgrid" id="pgH"></div>
+  <div class="dv"></div>
+  <div class="srow">
+    <div class="seic" style="width:34px;height:34px;border-radius:10px;background:var(--R);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sR)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="11" r="1.2" fill="#fff" stroke="none"/><circle cx="19" cy="11" r="1.2" fill="#fff" stroke="none"/><circle cx="16" cy="14" r="1.2" fill="#fff" stroke="none"/><circle cx="19" cy="14" r="1.2" fill="#fff" stroke="none"/></svg></div>
+    <div class="srowtit">ເກມທັງໝົດ</div>
+    <div class="sbox"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="ຊອກຫາ..." id="si1" oninput="fg('agH','si1')"></div>
+  </div>
+  <div class="agrid" id="agH"></div>
+  <div class="site-footer">
+    <div class="footer-logo">Easy Store</div>
+    <div class="footer-sub">Top Up Game Center · ບໍລິການ 24/7</div>
+    <div class="footer-links">
+      <span onclick="toast('ເງື່ອນໄຂການໃຊ້ງານ','info')">ເງື່ອນໄຂການໃຊ້ງານ</span>
+      <span class="fdot">·</span>
+      <span onclick="toast('ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ','info')">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</span>
+    </div>
+    <div class="footer-copy">© 2025 Easy Store. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div class="page" id="pG">
+  <nav class="nav"><button class="ham" onclick="oD()"><span></span><span></span><span></span></button><div class="nav-title">ເກມທັງໝົດ</div><div class="nav-r" id="nR2"></div></nav>
+  <div class="srow"><div class="srowtit">ເກມທັງໝົດ</div><div class="sbox"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="ຊອກຫາ..." id="si2" oninput="fg('agG','si2')"></div></div>
+  <div class="agrid" id="agG"></div>
+  <div class="site-footer">
+    <div class="footer-logo">Easy Store</div>
+    <div class="footer-sub">Top Up Game Center · ບໍລິການ 24/7</div>
+    <div class="footer-links">
+      <span onclick="toast('ເງື່ອນໄຂການໃຊ້ງານ','info')">ເງື່ອນໄຂການໃຊ້ງານ</span>
+      <span class="fdot">·</span>
+      <span onclick="toast('ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ','info')">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</span>
+    </div>
+    <div class="footer-copy">© 2025 Easy Store. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div class="page" id="pD">
+  <nav class="nav"><button class="backbtn" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button><div class="nav-title" id="dnavnm"></div></nav>
+  <div class="ghero" id="ghero">
+    <div class="ghbg" id="ghbg"></div>
+    <div class="ghbl"></div>
+    <div class="ghc">
+      <div class="gic" id="gic"></div>
+      <div class="gnm" id="gnm"></div>
+      <div class="gds" id="gds"></div>
+    </div>
+  </div>
+  <div class="scard">
+    <div class="steprow"><div class="stepn">1</div><div class="stept">ກອກ Game ID</div></div>
+    <div class="flbl">Game ID <span style="color:var(--R)">*</span></div>
+    <input class="fin" id="uIn" type="text" placeholder="ໃສ່ Game ID ..." autocomplete="off" oninput="chkZone()">
+    <div id="zoneWrap" style="display:none;margin-top:10px">
+      <div class="flbl">Zone / Server <span style="color:var(--R)">*</span></div>
+      <input class="fin" id="zoneIn" type="text" placeholder="ໃສ່ Zone/Server ID...">
+    </div>
+  </div>
+  <div class="scard">
+    <div class="steprow"><div class="stepn">2</div><div class="stept">ເລືອກ Package</div></div>
+    <div class="pkgg" id="pkgG"></div>
+  </div>
+  <div class="scard">
+    <div class="steprow"><div class="stepn">3</div><div class="stept">ໂຄ້ດສ່ວນລົດ (ຖ້າມີ)</div></div>
+    <div class="disc-wrap">
+      <input type="text" id="discIn" placeholder="ໃສ່ໂຄ້ດ..." autocomplete="off">
+      <button onclick="applyDisc()">ໃຊ້ໂຄ້ດ</button>
+    </div>
+    <div class="disc-tag" id="discTag" style="display:none"></div>
+    <div class="disc-err" id="discErr" style="display:none"></div>
+  </div>
+  <div class="scard">
+    <div class="steprow"><div class="stepn">4</div><div class="stept">ຊ່ອງທາງການຊຳລະ</div></div>
+    <div class="payo on" id="py1" onclick="sPay('py1')">
+      <div class="payic" style="background:var(--Rl)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1.5" fill="var(--R)" stroke="none"/></svg></div>
+      <div style="flex:1"><div class="paynm">ເຄຣດິດ (Balance)</div><div class="paysb" id="payBalLbl">ຍອດເງິນຄົງເຫຼືອ: 0 ກີບ</div></div>
+      <div class="payck" style="background:var(--R);border-color:var(--R)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+    </div>
+  </div>
+  <!-- SUMMARY -->
+  <div class="scard" id="summaryCard">
+    <div class="steprow"><div class="stepn">5</div><div class="stept">ສະຫລຸບລາຍການ</div></div>
+    <div class="crow"><span class="clbl">ລາຍການທີ່ເລືອກ</span><span class="cval" id="sumPkg">-</span></div>
+    <div class="crow"><span class="clbl">ລາຄາ</span><span class="cval" id="sumPrice">-</span></div>
+    <div class="crow disc" id="sumDiscRow"><span class="clbl">ສ່ວນລົດ</span><span class="cval" style="color:#16a34a" id="sumDisc">-ø ກີບ</span></div>
+    <div class="crow"><span class="clbl"><b>ຍອດຊຳລະທັງໝົດ</b></span><span class="cval big" id="sumTotal">-</span></div>
+  </div>
+  <button class="obtn" onclick="openCof()">ທຳການຊຳລະ &#8594;</button>
+  <div style="height:20px"></div>
+</div>
+
+<!-- RECEIPT -->
+<div class="page" id="pR">
+  <div class="rhero"><div class="ric2"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="rstat">ສົ່ງ Order ສຳເລັດ!</div><div style="font-size:12px;opacity:.8;margin-top:4px">ກະລຸນາຊຳລະ ແລ້ວສົ່ງ Slip ຢືນຢັນ</div><div class="roid" id="roid"></div></div>
+  <div class="rcard">
+    <div class="rgrw"><div class="rgic" id="rgic"></div><div><div class="rgnm" id="rgnm"></div><div class="rgpk" id="rgpk"></div></div></div>
+    <div class="rrow"><div class="rlbl">Game ID</div><div class="rval mono" id="ruid"></div></div>
+    <div class="rrow"><div class="rlbl">ຊ່ອງທາງຊຳລະ</div><div class="rval" id="rpay"></div></div>
+    <div class="rrow"><div class="rlbl">ລາຄາ</div><div class="rval price" id="rprice"></div></div>
+    <div class="rrow" id="rdiscrow" style="display:none"><div class="rlbl">ສ່ວນລົດ</div><div class="rval" style="color:#16a34a" id="rdisc"></div></div>
+    <div class="rrow"><div class="rlbl">ຍອດຊຳລະ</div><div class="rval price" id="rtotal"></div></div>
+    <div class="rrow"><div class="rlbl">ເວລາ</div><div class="rval" id="rtime"></div></div>
+    <div class="rrow"><div class="rlbl">ສະຖານະ</div><div class="rval pend" id="rstatEl">ລໍຖ້າດຳເນີນການ</div></div>
+  </div>
+  <div class="rnote"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--O)" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg><p>ກ່ອນໂອນ ກະລຸນາ Screenshot Slip ແລ້ວສົ່ງໃຫ້ທີມງານ</p></div>
+  <div class="ract"><button class="rbtn1" onclick="go('home')">ໜ້າຫຼັກ</button><button class="rbtn2" onclick="go('history')">ປະຫວັດ</button></div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- AUTH -->
+<div class="page auth-new" id="pA">
+  <div class="auth-bg-art">
+    <div class="auth-orb auth-orb1"></div>
+    <div class="auth-orb auth-orb2"></div>
+    <div class="auth-orb auth-orb3"></div>
+  </div>
+  <button class="auth-back-btn" onclick="go('home')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="auth-wrap">
+    <!-- BRAND -->
+    <div class="auth-brand">
+      <div class="auth-logo-text">
+        <span class="auth-logo-e">E</span><span class="auth-logo-asy">ASY</span><span class="auth-logo-space"> </span><span class="auth-logo-store">STORE</span>
+      </div>
+      <div class="auth-logo-line"></div>
+      <div class="auth-tagline">TOP UP · ທຸກເກມ · 24/7</div>
+    </div>
+    <!-- CARD -->
+    <div class="auth-card">
+      <!-- TAB INDICATOR -->
+      <div class="auth-tab-row">
+        <button class="auth-tab on" id="tL" onclick="aTab('login')">ເຂົ້າສູ່ລະບົບ</button>
+        <button class="auth-tab" id="tR" onclick="aTab('reg')">ສ້າງບັນຊີ</button>
+        <div class="auth-tab-slider" id="authSlider"></div>
+      </div>
+      <!-- LOGIN FORM -->
+      <div id="fL">
+        <div class="auth-field">
+          <div class="auth-field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <input type="text" id="lE" placeholder="Email ຫຼື Username" autocomplete="username">
+        </div>
+        <div class="auth-field">
+          <div class="auth-field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <input type="password" id="lP" placeholder="ລະຫັດຜ່ານ" autocomplete="current-password">
+          <button class="auth-eye" onclick="togglePw('lP',this)" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <button class="auth-submit-btn" onclick="doLogin()">
+          ເຂົ້າສູ່ລະບົບ
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="auth-switch">ຍັງບໍ່ມີບັນຊີ? <b onclick="aTab('reg')">ສ້າງໃໝ່ຟຣີ</b></div>
+      </div>
+      <!-- REGISTER FORM -->
+      <div id="fR" style="display:none">
+        <div class="auth-field">
+          <div class="auth-field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <input type="text" id="rN" placeholder="ຊື່ (ຂັ້ນຕ່ຳ 5 ຕົວ)">
+        </div>
+        <div class="auth-field">
+          <div class="auth-field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <input type="email" id="rE" placeholder="Email (@gmail.com)" autocomplete="email">
+        </div>
+        <div class="ferr" id="eE" style="margin:-8px 0 8px 0;padding-left:4px"></div>
+        <div class="auth-field">
+          <div class="auth-field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <input type="password" id="rP" placeholder="ລະຫັດຜ່ານ (6+ ຕົວ)" autocomplete="new-password">
+          <button class="auth-eye" onclick="togglePw('rP',this)" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="ferr" id="eP" style="margin:-8px 0 8px 0;padding-left:4px"></div>
+        <div class="auth-field">
+          <div class="auth-field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <input type="password" id="rP2" placeholder="ຢືນຢັນລະຫັດຜ່ານ" autocomplete="new-password">
+        </div>
+        <div class="ferr" id="eP2" style="margin:-8px 0 8px 0;padding-left:4px"></div>
+        <button class="auth-submit-btn" onclick="doReg()">
+          ສ້າງບັນຊີ
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="auth-switch">ມີບັນຊີຢູ່ແລ້ວ? <b onclick="aTab('login')">ເຂົ້າສູ່ລະບົບ</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WALLET PAGE -->
+<div class="page" id="pWallet">
+  <nav class="nav"><button class="backbtn" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button><div class="nav-title">ເຕີມເຄຣດິດ</div></nav>
+  <div class="wpage" style="background:var(--bg);min-height:calc(100vh - 58px)">
+    <div class="wcard">
+      <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:10px;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linecap="round"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1" fill="rgba(255,255,255,.7)" stroke="none"/></svg>ເຄຣດິດຄົງເຫຼືອຂອງທ່ານ</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><span class="wamt" id="wPageAmt">0.00</span><span class="wunit">ກີບ</span></div>
+      <div class="wuser" id="wUserBox" style="display:none">
+        <div class="wuav" id="wUAv"></div>
+        <div><div class="wunm" id="wUNm"></div><div class="wuid" id="wUID"></div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:20px;padding:20px;margin-bottom:12px;box-shadow:var(--s1);border:1px solid var(--br)">
+      <div class="wsec-title" style="margin-bottom:16px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" style="vertical-align:middle;margin-right:6px;flex-shrink:0"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1.5" fill="#d97706" stroke="none"/></svg> ເລືອກຊ່ອງທາງການເຕີມເງິນ</div>
+      <div class="wopt on" id="wopt1" onclick="selWopt('wopt1')">
+        <div class="wopt-top">
+          <div class="wopt-ic" style="background:#fff7ed;border-radius:12px;padding:4px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/TrueMoney_logo.svg/200px-TrueMoney_logo.svg.png" style="width:36px;height:36px;object-fit:contain" onerror="this.parentNode.innerHTML='<svg width=22 height=22 viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;#f97316&quot; stroke-width=&quot;2&quot;><rect x=&quot;2&quot; y=&quot;7&quot; width=&quot;20&quot; height=&quot;14&quot; rx=&quot;2&quot;/><path d=&quot;M16 11h.01&quot;/></svg>'"></div>
+          <div style="flex:1"><div class="wopt-nm">TrueMoney Wallet</div><div class="wopt-sb">ສະແກນ QR Code (ອໍໂຕ)</div></div>
+          <div class="wopt-ck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div class="wopt-fee">ຄ່າທຳນຽມ 2.9%</div>
+      </div>
+      <div class="wopt" id="wopt2" onclick="selWopt('wopt2')">
+        <div class="wopt-top">
+          <div class="wopt-ic" style="background:#eff6ff;border-radius:12px;padding:4px"><svg width="36" height="36" viewBox="0 0 60 40" fill="none"><rect width="60" height="40" rx="6" fill="#1a56db"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">PromptPay</text></svg></div>
+          <div style="flex:1"><div class="wopt-nm">ພ້ອມເພ (PromptPay) QR</div><div class="wopt-sb">ສະແກນຈ່າຍທັນທີ (ອໍໂຕ)</div></div>
+          <div class="wopt-ck"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="page" id="pP">
+  <nav class="nav"><button class="ham" onclick="oD()"><span></span><span></span><span></span></button><div class="nav-title">ໂປຣໄຟລ໌</div></nav>
+  <div class="ptop">
+    <div class="pav" id="pav"></div>
+    <div class="pnm2" id="pnm2"></div>
+    <div class="pem" id="pem"></div>
+    <div style="font-size:11px;color:var(--t3);margin-top:3px;font-family:monospace;background:var(--bg3);display:inline-block;padding:3px 10px;border-radius:8px;border:1px solid var(--br)" id="puid">ID: -</div>
+    <div class="pbdg" id="pbdg">ສະມາຊິກ</div>
+    <div class="pstats">
+      <div class="pst"><div class="psn" id="poc">0</div><div class="psl">Orders</div></div>
+      <div class="pst"><div class="psn" id="pwal">0</div><div class="psl">ກີບ</div></div>
+      <div class="pst"><div class="psn" id="pjd">-</div><div class="psl">ເດືອນ</div></div>
+    </div>
+  </div>
+  <div class="mcard">
+    <div class="mi" onclick="needAuth(()=>go('history'))"><div class="miic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1"><div class="mit">ປະຫວັດ Order</div><div class="mis" id="pos">0 Orders</div></div><span class="miarr">&#8250;</span></div>
+    <div class="mi" onclick="needAuth(()=>go('pWallet'))"><div class="miic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="2.2" stroke-linecap="round"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1" fill="var(--R)" stroke="none"/></svg></div><div style="flex:1"><div class="mit">Wallet / ເຕີມເຄຣດິດ</div><div class="mis" id="walletBal">0 ກີບ</div></div><span class="miarr">&#8250;</span></div>
+    <div id="admmi" style="display:none" onclick="openAdm()" class="mi"><div class="miic" style="background:var(--Rl)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div style="flex:1"><div class="mit" style="color:var(--R)">Admin Panel <span class="admibdg">ADMIN</span></div><div class="mis">ຈັດການລະບົບ</div></div><span class="miarr" style="color:var(--R)">&#8250;</span></div>
+  </div>
+  <button class="logbtn" onclick="doLogout()">ອອກຈາກລະບົບ</button>
+</div>
+
+<!-- HISTORY -->
+<div class="page" id="pHist">
+  <nav class="nav"><button class="ham" onclick="oD()"><span></span><span></span><span></span></button><div class="nav-title">ປະຫວັດການສັ່ງຊື້</div></nav>
+  <div style="padding:14px 0" id="histL"></div>
+</div>
+
+<!-- HELP -->
+<div class="page" id="pHelp">
+  <nav class="nav"><button class="ham" onclick="oD()"><span></span><span></span><span></span></button><div class="nav-title">ຕິດຕໍ່ຫາ</div></nav>
+  <div style="padding:14px 0">
+    <div style="padding:20px 14px 10px;font-size:16px;font-weight:800;color:var(--t)">ຊ່ອງທາງຕິດຕໍ່</div>
+    <div style="padding:0 14px 14px;font-size:13px;color:var(--t3)">ຕິດຕໍ່ທີມງານ 24/7</div>
+    <div class="ct-card" id="ctCard"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="vAdm">
+  <div class="admtop"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><h2>Admin Panel</h2><button class="admback" onclick="exitAdm()">&#8592; ອອກ</button></div>
+  <div class="admtabs">
+    <div class="admt on" onclick="aT('dash',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard</div>
+    <div class="admt" onclick="aT('ban',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="14" rx="2"/><polyline points="3 9 12 13 21 9"/></svg> Banner</div>
+    <div class="admt" onclick="aT('games',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> ເກມ+Pkg</div>
+    <div class="admt" onclick="aT('popup',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Popup</div>
+    <div class="admt" onclick="aT('coupon',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg> ໂຄ້ດສ່ວນລົດ</div>
+    <div class="admt" onclick="aT('ord',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Orders</div>
+    <div class="admt" onclick="aT('usr',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Users</div>
+    <div class="admt" onclick="aT('ct',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg> ຕິດຕໍ່</div>
+  </div>
+  <div class="admbody">
+    <!-- DASH -->
+    <div class="asec on" id="as-dash"><div class="admc"><div class="stg"><div class="stb"><div class="stn" id="sG">0</div><div class="stl">ເກມ</div></div><div class="stb"><div class="stn" id="sB">0</div><div class="stl">Banner</div></div><div class="stb"><div class="stn" id="sP">0</div><div class="stl">Package</div></div><div class="stb"><div class="stn" id="sO">0</div><div class="stl">Orders</div></div><div class="stb"><div class="stn" id="sU">0</div><div class="stl">Users</div></div></div><div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:15px;font-weight:800;color:var(--t);margin-bottom:4px">ຍິນດີຕ້ອນຮັບ Admin 👋</div><div style="font-size:12px">Easy Store Management System</div></div></div></div>
+    <!-- BANNER -->
+    <div class="asec" id="as-ban"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><rect x="3" y="3" width="18" height="14" rx="2"/><polyline points="3 9 12 13 21 9"/></svg>Banner</h3><div class="ibox"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>ໃຊ້ URL https://... ໂດຍກົງ</div><div id="bA"></div><button class="bad" onclick="addBan()">+ ເພີ່ມ Banner</button></div></div>
+    <!-- GAMES+PKG -->
+    <div class="asec" id="as-games"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>ເກມ+Package</h3><div class="ibox"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>ເພີ່ມ URL ພື້ນຫຼັງ (bg_img) ໃຫ້ແຕ່ລະເກມ</div><div id="gA"></div><button class="bad" onclick="addGame()">+ ເພີ່ມເກມໃໝ່</button></div></div>
+    <!-- POPUP -->
+    <div class="asec" id="as-popup"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Popup</h3><div id="pupAdm"></div><button class="bad" onclick="addPup()">+ ເພີ່ມ Popup</button></div></div>
+    <!-- COUPON -->
+    <div class="asec" id="as-coupon">
+      <div class="admc">
+        <h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>ໂຄ້ດສ່ວນລົດ</h3>
+        <div class="ibox"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>ສ້າງໂຄ້ດໄດ້ 2 ປະເພດ: ຫຼຸດເປີເຊັນ (%) ຫຼື ຫຼຸດລາຄາຕາຍ (ກີບ)</div>
+        <div id="couponList"></div>
+        <button class="bad" onclick="addCoupon()">+ ສ້າງໂຄ້ດໃໝ່</button>
+      </div>
+    </div>
+    <!-- ORDERS -->
+    <div class="asec" id="as-ord"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Orders</h3><div id="oA"></div></div></div>
+    <!-- USERS -->
+    <div class="asec" id="as-usr"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users</h3><div id="uA"></div></div></div>
+    <!-- CONTACTS -->
+    <div class="asec" id="as-ct">
+      <div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>ຊ່ອງທາງຕິດຕໍ່</h3>
+        <div class="af">
+          <label>Facebook URL</label><input type="text" id="ctFB" placeholder="https://facebook.com/..." oninput="saveContacts()">
+          <label>TikTok URL</label><input type="text" id="ctTT" placeholder="https://tiktok.com/@..." oninput="saveContacts()">
+          <label>WhatsApp URL</label><input type="text" id="ctWA" placeholder="https://wa.me/85620..." oninput="saveContacts()">
+        </div>
+        <div style="font-size:12px;color:var(--t3);margin-top:6px">ບັນທຶກ auto ທັນທີ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="bot" id="botN">
+  <div class="bni on" onclick="go('home');bn(this)">
+    <div class="bic">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <div class="bnl">ໜ້າຫຼັກ</div>
+  </div>
+  <div class="bni" onclick="needAuth(()=>{go('pWallet');bn(this);})">
+    <div class="bic">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="bnl">ເຕີມເຄຣດິດ</div>
+  </div>
+  <div class="bni" onclick="needAuth(()=>{go('history');bn(this);})">
+    <div class="bic">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+    <div class="bnl">ປະຫວັດ</div>
+  </div>
+  <div class="bni" onclick="needAuth(()=>{go('profile');bn(this);})">
+    <div class="bic">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>
+    <div class="bnl">ໂປຣໄຟ</div>
+  </div>
+  <div class="bni" onclick="go('help');bn(this)">
+    <div class="bic">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+      </svg>
+    </div>
+    <div class="bnl">ຕິດຕໍ່</div>
+  </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
